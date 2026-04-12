@@ -703,14 +703,19 @@ def solve_level(env, game, level_idx):
     else:
         print(f"  No pure solution ({elapsed:.1f}s), trying integrated solver...")
 
-    # Unified A* search (handles L1-L9; L7/L10 remain open as of this version).
-    # Budget: big for L7/L10 where the search is genuinely large.
-    time_limit = 600 if level in (7, 10) else 120
+    # Unified A* search (handles L1-L9 once the blue-is-movable bug is fixed).
+    # L7 appears to have a structural gotcha that isn't explained by my
+    # understanding of the engine — N@(0,1) is in a 2-cell island and no
+    # push chain in the 3M-state reachable space ever creates a bridge.
+    # Either there is a mechanic I haven't decoded, or the search depth is
+    # simply beyond the 5M-state budget.
+    # L10 similarly has a large reachable space; the `7`-glyph mechanic is
+    # partially modeled but not fully.
+    time_limit = 300 if level in (7, 10) else 120
     actions = solve_unified(ps, target, time_limit=time_limit)
     if actions is None:
-        # Fallback to old two-phase solver
         print(f"  Unified failed, trying legacy integrated solver...")
-        actions = solve_integrated(ps, target, max_steps=200, time_limit=300)
+        actions = solve_integrated(ps, target, max_steps=200, time_limit=180)
 
     if actions:
         print(f"  Solution sequence:")
@@ -751,7 +756,6 @@ def main():
     save_frame(obs.frame, f"{VISUAL_DIR}/initial.png")
 
     levels_solved = 0
-    levels_skipped = []
 
     for level in range(obs.win_levels):
         fd = solve_level(env, game, level)
@@ -765,18 +769,9 @@ def main():
         else:
             print(f"\nSTUCK on level {level + 1}")
             save_frame(env.observation_space.frame, f"{VISUAL_DIR}/L{level+1}_stuck.png")
-            # Force-jump to next level to continue testing the rest of the ladder.
-            # This does NOT count as solved; it's only so we can verify L8-L10 solve.
-            levels_skipped.append(level + 1)
-            eq.whtqurkphir = level + 2
-            eq.qjwmwkhrml()
-            eq.vpanmnowjy()
-            # also bump engine levels_completed bookkeeping? We bypass arc_agi's
-            # progress tracking — levels_solved stays at whatever was last won.
+            break
 
-    print(f"\nFinal: {levels_solved}/{obs.win_levels} levels won by engine")
-    if levels_skipped:
-        print(f"Levels skipped (unsolved, manually force-jumped): {levels_skipped}")
+    print(f"\nFinal: {levels_solved}/{obs.win_levels} levels solved")
     return levels_solved
 
 

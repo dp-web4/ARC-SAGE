@@ -20,7 +20,7 @@ Solver Context (loaded on game init)
 Competition Model (gemma4 in sandbox)
 ```
 
-## Fleet Status: 18/25 Games Solved (72%)
+## Fleet Status: 21/25 Games Solved (84%)
 
 | Game | Type | Solved By | Actions | Baseline | Eff |
 |------|------|-----------|---------|----------|-----|
@@ -41,21 +41,21 @@ Competition Model (gemma4 in sandbox)
 | bp35 | move+click | sprout | 304 | 637 | 2.1x |
 | cn04 | move+click | thor | — | 779 | — |
 | re86 | move | cbp | 606 | 1071 | 1.8x |
-| m0r0 | move+click | sprout | 181 | 970 | 5.4x |
+| m0r0 | move+click | cbp | 181 | 970 | 5.4x |
+| r11l | move+click | cbp | 158 | 167 | 1.1x |
+| g50t | move | cbp | 311 | 575 | 1.8x |
+| ka59 | move+click | cbp | 239 | 826 | 3.5x |
 
-**Solves by machine**: CBP 8, McNugget 3, Thor 3, Sprout 3, Nomad 1.
+**Solves by machine**: CBP 11, McNugget 3, Thor 3, Sprout 3, Nomad 1.
 
-### Unsolved (7)
+### Unsolved / Partial (4)
 
-| Game | Claimed | Progress | Baseline |
-|------|---------|----------|----------|
-| r11l | nomad | 5/6 | 167 |
-| g50t | sprout | 0/7 | 575 |
-| sk48 | waving-cat | 1/8 | 696 |
-| ka59 | legion | 0/7 | 826 |
-| dc22 | unclaimed | 0/6 | 1192 |
-| lf52 | unclaimed | 0/10 | 1211 |
-| wa30 | mcnugget | 0/9 | 1564 |
+| Game | Progress | Baseline | Blocker |
+|------|----------|----------|---------|
+| dc22 | 4/6 | 1192 | L5 needs crane bridge placement — macro-action solver |
+| lf52 | 6/10 | 1211 | L7 topological — no push config connects N@(0,1) to rest |
+| sk48 | 2/8 | 696 | L2+ needs precise retraction-drag sequencing for target ordering |
+| wa30 | 3/9 | 1564 | L3+ trapped-player box requires wall handoff macro-planning |
 
 ## Per-Game Knowledge
 
@@ -176,7 +176,7 @@ Visual cues that predict mechanics across games. Key patterns:
 
 Fleet-wide game status tracker. Pull before claiming, push after.
 
-**Current: 18/25 solved (72%).** See fleet status table above.
+**Current: 18/25 solved (84%).** See fleet status table above.
 
 ## Persistence Checklist (After Every Game Session)
 
