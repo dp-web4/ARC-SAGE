@@ -16,6 +16,28 @@ SOLVER:
 - Integrated BFS/DFS over combined (pieces, blocks) state
 - Actions: 4 push directions + all valid jumps
 - Handles piece-on-block transport through wall channels
+
+L7 STATUS (2026-04-12): UNSOLVED. Two investigations confirm:
+  1. right-N@(22,6) is structurally immobile — zero valid jump directions under
+     any push sequence (middle cell (22,5) has no piece/peg to jump over).
+  2. Block at (22,4) = `;` has no peg, so can't become a jumpable middle.
+  3. No geometric configuration allows left-N to self-jump over right-N with a
+     valid landing cell: (22,8), (20,6), (24,6) are all invalid landings.
+  4. Engine source was traced exhaustively: scroll is pixel-only (pneghtfqtt is
+     dead code), ACTION5/6 never call win() directly, cwyrzsciwms click only
+     schedules render frames, no alternate piece-removal path exists beyond
+     cfilhtifcb's self-jump decrement.
+  5. ddaguepwkt uses ndtvadsrqf (prefix match, includes red+blue). Solver's
+     movable_count matches (non-blue count). For L7: starts at 3, win at 2.
+     Only reduction: N-over-N self-jump (red is unique, can't self-reduce).
+  6. is_valid_landing / is_jumpable_middle verified against engine posalhhmjq /
+     pymqmlkgzs on every cell signature in L7 — semantics match perfectly.
+
+The conclusion is that either a mechanic exists that was not found in the
+source read, or the level is genuinely unwinnable under this engine version.
+Recommended next step: record a human-solved trajectory (e.g. via browser UI)
+and diff the resulting state sequence against the simulator to locate the
+missing mechanic. See game-mechanics/lf52.md for full writeup.
 """
 
 import os, sys, time, heapq
@@ -704,13 +726,17 @@ def solve_level(env, game, level_idx):
         print(f"  No pure solution ({elapsed:.1f}s), trying integrated solver...")
 
     # Unified A* search (handles L1-L9 once the blue-is-movable bug is fixed).
-    # L7 appears to have a structural gotcha that isn't explained by my
-    # understanding of the engine — N@(0,1) is in a 2-cell island and no
-    # push chain in the 3M-state reachable space ever creates a bridge.
-    # Either there is a mechanic I haven't decoded, or the search depth is
-    # simply beyond the 5M-state budget.
-    # L10 similarly has a large reachable space; the `7`-glyph mechanic is
-    # partially modeled but not fully.
+    # L7 STATUS (2026-04-12): proven structurally unsolvable in the current model.
+    # - Simulator verified to match engine exactly on push transitions (all 4 dirs).
+    # - Left-N@(0,1) reaches cols 0-6 (22 cells total, via blocks pushed to (0,3)).
+    # - Red@(6,1) reaches 20 of the same cells.
+    # - Right-N@(22,6) is permanently immobile: 500K-state isolated BFS never
+    #   leaves (22,6); (22,5) is walkable-only (not jumpable), (21,6)/(22,7)
+    #   are empty with no walls that could ever host blocks.
+    # - N-over-N is the ONLY possible reduction (1 R, can't self-jump).
+    # - Left-N and right-N can never meet; no reducing jump exists.
+    # L7 requires a mechanic or hidden path not yet decoded. See
+    # shared-context/arc-agi-3/game-mechanics/lf52.md for full analysis.
     time_limit = 300 if level in (7, 10) else 120
     actions = solve_unified(ps, target, time_limit=time_limit)
     if actions is None:
