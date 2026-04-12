@@ -230,8 +230,9 @@
       "levels": 8,
       "status": "in_progress",
       "claimed_by": "waving-cat",
-      "best_level": 2,
-      "solved": false
+      "best_level": 4,
+      "solved": false,
+      "notes": "L0-L3 solved (99 actions cumulative). Key discovery: engine budget must be restored during engine-backed search, otherwise state space collapses to ~33 states because failed moves still drain budget. With restoration, state space is thousands. L2 solved in 33 moves via column-slide + retract-drag after isolating target 14. L3 solved in 25 moves — the unpaired (5,42) rail is the player's arranger tool; paired rails are static targets. L4+ use multi-pair states requiring CLICK to switch between arranger rails (CLICK doesn't save history so beam search requires special handling)."
     },
     {
       "id": "cn04-65d47d14",
