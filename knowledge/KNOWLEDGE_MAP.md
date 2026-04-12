@@ -20,7 +20,7 @@ Solver Context (loaded on game init)
 Competition Model (gemma4 in sandbox)
 ```
 
-## Fleet Status: 21/25 Games Solved (84%)
+## Fleet Status: 22/25 Games Solved (88%)
 
 | Game | Type | Solved By | Actions | Baseline | Eff |
 |------|------|-----------|---------|----------|-----|
@@ -45,17 +45,17 @@ Competition Model (gemma4 in sandbox)
 | r11l | move+click | cbp | 158 | 167 | 1.1x |
 | g50t | move | cbp | 311 | 575 | 1.8x |
 | ka59 | move+click | cbp | 239 | 826 | 3.5x |
+| wa30 | move | cbp | 637 | 1564 | 2.5x |
 
-**Solves by machine**: CBP 11, McNugget 3, Thor 3, Sprout 3, Nomad 1.
+**Solves by machine**: CBP 12, McNugget 3, Thor 3, Sprout 3, Nomad 1.
 
-### Unsolved / Partial (4)
+### Unsolved / Partial (3)
 
 | Game | Progress | Baseline | Blocker |
 |------|----------|----------|---------|
-| dc22 | 4/6 | 1192 | L5 needs crane bridge placement — macro-action solver |
-| lf52 | 6/10 | 1211 | L7 topological — no push config connects N@(0,1) to rest |
-| sk48 | 2/8 | 696 | L2+ needs precise retraction-drag sequencing for target ordering |
-| wa30 | 3/9 | 1564 | L3+ trapped-player box requires wall handoff macro-planning |
+| dc22 | 4/6 | 1192 | L5 crane bridge — macro-action solver infra built, L5 gap unbridgeable under current toggle model |
+| lf52 | 6/10 | 1211 | L7 right-N@(22,6) structurally immobile under push+jump — unmodeled mechanic needed (click side-effect? peg mutation?) |
+| sk48 | 2/8 | 696 | L2+ target ordering — retraction-drag primitive verified, combinatorial sequencing still hard |
 
 ## Per-Game Knowledge
 

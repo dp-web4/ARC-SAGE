@@ -2,7 +2,7 @@
 
 *Fleet-maintained. Updated as games are solved.*
 
-## Solved Games (21/25)
+## Solved Games (22/25)
 
 ---
 
@@ -278,10 +278,38 @@
 
 ---
 
+### wa30 — Sokoban with AI Movers (helpers + saboteurs)
+**Solved by:** CBP | **Levels:** 9/9 | **Baseline:** 1564 | **Result:** 637 actions (2.5x efficiency) | **Actions:** move only
+
+**Objects:** Puzzle pieces, goal slots, BLUE AI movers (helpers → correct slots), WHITE AI movers (saboteurs → wrong slots)
+**Goal:** Deliver all pieces to correct slots; win when all in slots AND unlinked.
+**Key mechanics:**
+- **AI behavior is deterministic BFS**: one BFS step per player action, fully simulatable given state
+- **Blue pickup is geometric** (manhattan-4), NOT reachability — pieces on blocked wall cells are grabbable by blues on any non-blocked neighbor
+- **Whites are parasitic carriers**: they force-detach pieces from blues AND player mid-delivery if within manhattan-4. They DO re-grab from correct slots (undo progress) but NOT from wrong slots
+- **Blues auto-rescue wrong-slotted pieces** (line 1157) — they don't exclude wrong-slot pieces from pickup, which makes wa30 winnable at all
+- **ACTION5 + adjacent-to-carrying-white**: destroys white, drops piece at current cell
+- **Whites can self-stall** when their BFS is blocked by their own deliveries (L6 exploit)
+- **Wall handoff**: carried pieces pass through blocked positions but carriers cannot — direction faced at pickup determines carry offset
+
+**Winning strategy per level**:
+- L0: Pure BFS (no AI)
+- L1: Engine greedy with one blue helper
+- L2: Hand-coded wall handoff sequence
+- L3: Trapped-player box — handoff feasibility table + blue cluster assignment + manhattan geometric pickup
+- L4, L5: Engine greedy after L3 unblocked
+- L6: Let white self-stall, destroy-white-to-drop, ferry pieces manually (saboteur exploit)
+- L7: "Lower-white-first" opening book — BFS-to-adjacent kills lower white (~18 moves), 20-move cap on upper-chase, let smart_action finish. Key insight: don't try to kill both whites, commit to the winnable sub-goal and trust the system
+- L8: Biased random search (seed=21, 5-30% random deviation from smart_action) found 67-move win; trapped white (60,56) in wall maze effectively dead on spawn
+
+**Discovery tips:** Deterministic engine means found solutions can be baked as fixed action strings. `env.reset()` after a LOSE can leave stale state — use fresh `Arcade()` per search attempt. When greedy caps below target, try biased random from the greedy policy — sometimes the ceiling is local, not global.
+
+---
+
 | Category | Games |
 |----------|-------|
-| **Solved (21)** | sb26 8/8, vc33 7/7, cd82 6/6, lp85 8/8, ft09 6/6, sp80 6/6, tr87 6/6, sc25 6/6, tn36 7/7, tu93 9/9, ls20 7/7, s5i5 8/8, su15 9/9, cn04 5/5, ar25 8/8, bp35 9/9, re86 8/8, m0r0 6/6, r11l 6/6, g50t 7/7, ka59 7/7 |
-| **Partial (4)** | dc22 4/6 (L5 crane), lf52 6/10 (L7 topology), sk48 2/8 (L2 ordering), wa30 3/9 (L3 trapped box) |
+| **Solved (22)** | sb26 8/8, vc33 7/7, cd82 6/6, lp85 8/8, ft09 6/6, sp80 6/6, tr87 6/6, sc25 6/6, tn36 7/7, tu93 9/9, ls20 7/7, s5i5 8/8, su15 9/9, cn04 5/5, ar25 8/8, bp35 9/9, re86 8/8, m0r0 6/6, r11l 6/6, g50t 7/7, ka59 7/7, wa30 9/9 |
+| **Partial (3)** | dc22 4/6 (L5 crane), lf52 6/10 (L7 topology), sk48 2/8 (L2 ordering) |
 
 ### Algorithmic Solver Results (2026-04-08 batch run)
 
