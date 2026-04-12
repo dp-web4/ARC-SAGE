@@ -1,0 +1,15 @@
+[Unit]
+Description=Membot Vector+ Memory Server
+After=network.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/opt/membot
+ExecStart=/opt/membot/venv/bin/python membot_server.py --transport http --read-only --port 8000
+Restart=always
+RestartSec=5
+Environment=PYTHONUNBUFFERED=1
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,58 @@
+{
+  "game_id": "sp80-0ee2d095",
+  "player": "replay",
+  "started": "20260410_123313",
+  "win_levels": 6,
+  "baseline": 0,
+  "steps": [
+    {
+      "step": 1,
+      "level": 0,
+      "action": "CLICK",
+      "png": "step_0001_L0_CLICK_7_3.png",
+      "x": 7,
+      "y": 3
+    },
+    {
+      "step": 2,
+      "level": 0,
+      "action": "DOWN",
+      "png": "step_0002_L0_DOWN.png"
+    },
+    {
+      "step": 3,
+      "level": 0,
+      "action": "DOWN",
+      "png": "step_0003_L0_DOWN.png"
+    },
+    {
+      "step": 4,
+      "level": 0,
+      "action": "DOWN",
+      "png": "step_0004_L0_DOWN.png"
+    },
+    {
+      "step": 5,
+      "level": 0,
+      "action": "DOWN",
+      "png": "step_0005_L0_DOWN.png"
+    },
+    {
+      "step": 6,
+      "level": 0,
+      "action": "DOWN",
+      "png": "step_0006_L0_DOWN.png"
+    },
+    {
+      "step": 7,
+      "level": 0,
+      "action": "SELECT",
+      "png": "step_0007_L0_SELECT.png",
+      "gif": "step_0007_L0_anim.gif"
+    }
+  ],
+  "finished": "20260410_123314",
+  "result": "NOT_FINISHED",
+  "levels_completed": 0,
+  "total_steps": 7
+}

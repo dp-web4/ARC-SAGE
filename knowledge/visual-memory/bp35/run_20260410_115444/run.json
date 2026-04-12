@@ -1,0 +1,55 @@
+{
+  "game_id": "bp35-0a0ad940",
+  "player": "replay",
+  "started": "20260410_115444",
+  "win_levels": 9,
+  "baseline": 0,
+  "steps": [
+    {
+      "step": 1,
+      "level": 0,
+      "action": "RIGHT",
+      "png": "step_0001_L0_RIGHT.png",
+      "gif": "step_0001_L0_anim.gif"
+    },
+    {
+      "step": 2,
+      "level": 0,
+      "action": "RIGHT",
+      "png": "step_0002_L0_RIGHT.png",
+      "gif": "step_0002_L0_anim.gif"
+    },
+    {
+      "step": 3,
+      "level": 0,
+      "action": "RIGHT",
+      "png": "step_0003_L0_RIGHT.png",
+      "gif": "step_0003_L0_anim.gif"
+    },
+    {
+      "step": 4,
+      "level": 0,
+      "action": "RIGHT",
+      "png": "step_0004_L0_RIGHT.png",
+      "gif": "step_0004_L0_anim.gif"
+    },
+    {
+      "step": 5,
+      "level": 0,
+      "action": "LEFT",
+      "png": "step_0005_L0_LEFT.png",
+      "gif": "step_0005_L0_anim.gif"
+    },
+    {
+      "step": 6,
+      "level": 0,
+      "action": "LEFT",
+      "png": "step_0006_L0_LEFT.png",
+      "gif": "step_0006_L0_anim.gif"
+    }
+  ],
+  "finished": "20260410_115444",
+  "result": "NOT_FINISHED",
+  "levels_completed": 0,
+  "total_steps": 6
+}

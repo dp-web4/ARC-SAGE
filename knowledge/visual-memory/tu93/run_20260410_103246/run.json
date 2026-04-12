@@ -1,0 +1,439 @@
+{
+  "game_id": "tu93-2b534c15",
+  "player": "tu93-verified",
+  "started": "20260410_103246",
+  "win_levels": 9,
+  "baseline": 0,
+  "steps": [
+    {
+      "step": 1,
+      "level": 0,
+      "action": "RIGHT",
+      "png": "step_0001_L0_RIGHT.png",
+      "gif": "step_0001_L0_anim.gif"
+    },
+    {
+      "step": 2,
+      "level": 0,
+      "action": "DOWN",
+      "png": "step_0002_L0_DOWN.png",
+      "gif": "step_0002_L0_anim.gif"
+    },
+    {
+      "step": 3,
+      "level": 0,
+      "action": "DOWN",
+      "png": "step_0003_L0_DOWN.png",
+      "gif": "step_0003_L0_anim.gif"
+    },
+    {
+      "step": 4,
+      "level": 0,
+      "action": "RIGHT",
+      "png": "step_0004_L0_RIGHT.png",
+      "gif": "step_0004_L0_anim.gif"
+    },
+    {
+      "step": 5,
+      "level": 0,
+      "action": "UP",
+      "png": "step_0005_L0_UP.png",
+      "gif": "step_0005_L0_anim.gif"
+    },
+    {
+      "step": 6,
+      "level": 0,
+      "action": "RIGHT",
+      "png": "step_0006_L0_RIGHT.png",
+      "gif": "step_0006_L0_anim.gif"
+    },
+    {
+      "step": 7,
+      "level": 0,
+      "action": "DOWN",
+      "png": "step_0007_L0_DOWN.png",
+      "gif": "step_0007_L0_anim.gif"
+    },
+    {
+      "step": 8,
+      "level": 0,
+      "action": "DOWN",
+      "png": "step_0008_L0_DOWN.png",
+      "gif": "step_0008_L0_anim.gif"
+    },
+    {
+      "step": 9,
+      "level": 0,
+      "action": "LEFT",
+      "png": "step_0009_L0_LEFT.png",
+      "gif": "step_0009_L0_anim.gif"
+    },
+    {
+      "step": 10,
+      "level": 0,
+      "action": "LEFT",
+      "png": "step_0010_L0_LEFT.png",
+      "gif": "step_0010_L0_anim.gif"
+    },
+    {
+      "step": 11,
+      "level": 0,
+      "action": "DOWN",
+      "png": "step_0011_L0_DOWN.png",
+      "gif": "step_0011_L0_anim.gif"
+    },
+    {
+      "step": 12,
+      "level": 0,
+      "action": "RIGHT",
+      "png": "step_0012_L0_RIGHT.png",
+      "gif": "step_0012_L0_anim.gif"
+    },
+    {
+      "step": 13,
+      "level": 0,
+      "action": "RIGHT",
+      "png": "step_0013_L0_RIGHT.png",
+      "gif": "step_0013_L0_anim.gif"
+    },
+    {
+      "step": 14,
+      "level": 0,
+      "action": "DOWN",
+      "png": "step_0014_L0_DOWN.png",
+      "gif": "step_0014_L0_anim.gif"
+    },
+    {
+      "step": 15,
+      "level": 0,
+      "action": "RIGHT",
+      "png": "step_0015_L0_RIGHT.png",
+      "gif": "step_0015_L0_anim.gif"
+    },
+    {
+      "step": 16,
+      "level": 0,
+      "action": "UP",
+      "png": "step_0016_L0_UP.png",
+      "gif": "step_0016_L0_anim.gif"
+    },
+    {
+      "step": 17,
+      "level": 0,
+      "action": "RIGHT",
+      "png": "step_0017_L0_RIGHT.png",
+      "gif": "step_0017_L0_anim.gif"
+    },
+    {
+      "step": 18,
+      "level": 0,
+      "action": "DOWN",
+      "png": "step_0018_L0_DOWN.png",
+      "gif": "step_0018_L0_anim.gif",
+      "level_up": true,
+      "new_level": 1
+    },
+    {
+      "step": 19,
+      "level": 1,
+      "action": "UP",
+      "png": "step_0019_L1_UP.png",
+      "gif": "step_0019_L1_anim.gif"
+    },
+    {
+      "step": 20,
+      "level": 1,
+      "action": "RIGHT",
+      "png": "step_0020_L1_RIGHT.png",
+      "gif": "step_0020_L1_anim.gif"
+    },
+    {
+      "step": 21,
+      "level": 1,
+      "action": "RIGHT",
+      "png": "step_0021_L1_RIGHT.png",
+      "gif": "step_0021_L1_anim.gif"
+    },
+    {
+      "step": 22,
+      "level": 1,
+      "action": "DOWN",
+      "png": "step_0022_L1_DOWN.png",
+      "gif": "step_0022_L1_anim.gif"
+    },
+    {
+      "step": 23,
+      "level": 1,
+      "action": "RIGHT",
+      "png": "step_0023_L1_RIGHT.png",
+      "gif": "step_0023_L1_anim.gif"
+    },
+    {
+      "step": 24,
+      "level": 1,
+      "action": "RIGHT",
+      "png": "step_0024_L1_RIGHT.png",
+      "gif": "step_0024_L1_anim.gif"
+    },
+    {
+      "step": 25,
+      "level": 1,
+      "action": "UP",
+      "png": "step_0025_L1_UP.png",
+      "gif": "step_0025_L1_anim.gif"
+    },
+    {
+      "step": 26,
+      "level": 1,
+      "action": "RIGHT",
+      "png": "step_0026_L1_RIGHT.png",
+      "gif": "step_0026_L1_anim.gif"
+    },
+    {
+      "step": 27,
+      "level": 1,
+      "action": "RIGHT",
+      "png": "step_0027_L1_RIGHT.png",
+      "gif": "step_0027_L1_anim.gif"
+    },
+    {
+      "step": 28,
+      "level": 1,
+      "action": "UP",
+      "png": "step_0028_L1_UP.png",
+      "gif": "step_0028_L1_anim.gif",
+      "level_up": true,
+      "new_level": 2
+    },
+    {
+      "step": 29,
+      "level": 2,
+      "action": "UP",
+      "png": "step_0029_L2_UP.png",
+      "gif": "step_0029_L2_anim.gif"
+    },
+    {
+      "step": 30,
+      "level": 2,
+      "action": "UP",
+      "png": "step_0030_L2_UP.png",
+      "gif": "step_0030_L2_anim.gif"
+    },
+    {
+      "step": 31,
+      "level": 2,
+      "action": "RIGHT",
+      "png": "step_0031_L2_RIGHT.png",
+      "gif": "step_0031_L2_anim.gif"
+    },
+    {
+      "step": 32,
+      "level": 2,
+      "action": "UP",
+      "png": "step_0032_L2_UP.png",
+      "gif": "step_0032_L2_anim.gif"
+    },
+    {
+      "step": 33,
+      "level": 2,
+      "action": "LEFT",
+      "png": "step_0033_L2_LEFT.png",
+      "gif": "step_0033_L2_anim.gif"
+    },
+    {
+      "step": 34,
+      "level": 2,
+      "action": "LEFT",
+      "png": "step_0034_L2_LEFT.png",
+      "gif": "step_0034_L2_anim.gif"
+    },
+    {
+      "step": 35,
+      "level": 2,
+      "action": "UP",
+      "png": "step_0035_L2_UP.png",
+      "gif": "step_0035_L2_anim.gif"
+    },
+    {
+      "step": 36,
+      "level": 2,
+      "action": "LEFT",
+      "png": "step_0036_L2_LEFT.png",
+      "gif": "step_0036_L2_anim.gif"
+    },
+    {
+      "step": 37,
+      "level": 2,
+      "action": "LEFT",
+      "png": "step_0037_L2_LEFT.png",
+      "gif": "step_0037_L2_anim.gif"
+    },
+    {
+      "step": 38,
+      "level": 2,
+      "action": "DOWN",
+      "png": "step_0038_L2_DOWN.png",
+      "gif": "step_0038_L2_anim.gif"
+    },
+    {
+      "step": 39,
+      "level": 2,
+      "action": "RIGHT",
+      "png": "step_0039_L2_RIGHT.png",
+      "gif": "step_0039_L2_anim.gif"
+    },
+    {
+      "step": 40,
+      "level": 2,
+      "action": "DOWN",
+      "png": "step_0040_L2_DOWN.png",
+      "gif": "step_0040_L2_anim.gif"
+    },
+    {
+      "step": 41,
+      "level": 2,
+      "action": "LEFT",
+      "png": "step_0041_L2_LEFT.png",
+      "gif": "step_0041_L2_anim.gif"
+    },
+    {
+      "step": 42,
+      "level": 2,
+      "action": "LEFT",
+      "png": "step_0042_L2_LEFT.png",
+      "gif": "step_0042_L2_anim.gif"
+    },
+    {
+      "step": 43,
+      "level": 2,
+      "action": "LEFT",
+      "png": "step_0043_L2_LEFT.png",
+      "gif": "step_0043_L2_anim.gif"
+    },
+    {
+      "step": 44,
+      "level": 2,
+      "action": "DOWN",
+      "png": "step_0044_L2_DOWN.png",
+      "gif": "step_0044_L2_anim.gif"
+    },
+    {
+      "step": 45,
+      "level": 2,
+      "action": "RIGHT",
+      "png": "step_0045_L2_RIGHT.png",
+      "gif": "step_0045_L2_anim.gif"
+    },
+    {
+      "step": 46,
+      "level": 2,
+      "action": "DOWN",
+      "png": "step_0046_L2_DOWN.png",
+      "gif": "step_0046_L2_anim.gif"
+    },
+    {
+      "step": 47,
+      "level": 2,
+      "action": "RIGHT",
+      "png": "step_0047_L2_RIGHT.png",
+      "gif": "step_0047_L2_anim.gif",
+      "level_up": true,
+      "new_level": 3
+    },
+    {
+      "step": 48,
+      "level": 3,
+      "action": "RIGHT",
+      "png": "step_0048_L3_RIGHT.png",
+      "gif": "step_0048_L3_anim.gif"
+    },
+    {
+      "step": 49,
+      "level": 3,
+      "action": "LEFT",
+      "png": "step_0049_L3_LEFT.png",
+      "gif": "step_0049_L3_anim.gif"
+    },
+    {
+      "step": 50,
+      "level": 3,
+      "action": "RIGHT",
+      "png": "step_0050_L3_RIGHT.png",
+      "gif": "step_0050_L3_anim.gif"
+    },
+    {
+      "step": 51,
+      "level": 3,
+      "action": "LEFT",
+      "png": "step_0051_L3_LEFT.png",
+      "gif": "step_0051_L3_anim.gif"
+    },
+    {
+      "step": 52,
+      "level": 3,
+      "action": "RIGHT",
+      "png": "step_0052_L3_RIGHT.png",
+      "gif": "step_0052_L3_anim.gif"
+    },
+    {
+      "step": 53,
+      "level": 3,
+      "action": "LEFT",
+      "png": "step_0053_L3_LEFT.png",
+      "gif": "step_0053_L3_anim.gif"
+    },
+    {
+      "step": 54,
+      "level": 3,
+      "action": "RIGHT",
+      "png": "step_0054_L3_RIGHT.png",
+      "gif": "step_0054_L3_anim.gif"
+    },
+    {
+      "step": 55,
+      "level": 3,
+      "action": "RIGHT",
+      "png": "step_0055_L3_RIGHT.png",
+      "gif": "step_0055_L3_anim.gif"
+    },
+    {
+      "step": 56,
+      "level": 3,
+      "action": "RIGHT",
+      "png": "step_0056_L3_RIGHT.png",
+      "gif": "step_0056_L3_anim.gif"
+    },
+    {
+      "step": 57,
+      "level": 3,
+      "action": "RIGHT",
+      "png": "step_0057_L3_RIGHT.png",
+      "gif": "step_0057_L3_anim.gif"
+    },
+    {
+      "step": 58,
+      "level": 3,
+      "action": "UP",
+      "png": "step_0058_L3_UP.png",
+      "gif": "step_0058_L3_anim.gif"
+    },
+    {
+      "step": 59,
+      "level": 3,
+      "action": "UP",
+      "png": "step_0059_L3_UP.png",
+      "gif": "step_0059_L3_anim.gif"
+    },
+    {
+      "step": 60,
+      "level": 3,
+      "action": "LEFT",
+      "png": "step_0060_L3_LEFT.png",
+      "gif": "step_0060_L3_anim.gif"
+    }
+  ],
+  "finished": "20260410_103249",
+  "result": "GAME_OVER",
+  "levels_completed": 3,
+  "total_steps": 60
+}

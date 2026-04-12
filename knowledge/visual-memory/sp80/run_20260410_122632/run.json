@@ -1,0 +1,20 @@
+{
+  "game_id": "sp80-0ee2d095",
+  "player": "replay",
+  "started": "20260410_122632",
+  "win_levels": 6,
+  "baseline": 0,
+  "steps": [
+    {
+      "step": 1,
+      "level": 0,
+      "action": "SELECT",
+      "png": "step_0001_L0_SELECT.png",
+      "gif": "step_0001_L0_anim.gif"
+    }
+  ],
+  "finished": "20260410_122632",
+  "result": "NOT_FINISHED",
+  "levels_completed": 0,
+  "total_steps": 1
+}

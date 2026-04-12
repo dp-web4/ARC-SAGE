@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Membot — Brain Cartridge Memory</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #0c1017;
+    --surface: #131a24;
+    --surface-2: #1a2332;
+    --border: #1e2d3d;
+    --border-hover: #2a3f54;
+    --text: #d1dae6;
+    --text-dim: #6b7f95;
+    --text-bright: #f0f4f8;
+    --accent: #3b82f6;
+    --accent-dim: #2563eb;
+    --accent-glow: #3b82f620;
+    --green: #22c55e;
+    --green-dim: #16a34a;
+    --green-glow: #22c55e18;
+    --amber: #eab308;
+    --red: #ef4444;
+    --mono: 'Cascadia Code', 'Fira Code', 'JetBrains Mono', 'Consolas', monospace;
+    --sans: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  }
+
+  [data-theme="light"] {
+    --bg: #f5f7fa;
+    --surface: #ffffff;
+    --surface-2: #f0f2f5;
+    --border: #e2e8f0;
+    --border-hover: #cbd5e1;
+    --text: #334155;
+    --text-dim: #94a3b8;
+    --text-bright: #0f172a;
+    --accent: #3b82f6;
+    --accent-dim: #2563eb;
+    --accent-glow: #3b82f615;
+    --green: #16a34a;
+    --green-dim: #15803d;
+    --green-glow: #22c55e12;
+    --amber: #ca8a04;
+    --red: #dc2626;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 14px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ---- Layout ---- */
+  .app { max-width: 960px; margin: 0 auto; padding: 20px; }
+
+  /* ---- Header ---- */
+  .brand {
+    display: flex; align-items: center; gap: 14px;
+    padding: 24px 0 20px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 24px;
+  }
+  .brand-icon {
+    width: 48px; height: 48px; border-radius: 12px;
+    overflow: hidden; flex-shrink: 0;
+    box-shadow: 0 4px 20px #3b82f630;
+  }
+  .brand-icon img {
+    width: 100%; height: 100%; object-fit: cover;
+  }
+  .brand-text h1 {
+    font-size: 22px; font-weight: 700; color: var(--text-bright);
+    letter-spacing: -0.5px;
+  }
+  .brand-text h1 span { color: var(--accent); }
+  .brand-text p { font-size: 12px; color: var(--text-dim); margin-top: -2px; }
+
+  /* ---- Theme toggle ---- */
+  .theme-toggle {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 18px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+  .theme-toggle:hover { border-color: var(--border-hover); color: var(--text); }
+
+  /* Light mode card shadows */
+  [data-theme="light"] .result-card,
+  [data-theme="light"] .cart-chip {
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  }
+  [data-theme="light"] .brand-icon {
+    box-shadow: 0 4px 20px #3b82f620;
+  }
+
+  .server-config {
+    margin-left: auto;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .server-config input {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 12px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    width: 260px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .server-config input:focus { border-color: var(--accent); }
+  .status-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    background: var(--text-dim);
+    transition: all 0.3s;
+  }
+  .status-dot.connected { background: var(--green); box-shadow: 0 0 8px var(--green-glow); }
+  .status-dot.error { background: var(--red); }
+
+  /* ---- Cartridge Bar ---- */
+  .cart-bar {
+    display: flex; gap: 10px; margin-bottom: 20px;
+    overflow-x: auto; padding-bottom: 4px;
+  }
+  .cart-bar::-webkit-scrollbar { height: 3px; }
+  .cart-bar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  .cart-chip.mounting { opacity: 0.6; pointer-events: none; }
+  .cart-chip {
+    flex-shrink: 0;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+    min-width: 140px;
+  }
+  .cart-chip:hover { border-color: var(--border-hover); background: var(--surface-2); }
+  .cart-chip.active {
+    border-color: var(--accent);
+    background: var(--accent-glow);
+    box-shadow: 0 0 12px var(--accent-glow);
+  }
+  .cart-chip .name {
+    font-size: 13px; font-weight: 600; color: var(--text-bright);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .cart-chip .meta { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
+  .cart-chip .meta .count { color: var(--accent); font-weight: 600; }
+
+  /* ---- Search ---- */
+  .search-section { margin-bottom: 24px; }
+
+  .search-box {
+    position: relative;
+    display: flex;
+    gap: 8px;
+  }
+  .search-box input {
+    flex: 1;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text-bright);
+    font-size: 15px;
+    padding: 12px 16px 12px 42px;
+    border-radius: 10px;
+    outline: none;
+    transition: all 0.2s;
+    font-family: var(--sans);
+  }
+  .search-box input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-glow);
+  }
+  .search-box input::placeholder { color: var(--text-dim); }
+
+  .search-icon {
+    position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+    color: var(--text-dim); font-size: 16px; pointer-events: none;
+  }
+  .search-box button {
+    background: var(--accent);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .search-box button:hover { background: var(--accent-dim); }
+
+  .search-meta {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-top: 8px; font-size: 12px; color: var(--text-dim);
+  }
+
+  /* ---- Results ---- */
+  .results { display: flex; flex-direction: column; gap: 12px; }
+
+  .result-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 20px;
+    transition: all 0.2s;
+  }
+  .result-card:hover { border-color: var(--border-hover); }
+
+  .result-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 8px;
+  }
+  .result-rank {
+    font-size: 11px; font-weight: 700; color: var(--accent);
+    background: var(--accent-glow);
+    padding: 2px 8px; border-radius: 4px;
+    font-family: var(--mono);
+  }
+  .result-score {
+    font-size: 11px; color: var(--text-dim);
+    font-family: var(--mono);
+  }
+
+  .result-text {
+    font-size: 13px; line-height: 1.7; color: var(--text);
+    white-space: pre-wrap; word-break: break-word;
+  }
+  .result-text mark {
+    background: #eab30830; color: var(--amber);
+    border-radius: 2px; padding: 0 2px;
+  }
+
+  .result-footer {
+    margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--border);
+    display: flex; gap: 12px; font-size: 11px; color: var(--text-dim);
+    font-family: var(--mono);
+  }
+  .result-footer .tag {
+    background: var(--surface-2); padding: 1px 6px; border-radius: 3px;
+  }
+  .result-card { cursor: pointer; }
+  .passage-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.7); z-index:900; display:flex; align-items:center; justify-content:center; opacity:0; transition:opacity 0.2s; pointer-events:none; }
+  .passage-overlay.open { opacity:1; pointer-events:auto; }
+  .passage-modal { background:var(--bg); border:1px solid var(--border); border-radius:14px; width:min(800px,90vw); max-height:80vh; display:flex; flex-direction:column; box-shadow:0 24px 80px #00000080; }
+  .passage-modal-header { display:flex; justify-content:space-between; align-items:center; padding:16px 20px; border-bottom:1px solid var(--border); flex-shrink:0; }
+  .passage-modal-header .modal-rank { font-size:12px; font-weight:700; color:var(--accent); font-family:var(--mono); }
+  .passage-modal-header .modal-score { font-size:12px; color:var(--text-dim); font-family:var(--mono); margin-left:12px; }
+  .passage-modal-header .modal-close { background:none; border:1px solid var(--border); color:var(--text-dim); width:32px; height:32px; border-radius:6px; cursor:pointer; font-size:18px; display:flex; align-items:center; justify-content:center; transition:all 0.2s; }
+  .passage-modal-header .modal-close:hover { border-color:var(--red); color:var(--red); background:rgba(239,68,68,0.1); }
+  .passage-modal-body { padding:20px; overflow-y:auto; flex:1; }
+  .passage-modal-body .passage-text { font-size:14px; line-height:1.8; color:var(--text); white-space:pre-wrap; word-break:break-word; }
+  .passage-modal-body .passage-text mark { background:#eab30830; color:var(--amber); border-radius:2px; padding:0 2px; }
+  .passage-modal-footer { padding:12px 20px; border-top:1px solid var(--border); display:flex; justify-content:center; gap:8px; flex-shrink:0; }
+  .passage-nav-btn { background:var(--surface); border:1px solid var(--border); color:var(--text-dim); padding:6px 16px; border-radius:6px; font-size:12px; cursor:not-allowed; opacity:0.4; transition:all 0.2s; font-family:var(--mono); }
+  .passage-nav-btn.enabled { cursor:pointer; opacity:1; }
+  .passage-nav-btn.enabled:hover { border-color:var(--accent); color:var(--accent); }
+
+  /* ---- Store Section ---- */
+  .store-section {
+    margin-top: 32px; padding-top: 24px;
+    border-top: 1px solid var(--border);
+  }
+  .store-section h2 {
+    font-size: 14px; font-weight: 600; color: var(--text-bright);
+    margin-bottom: 12px;
+  }
+  .store-box { display: flex; flex-direction: column; gap: 8px; }
+  .store-box textarea {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-size: 13px;
+    font-family: var(--sans);
+    padding: 12px 16px;
+    border-radius: 10px;
+    resize: vertical;
+    min-height: 100px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .store-box textarea:focus { border-color: var(--green); }
+  .store-box textarea::placeholder { color: var(--text-dim); }
+
+  .store-row {
+    display: flex; gap: 8px; align-items: center;
+  }
+  .store-row input {
+    flex: 1;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-size: 12px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    outline: none;
+    font-family: var(--mono);
+  }
+  .store-row input:focus { border-color: var(--green); }
+  .store-row input::placeholder { color: var(--text-dim); }
+
+  .store-row button {
+    background: var(--green);
+    color: white;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .store-row button:hover { background: var(--green-dim); }
+
+  /* ---- Toast ---- */
+  .toast {
+    position: fixed; bottom: 24px; right: 24px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 20px;
+    font-size: 13px;
+    color: var(--text);
+    box-shadow: 0 8px 32px #00000060;
+    transform: translateY(80px);
+    opacity: 0;
+    transition: all 0.3s;
+    z-index: 1000;
+  }
+  .toast.show { transform: translateY(0); opacity: 1; }
+  .toast.success { border-left: 3px solid var(--green); }
+  .toast.error { border-left: 3px solid var(--red); }
+
+  /* ---- Empty State ---- */
+  .empty-state {
+    text-align: center; padding: 60px 20px;
+    color: var(--text-dim);
+  }
+  .empty-state .icon { font-size: 48px; margin-bottom: 12px; opacity: 0.3; }
+  .empty-state p { font-size: 14px; }
+  .empty-state .hint { font-size: 12px; margin-top: 8px; }
+
+  /* ---- Loading ---- */
+  .loading { display: none; text-align: center; padding: 40px; color: var(--text-dim); }
+  .loading.active { display: block; }
+  .spinner {
+    display: inline-block; width: 20px; height: 20px;
+    border: 2px solid var(--border); border-top-color: var(--accent);
+    border-radius: 50%; animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ---- Footer ---- */
+  .app-footer {
+    margin-top: 40px; padding: 20px 0;
+    border-top: 1px solid var(--border);
+    text-align: center;
+    font-size: 11px; color: var(--text-dim);
+  }
+  .app-footer a { color: var(--accent); text-decoration: none; }
+  .app-footer a:hover { text-decoration: underline; }
+
+  /* ---- Responsive ---- */
+  @media (max-width: 640px) {
+    .app { padding: 12px; }
+    .brand { flex-wrap: wrap; }
+    .server-config { margin-left: 0; width: 100%; }
+    .server-config input { width: 100%; }
+    .search-box { flex-direction: column; }
+    .search-box button { width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <!-- Brand -->
+  <div class="brand">
+    <div class="brand-icon"><img src="../vector-benchmark-demo/cuda/membot-icon-no-bg.png" alt="Membot"></div>
+    <div class="brand-text">
+      <h1>Mem<span>bot</span></h1>
+      <p>Brain Cartridge Memory System</p>
+    </div>
+    <button class="theme-toggle" id="themeBtn" onclick="toggleTheme()" title="Toggle light/dark mode">&#x2600;</button>
+    <div class="server-config">
+      <div class="status-dot" id="statusDot" title="Disconnected"></div>
+      <input type="text" id="serverUrl" value="http://137.184.227.79:8000"
+             placeholder="Server URL" onchange="loadCartridges()">
+    </div>
+  </div>
+
+  <!-- Cartridge Bar -->
+  <div class="cart-bar" id="cartBar">
+    <div class="cart-chip" onclick="listCarts()">
+      <div class="name" style="color: var(--text-dim)">Loading...</div>
+      <div class="meta">Checking server</div>
+    </div>
+  </div>
+
+  <!-- Search -->
+  <div class="search-section">
+    <div class="search-box">
+      <span class="search-icon">&#x1F50D;</span>
+      <input type="text" id="searchInput" placeholder="Search your memory..."
+             onkeydown="if(event.key==='Enter') doSearch()">
+      <button onclick="doSearch()">Search</button>
+    </div>
+    <div class="search-meta" id="searchMeta"></div>
+  </div>
+
+  <!-- Results -->
+  <div class="loading" id="loadingEl"><div class="spinner"></div> Searching...</div>
+
+  <div class="results" id="resultsEl">
+    <div class="empty-state">
+      <div class="icon">&#x1F9E0;</div>
+      <p>Search your brain cartridge</p>
+      <div class="hint">Type a query above to find memories by meaning, not just keywords</div>
+    </div>
+  </div>
+
+  <!-- Passage Viewer Modal -->
+  <div class="passage-overlay" id="passageOverlay" onclick="if(event.target===this)closePassage()">
+    <div class="passage-modal">
+      <div class="passage-modal-header">
+        <div><span class="modal-rank" id="modalRank"></span><span class="modal-score" id="modalScore"></span></div>
+        <button class="modal-close" onclick="closePassage()" title="Close">&#x2715;</button>
+      </div>
+      <div class="passage-modal-body"><div class="passage-text" id="modalText"></div></div>
+      <div class="passage-modal-footer">
+        <button class="passage-nav-btn" id="btnPrev" title="Previous chunk (when metadata wired)">&#x25C0; Prev</button>
+        <button class="passage-nav-btn" id="btnNext" title="Next chunk (when metadata wired)">Next &#x25B6;</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Store -->
+  <div class="store-section">
+    <h2>Store a Memory</h2>
+    <div class="store-box">
+      <textarea id="storeContent" placeholder="Paste or type content to store in the cartridge..." rows="4"></textarea>
+      <div class="store-row">
+        <input type="text" id="storeTags" placeholder="Tags (optional): ARCHITECTURE, JOURNAL, ...">
+        <button onclick="doStore()">Store</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="app-footer">
+    Membot &mdash; Neuromorphic memory for AI agents &mdash;
+    <a href="https://github.com/project-you-apps/membot">GitHub</a>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toastEl"></div>
+
+<script>
+const $ = s => document.querySelector(s);
+const BASE = () => $('#serverUrl').value.replace(/\/$/, '');
+
+let _mounted = null, _memories = 0;
+
+function applyReadOnly(isReadOnly) {
+  const ta = $('#storeContent'), btn = document.querySelector('.store-section button'), ti = $('#storeTags');
+  if (isReadOnly) {
+    if(ta){ta.value='THIS SERVICE NOT YET AVAILABLE';ta.disabled=true;ta.style.opacity='0.5';}
+    if(ti){ti.disabled=true;ti.style.opacity='0.5';}
+    if(btn){btn.disabled=true;btn.style.opacity='0.5';btn.style.cursor='not-allowed';}
+  } else {
+    if(ta){ta.value='';ta.disabled=false;ta.style.opacity='1';}
+    if(ti){ti.disabled=false;ti.style.opacity='1';}
+    if(btn){btn.disabled=false;btn.style.opacity='1';btn.style.cursor='pointer';}
+  }
+}
+
+// ---- Status ----
+async function checkStatus() {
+  const dot = $('#statusDot');
+  try {
+    const r = await fetch(BASE() + '/api/status', { signal: AbortSignal.timeout(5000) });
+    const d = await r.json();
+    dot.className = 'status-dot connected';
+    _mounted = d.cartridge; _memories = d.memories || 0;
+    dot.title = `Connected: ${_memories} memories`;
+    applyReadOnly(d.read_only);
+    return d;
+  } catch(e) {
+    dot.className = 'status-dot error';
+    dot.title = 'Disconnected';
+    return null;
+  }
+}
+
+// ---- Cartridge Picker ----
+async function loadCartridges() {
+  const bar = $('#cartBar');
+  try {
+    const [cr, sr] = await Promise.all([
+      fetch(BASE() + '/api/cartridges', { signal: AbortSignal.timeout(5000) }).then(r => r.json()),
+      fetch(BASE() + '/api/status', { signal: AbortSignal.timeout(5000) }).then(r => r.json())
+    ]);
+    _mounted = sr.cartridge; _memories = sr.memories || 0;
+    const dot = $('#statusDot');
+    dot.className = 'status-dot connected';
+    dot.title = `Connected: ${_memories} memories`;
+    applyReadOnly(sr.read_only);
+
+    const carts = cr.cartridges || [];
+    if (carts.length === 0) {
+      bar.innerHTML = '<div class="cart-chip"><div class="name" style="color:var(--text-dim)">No cartridges found</div></div>';
+      return;
+    }
+    bar.innerHTML = carts.map(c => {
+      const active = _mounted && c.name === _mounted;
+      return `
+        <div class="cart-chip${active ? ' active' : ''}" onclick="mountCart('${esc(c.name)}')" data-name="${esc(c.name)}">
+          <div class="name">${esc(c.name)}</div>
+          <div class="meta">${c.size_mb} MB &middot; ${c.format.toUpperCase()}${c.has_brain ? ' &middot; GPU' : ''}${active ? ` &middot; <span class="count">${_memories.toLocaleString()} memories</span>` : ''}</div>
+        </div>`;
+    }).join('');
+  } catch(e) {
+    bar.innerHTML = `<div class="cart-chip"><div class="name" style="color:var(--red)">Connection failed</div><div class="meta">${esc(e.message)}</div></div>`;
+  }
+}
+
+async function mountCart(name) {
+  if (name === _mounted) return;
+  // Clear stale results from previous cart
+  $('#resultsEl').innerHTML = `
+    <div class="empty-state">
+      <div class="icon">&#x1F9E0;</div>
+      <p>Search your brain cartridge</p>
+      <div class="hint">Type a query above to find memories by meaning, not just keywords</div>
+    </div>`;
+  $('#searchMeta').textContent = '';
+  _lastResults = []; _lastQuery = '';
+
+  const chips = document.querySelectorAll('.cart-chip');
+  chips.forEach(c => { if (c.dataset.name === name) c.classList.add('mounting'); });
+  toast('Mounting ' + name + '...');
+  try {
+    const r = await fetch(BASE() + '/api/mount', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name }),
+    });
+    const d = await r.json();
+    if (d.error) { toast(d.error, 'error'); }
+    else { toast('Mounted ' + name, 'success'); }
+    await loadCartridges();
+  } catch(e) {
+    toast('Mount failed: ' + e.message, 'error');
+    chips.forEach(c => c.classList.remove('mounting'));
+  }
+}
+
+// ---- Search ----
+let _lastResults = [], _lastQuery = '';
+
+async function doSearch() {
+  const query = $('#searchInput').value.trim();
+  if (!query) return;
+  _lastQuery = query;
+
+  const el = $('#resultsEl');
+  const loading = $('#loadingEl');
+  const meta = $('#searchMeta');
+
+  el.innerHTML = '';
+  loading.className = 'loading active';
+  meta.textContent = '';
+
+  const t0 = performance.now();
+
+  try {
+    const r = await fetch(BASE() + '/api/search', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ query, top_k: 8 }),
+    });
+    const data = await r.json();
+    const elapsed = Math.round(performance.now() - t0);
+
+    loading.className = 'loading';
+
+    // Handle both structured JSON (new) and string (old) response formats
+    let items = data.results;
+    if (!items && typeof data.result === 'string') {
+      items = [];
+      const lines = data.result.split(/\n\n/);
+      for (const line of lines) {
+        const m = line.match(/^#\d+\s+\[([\d.]+)\]\s+(.*)/s);
+        if (m) items.push({ score: parseFloat(m[1]), text: m[2], full_text: m[2], tags: '' });
+      }
+    }
+    _lastResults = items || [];
+
+    if (!items || items.length === 0) {
+      el.innerHTML = `
+        <div class="empty-state">
+          <div class="icon">&#x1F914;</div>
+          <p>No results found</p>
+          <div class="hint">Try a different query or broader terms</div>
+        </div>`;
+      meta.textContent = `0 results in ${elapsed}ms`;
+      return;
+    }
+
+    meta.textContent = `${items.length} results in ${elapsed}ms`;
+
+    el.innerHTML = items.map((item, i) => {
+      const text = esc(item.text || item.content || '');
+      const score = item.score != null ? item.score.toFixed(4) : '';
+      const tags = item.tags ? item.tags.split(',').map(t =>
+        `<span class="tag">${esc(t.trim())}</span>`
+      ).join('') : '';
+
+      return `
+        <div class="result-card" data-idx="${i}">
+          <div class="result-header">
+            <span class="result-rank">#${i + 1}</span>
+            ${score ? `<span class="result-score">score: ${score}</span>` : ''}
+          </div>
+          <div class="result-text">${highlight(text, query)}</div>
+          ${tags ? `<div class="result-footer">${tags}</div>` : ''}
+        </div>`;
+    }).join('');
+
+    el.querySelectorAll('.result-card').forEach(c =>
+      c.addEventListener('click', () => openPassage(parseInt(c.dataset.idx)))
+    );
+
+  } catch(e) {
+    loading.className = 'loading';
+    el.innerHTML = `<div class="empty-state"><div class="icon">&#x26A0;</div><p>Search failed</p><div class="hint">${esc(e.message)}</div></div>`;
+  }
+}
+
+let _currentPassage = null;  // {index, full_text, prev_idx, next_idx, score, rank}
+
+function openPassage(resultIdx) {
+  if (resultIdx < 0 || resultIdx >= _lastResults.length) return;
+  const item = _lastResults[resultIdx];
+  _showPassage({
+    index: item.index,
+    full_text: item.full_text || item.text || '',
+    prev_idx: item.prev_idx,
+    next_idx: item.next_idx,
+    score: item.score,
+    rank: resultIdx + 1,
+  });
+}
+
+function _showPassage(p) {
+  _currentPassage = p;
+  $('#modalRank').textContent = p.rank ? '#' + p.rank : 'idx:' + p.index;
+  $('#modalScore').textContent = p.score != null ? 'score: ' + p.score.toFixed(4) : '';
+  $('#modalText').innerHTML = highlight(esc(p.full_text), _lastQuery);
+
+  // Wire PREV/NEXT buttons
+  const btnP = $('#btnPrev'), btnN = $('#btnNext');
+  if (p.prev_idx != null) {
+    btnP.className = 'passage-nav-btn enabled';
+    btnP.onclick = () => navigatePassage(p.prev_idx);
+  } else {
+    btnP.className = 'passage-nav-btn';
+    btnP.onclick = null;
+  }
+  if (p.next_idx != null) {
+    btnN.className = 'passage-nav-btn enabled';
+    btnN.onclick = () => navigatePassage(p.next_idx);
+  } else {
+    btnN.className = 'passage-nav-btn';
+    btnN.onclick = null;
+  }
+
+  $('#passageOverlay').classList.add('open');
+  document.addEventListener('keydown', _passageKeys);
+}
+
+async function navigatePassage(idx) {
+  try {
+    const r = await fetch(BASE() + '/api/passage?idx=' + idx);
+    const data = await r.json();
+    if (data.error) { toast(data.error, 'error'); return; }
+    const p = data.passage;
+    _showPassage({
+      index: p.index,
+      full_text: p.full_text,
+      prev_idx: p.prev_idx,
+      next_idx: p.next_idx,
+      score: null,
+      rank: null,
+    });
+  } catch(e) {
+    toast('Navigation failed: ' + e.message, 'error');
+  }
+}
+
+function closePassage() {
+  $('#passageOverlay').classList.remove('open');
+  _currentPassage = null;
+  document.removeEventListener('keydown', _passageKeys);
+}
+
+function _passageKeys(e) {
+  if (e.key === 'Escape') closePassage();
+  if (e.key === 'ArrowLeft' && _currentPassage?.prev_idx != null) navigatePassage(_currentPassage.prev_idx);
+  if (e.key === 'ArrowRight' && _currentPassage?.next_idx != null) navigatePassage(_currentPassage.next_idx);
+}
+
+// ---- Store ----
+async function doStore() {
+  const content = $('#storeContent').value.trim();
+  const tags = $('#storeTags').value.trim();
+
+  if (!content) { toast('Enter some content to store', 'error'); return; }
+
+  try {
+    const r = await fetch(BASE() + '/api/store', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ content, tags }),
+    });
+    const data = await r.json();
+
+    if (data.error) {
+      toast(data.error, 'error');
+    } else {
+      toast('Memory stored successfully', 'success');
+      $('#storeContent').value = '';
+      $('#storeTags').value = '';
+      loadCartridges(); // refresh count
+    }
+  } catch(e) {
+    toast('Store failed: ' + e.message, 'error');
+  }
+}
+
+// ---- Helpers ----
+function esc(s) {
+  const d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML;
+}
+
+const _STOP = new Set(['the','and','are','was','were','for','that','this','with','from','not','but','has','had','have','does','did','will','can','its','who','what','how','why','about','tell','you','your','some','than','them','then','they','been','more','also','into','would','could','should','just','like','very','much','many','only','other','over','such','after','before','between','through','where','when','which','while','each','there','their','these','those','being','because','during','both','same','own','most','well','way','all','out','one','two','may']);
+function highlight(text, query) {
+  if (!query) return text;
+  const words = query.split(/\s+/).filter(w => w.length > 2 && !_STOP.has(w.toLowerCase()));
+  let result = text;
+  for (const word of words) {
+    const re = new RegExp(`(${word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+    result = result.replace(re, '<mark>$1</mark>');
+  }
+  return result;
+}
+
+function toast(msg, type = 'success') {
+  const el = $('#toastEl');
+  el.textContent = msg;
+  el.className = `toast ${type} show`;
+  setTimeout(() => el.className = 'toast', 3000);
+}
+
+// ---- Theme ----
+function toggleTheme() {
+  const html = document.documentElement;
+  const current = html.getAttribute('data-theme');
+  const next = current === 'light' ? 'dark' : 'light';
+  html.setAttribute('data-theme', next);
+  $('#themeBtn').innerHTML = next === 'light' ? '&#x1F319;' : '&#x2600;';
+  localStorage.setItem('membot-theme', next);
+}
+
+// Restore saved theme
+(function() {
+  const saved = localStorage.getItem('membot-theme');
+  if (saved === 'light') {
+    document.documentElement.setAttribute('data-theme', 'light');
+    // Button update happens after DOM ready
+    setTimeout(() => { $('#themeBtn').innerHTML = '&#x1F319;'; }, 0);
+  }
+})();
+
+// ---- Init ----
+loadCartridges();
+</script>
+</body>
+</html>

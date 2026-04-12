@@ -1,0 +1,141 @@
+{
+  "game_id": "tu93-2b534c15",
+  "player": "replay",
+  "started": "20260410_112833",
+  "win_levels": 9,
+  "baseline": 0,
+  "steps": [
+    {
+      "step": 1,
+      "level": 0,
+      "action": "RIGHT",
+      "png": "step_0001_L0_RIGHT.png",
+      "gif": "step_0001_L0_anim.gif"
+    },
+    {
+      "step": 2,
+      "level": 0,
+      "action": "DOWN",
+      "png": "step_0002_L0_DOWN.png",
+      "gif": "step_0002_L0_anim.gif"
+    },
+    {
+      "step": 3,
+      "level": 0,
+      "action": "DOWN",
+      "png": "step_0003_L0_DOWN.png",
+      "gif": "step_0003_L0_anim.gif"
+    },
+    {
+      "step": 4,
+      "level": 0,
+      "action": "RIGHT",
+      "png": "step_0004_L0_RIGHT.png",
+      "gif": "step_0004_L0_anim.gif"
+    },
+    {
+      "step": 5,
+      "level": 0,
+      "action": "UP",
+      "png": "step_0005_L0_UP.png",
+      "gif": "step_0005_L0_anim.gif"
+    },
+    {
+      "step": 6,
+      "level": 0,
+      "action": "RIGHT",
+      "png": "step_0006_L0_RIGHT.png",
+      "gif": "step_0006_L0_anim.gif"
+    },
+    {
+      "step": 7,
+      "level": 0,
+      "action": "DOWN",
+      "png": "step_0007_L0_DOWN.png",
+      "gif": "step_0007_L0_anim.gif"
+    },
+    {
+      "step": 8,
+      "level": 0,
+      "action": "DOWN",
+      "png": "step_0008_L0_DOWN.png",
+      "gif": "step_0008_L0_anim.gif"
+    },
+    {
+      "step": 9,
+      "level": 0,
+      "action": "LEFT",
+      "png": "step_0009_L0_LEFT.png",
+      "gif": "step_0009_L0_anim.gif"
+    },
+    {
+      "step": 10,
+      "level": 0,
+      "action": "LEFT",
+      "png": "step_0010_L0_LEFT.png",
+      "gif": "step_0010_L0_anim.gif"
+    },
+    {
+      "step": 11,
+      "level": 0,
+      "action": "DOWN",
+      "png": "step_0011_L0_DOWN.png",
+      "gif": "step_0011_L0_anim.gif"
+    },
+    {
+      "step": 12,
+      "level": 0,
+      "action": "RIGHT",
+      "png": "step_0012_L0_RIGHT.png",
+      "gif": "step_0012_L0_anim.gif"
+    },
+    {
+      "step": 13,
+      "level": 0,
+      "action": "RIGHT",
+      "png": "step_0013_L0_RIGHT.png",
+      "gif": "step_0013_L0_anim.gif"
+    },
+    {
+      "step": 14,
+      "level": 0,
+      "action": "DOWN",
+      "png": "step_0014_L0_DOWN.png",
+      "gif": "step_0014_L0_anim.gif"
+    },
+    {
+      "step": 15,
+      "level": 0,
+      "action": "RIGHT",
+      "png": "step_0015_L0_RIGHT.png",
+      "gif": "step_0015_L0_anim.gif"
+    },
+    {
+      "step": 16,
+      "level": 0,
+      "action": "UP",
+      "png": "step_0016_L0_UP.png",
+      "gif": "step_0016_L0_anim.gif"
+    },
+    {
+      "step": 17,
+      "level": 0,
+      "action": "RIGHT",
+      "png": "step_0017_L0_RIGHT.png",
+      "gif": "step_0017_L0_anim.gif"
+    },
+    {
+      "step": 18,
+      "level": 0,
+      "action": "DOWN",
+      "png": "step_0018_L0_DOWN.png",
+      "gif": "step_0018_L0_anim.gif",
+      "level_up": true,
+      "new_level": 1
+    }
+  ],
+  "finished": "20260410_112835",
+  "result": "NOT_FINISHED",
+  "levels_completed": 1,
+  "total_steps": 18
+}

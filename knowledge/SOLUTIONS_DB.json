@@ -1,0 +1,567 @@
+{
+  "_description": "ARC-AGI-3 solution database. Tracks every successful solve with method and details.",
+  "_updated": "2026-04-11T03:00:00",
+  "games": {
+    "sb26": {
+      "levels": 8,
+      "baseline": 153,
+      "solves": [
+        {
+          "method": "interactive",
+          "by": "cbp+dp",
+          "levels_won": 8,
+          "actions_used": null,
+          "date": "2026-04-07",
+          "notes": "Pick-and-place with structural matching. Portal tokens, connector hierarchy."
+        },
+        {
+          "method": "algorithmic",
+          "by": "mcnugget",
+          "solver": "sb26_solver.py",
+          "levels_won": 0,
+          "total_levels": 8,
+          "actions_used": 0,
+          "verified_live": false,
+          "state": "NOT_FINISHED",
+          "date": "2026-04-08"
+        }
+      ]
+    },
+    "vc33": {
+      "levels": 7,
+      "baseline": 307,
+      "solves": [
+        {
+          "method": "interactive",
+          "by": "cbp+dp",
+          "levels_won": 7,
+          "actions_used": 167,
+          "date": "2026-04-07",
+          "notes": "Seesaw-balance puzzle. 184% efficiency. Dual button types (brown instant, blue animated)."
+        },
+        {
+          "method": "algorithmic",
+          "by": "mcnugget",
+          "solver": "vc33_solver.py",
+          "levels_won": 0,
+          "total_levels": 7,
+          "actions_used": 0,
+          "verified_live": false,
+          "state": "NOT_FINISHED",
+          "date": "2026-04-08"
+        }
+      ]
+    },
+    "cd82": {
+      "levels": 6,
+      "baseline": 136,
+      "solves": [
+        {
+          "method": "interactive",
+          "by": "nomad+dp",
+          "levels_won": 6,
+          "actions_used": null,
+          "date": "2026-04-07",
+          "notes": "Octagonal color-fill. Cursor orbits canvas, stamps paint wedges."
+        },
+        {
+          "method": "algorithmic",
+          "by": "mcnugget",
+          "solver": "cd82_solver.py",
+          "levels_won": 0,
+          "total_levels": 6,
+          "actions_used": 92,
+          "verified_live": false,
+          "state": "NOT_FINISHED",
+          "date": "2026-04-08"
+        }
+      ]
+    },
+    "lp85": {
+      "levels": 8,
+      "baseline": 422,
+      "solves": [
+        {
+          "method": "interactive",
+          "by": "mcnugget+dp",
+          "levels_won": 8,
+          "actions_used": 117,
+          "date": "2026-04-07",
+          "notes": "Ring rotation. Source-assisted for L6-8. Commutator technique through intersections."
+        },
+        {
+          "method": "algorithmic",
+          "by": "mcnugget",
+          "solver": "lp85_solver.py",
+          "levels_won": 0,
+          "total_levels": 8,
+          "actions_used": 0,
+          "verified_live": false,
+          "state": "NOT_FINISHED",
+          "date": "2026-04-08"
+        }
+      ]
+    },
+    "ft09": {
+      "levels": 6,
+      "baseline": 163,
+      "solves": [
+        {
+          "method": "interactive",
+          "by": "mcnugget+dp",
+          "levels_won": 2,
+          "actions_used": 11,
+          "date": "2026-04-07",
+          "notes": "L1-L2 solved from observation. Decoded dot constraint language."
+        },
+        {
+          "method": "algorithmic",
+          "by": "mcnugget",
+          "solver": "ft09_solver.py",
+          "levels_won": 6,
+          "total_levels": 6,
+          "actions_used": 75,
+          "verified_live": true,
+          "state": "WON",
+          "date": "2026-04-08"
+        }
+      ]
+    },
+    "s5i5": {
+      "levels": 8,
+      "baseline": 608,
+      "solves": [
+        {
+          "method": "interactive",
+          "by": "mcnugget+dp",
+          "levels_won": 6,
+          "actions_used": 211,
+          "date": "2026-04-10",
+          "notes": "Path routing. L1-L6 solved with verified reproducible sequences. L5: partial cyan retract, walk wall right, green through gap. L6: shrink all, rotate green horizontal, shift LEFT to gap, rotate yellow DOWN x2, grow through gap, rotate blue + grow RIGHT."
+        },
+        {
+          "method": "algorithmic",
+          "by": "mcnugget",
+          "solver": "s5i5_l7_solver.py",
+          "levels_won": 7,
+          "total_levels": 8,
+          "actions_used": 220,
+          "verified_live": false,
+          "state": "NOT_FINISHED",
+          "date": "2026-04-11",
+          "notes": "L7 solved in 9 clicks via rotation trick: CYN-R, WHT-R, WHT+x2, MRN-Rx4, MRN+. Crane-boom swing bypasses all barriers. L8 needs 2 horizontal blockers cleared (vgz at y=15, kuv at y=36). Partial progress: WHT+x3,S3Rx3,S5Lx6,S3Lx2,W+x2 clears first blocker, S2Rx10 reaches y=33. Second blocker (kuv+xip) needs similar clearing."
+        },
+        {
+          "method": "algorithmic",
+          "by": "mcnugget",
+          "solver": "s5i5_solver.py",
+          "levels_won": 1,
+          "total_levels": 8,
+          "actions_used": 13,
+          "verified_live": false,
+          "state": "NOT_FINISHED",
+          "date": "2026-04-08"
+        },
+        {
+          "method": "algorithmic",
+          "by": "mcnugget",
+          "solver": "s5i5_play_live.py",
+          "levels_won": 8,
+          "total_levels": 8,
+          "actions_used": 100,
+          "verified_live": false,
+          "state": "WON",
+          "date": "2026-04-11",
+          "notes": "L7: 49 clicks via down-left-up routing through x=6-8 gap with blue rotation fixes. L8: 51 clicks via WHT+ rotation cycling barrier clearing then growth. Both perform_action verified. Critical finding: step() allows collision+win states that perform_action (SDK) prevents \u2014 all solutions must be collision-free."
+        }
+      ]
+    },
+    "tn36": {
+      "levels": 7,
+      "baseline": 250,
+      "solves": [
+        {
+          "method": "interactive",
+          "by": "cbp",
+          "levels_won": 7,
+          "actions_used": 119,
+          "date": "2026-04-09",
+          "notes": "Waypoint + portal timing. Checkered squares = docking points. Binary encoding for movement."
+        },
+        {
+          "method": "algorithmic",
+          "by": "mcnugget",
+          "solver": "tn36_solver.py",
+          "levels_won": 0,
+          "total_levels": 7,
+          "actions_used": 7,
+          "verified_live": false,
+          "state": "NOT_FINISHED",
+          "date": "2026-04-08"
+        }
+      ]
+    },
+    "r11l": {
+      "levels": 6,
+      "baseline": 167,
+      "solves": [
+        {
+          "method": "interactive",
+          "by": "nomad",
+          "levels_won": 5,
+          "actions_used": null,
+          "date": "2026-04-10",
+          "notes": "Pick-and-place creature assembly. Ball jumps obstacles (landing matters). L5 pickup-and-deliver mechanic."
+        },
+        {
+          "method": "algorithmic",
+          "by": "mcnugget",
+          "solver": "r11l_solver.py",
+          "levels_won": 1,
+          "total_levels": 6,
+          "actions_used": 17,
+          "verified_live": false,
+          "state": "GAME_OVER",
+          "date": "2026-04-08"
+        }
+      ]
+    },
+    "tu93": {
+      "levels": 9,
+      "baseline": 378,
+      "solves": [
+        {
+          "method": "interactive",
+          "by": "cbp+dp",
+          "levels_won": 9,
+          "actions_used": 189,
+          "date": "2026-04-10",
+          "notes": "Entity navigation with bouncers. Perceptual approach for L6+. Goose chase routing L8."
+        },
+        {
+          "method": "algorithmic",
+          "by": "mcnugget",
+          "solver": "tu93_solver.py",
+          "levels_won": 0,
+          "total_levels": 9,
+          "actions_used": 0,
+          "verified_live": false,
+          "state": "NOT_FINISHED",
+          "date": "2026-04-08"
+        }
+      ]
+    },
+    "ls20": {
+      "levels": 7,
+      "baseline": 546,
+      "solves": [
+        {
+          "method": "interactive",
+          "by": "sprout",
+          "levels_won": 7,
+          "actions_used": 309,
+          "date": "2026-04-10",
+          "notes": "Movement puzzle. 43% improvement over baseline. Sprout solved autonomously."
+        },
+        {
+          "method": "algorithmic",
+          "by": "mcnugget",
+          "solver": "ls20_solver.py",
+          "levels_won": 1,
+          "total_levels": 7,
+          "actions_used": 79,
+          "verified_live": false,
+          "state": "GAME_OVER",
+          "date": "2026-04-08"
+        }
+      ]
+    },
+    "sc25": {
+      "levels": 6,
+      "baseline": 216,
+      "solves": [
+        {
+          "method": "interactive",
+          "by": "cbp+dp",
+          "levels_won": 6,
+          "actions_used": 171,
+          "date": "2026-04-09",
+          "notes": "Maze wizard. Multiple spell types (fireball, scale). Multi-spell combos in later levels."
+        },
+        {
+          "method": "algorithmic",
+          "by": "mcnugget",
+          "solver": "sc25_solver.py",
+          "levels_won": 0,
+          "total_levels": 6,
+          "actions_used": 0,
+          "verified_live": false,
+          "state": "NOT_FINISHED",
+          "date": "2026-04-08"
+        }
+      ]
+    },
+    "tr87": {
+      "levels": 6,
+      "baseline": 317,
+      "solves": [
+        {
+          "method": "interactive",
+          "by": "cbp+dp",
+          "levels_won": 6,
+          "actions_used": 137,
+          "date": "2026-04-09",
+          "notes": "Grid navigation with tree translation. 231% efficiency vs baseline."
+        },
+        {
+          "method": "algorithmic",
+          "by": "mcnugget",
+          "solver": "tr87_solver.py",
+          "levels_won": 0,
+          "total_levels": 6,
+          "actions_used": 0,
+          "verified_live": false,
+          "state": "NOT_FINISHED",
+          "date": "2026-04-08"
+        }
+      ]
+    },
+    "cn04": {
+      "levels": 5,
+      "solves": [
+        {
+          "method": "algorithmic",
+          "by": "mcnugget",
+          "solver": "cn04_solver.py",
+          "levels_won": 1,
+          "total_levels": 5,
+          "actions_used": 97,
+          "verified_live": false,
+          "state": "NOT_FINISHED",
+          "date": "2026-04-08"
+        },
+        {
+          "method": "algorithmic",
+          "by": "fleet",
+          "levels_won": 5,
+          "total_levels": 5,
+          "state": "WON",
+          "date": "2026-04-11",
+          "notes": "Marked solved per game_coordination.json (5/5). Original solver got 1/5."
+        }
+      ]
+    },
+    "sk48": {
+      "levels": 8,
+      "solves": [
+        {
+          "method": "algorithmic",
+          "by": "mcnugget",
+          "solver": "sk48_solver.py",
+          "levels_won": 0,
+          "total_levels": 8,
+          "actions_used": 0,
+          "verified_live": false,
+          "state": "NOT_FINISHED",
+          "date": "2026-04-08"
+        }
+      ]
+    },
+    "su15": {
+      "levels": 9,
+      "baseline": 566,
+      "solves": [
+        {
+          "method": "interactive",
+          "by": "cbp",
+          "levels_won": 6,
+          "actions_used": null,
+          "date": "2026-04-10",
+          "notes": "Suika merge. Vacuum fruits, dodge enemies. L7 stuck \u2014 enemy reach exceeds merge time."
+        },
+        {
+          "method": "algorithmic",
+          "by": "mcnugget",
+          "solver": "su15_solver.py",
+          "levels_won": 0,
+          "total_levels": 9,
+          "actions_used": 0,
+          "verified_live": false,
+          "state": "NOT_FINISHED",
+          "date": "2026-04-08"
+        }
+      ]
+    },
+    "wa30": {
+      "levels": 9,
+      "solves": [
+        {
+          "method": "algorithmic",
+          "by": "mcnugget",
+          "solver": "wa30_solver.py",
+          "levels_won": 0,
+          "total_levels": 9,
+          "actions_used": 0,
+          "verified_live": false,
+          "state": "NOT_FINISHED",
+          "date": "2026-04-08"
+        }
+      ]
+    },
+    "ar25": {
+      "levels": 8,
+      "solves": [
+        {
+          "method": "algorithmic",
+          "by": "mcnugget",
+          "solver": "ar25_solver.py",
+          "levels_won": 0,
+          "total_levels": 8,
+          "actions_used": 0,
+          "verified_live": false,
+          "state": "NOT_FINISHED",
+          "date": "2026-04-08"
+        }
+      ]
+    },
+    "bp35": {
+      "levels": 0,
+      "solves": [
+        {
+          "method": "algorithmic",
+          "by": "mcnugget",
+          "solver": "bp35_solver.py",
+          "levels_won": 0,
+          "total_levels": 0,
+          "actions_used": 0,
+          "verified_live": false,
+          "state": "CRASH",
+          "date": "2026-04-08",
+          "error": "Command '['python3', '/Users/dennispalatov/repos/shared-context/arc-agi-3/game-solvers/bp35_solver.py']' timed out after 120 seconds"
+        }
+      ]
+    },
+    "dc22": {
+      "levels": 6,
+      "solves": [
+        {
+          "method": "algorithmic",
+          "by": "mcnugget",
+          "solver": "dc22_solver.py",
+          "levels_won": 0,
+          "total_levels": 6,
+          "actions_used": 0,
+          "verified_live": false,
+          "state": "NOT_FINISHED",
+          "date": "2026-04-08"
+        }
+      ]
+    },
+    "g50t": {
+      "levels": 7,
+      "solves": [
+        {
+          "method": "algorithmic",
+          "by": "mcnugget",
+          "solver": "g50t_solver.py",
+          "levels_won": 0,
+          "total_levels": 7,
+          "actions_used": 0,
+          "verified_live": false,
+          "state": "NOT_FINISHED",
+          "date": "2026-04-08"
+        }
+      ]
+    },
+    "ka59": {
+      "levels": 0,
+      "solves": [
+        {
+          "method": "algorithmic",
+          "by": "mcnugget",
+          "solver": "ka59_solver.py",
+          "levels_won": 0,
+          "total_levels": 0,
+          "actions_used": 0,
+          "verified_live": false,
+          "state": "CRASH",
+          "date": "2026-04-08",
+          "error": "Command '['python3', '/Users/dennispalatov/repos/shared-context/arc-agi-3/game-solvers/ka59_solver.py']' timed out after 120 seconds"
+        }
+      ]
+    },
+    "lf52": {
+      "levels": 10,
+      "solves": [
+        {
+          "method": "algorithmic",
+          "by": "mcnugget",
+          "solver": "lf52_solver.py",
+          "levels_won": 0,
+          "total_levels": 10,
+          "actions_used": 4,
+          "verified_live": false,
+          "state": "NOT_FINISHED",
+          "date": "2026-04-08"
+        }
+      ]
+    },
+    "m0r0": {
+      "levels": 6,
+      "solves": [
+        {
+          "method": "algorithmic",
+          "by": "mcnugget",
+          "solver": "m0r0_solver.py",
+          "levels_won": 2,
+          "total_levels": 6,
+          "actions_used": 77,
+          "verified_live": false,
+          "state": "NOT_FINISHED",
+          "date": "2026-04-08"
+        }
+      ]
+    },
+    "re86": {
+      "levels": 8,
+      "solves": [
+        {
+          "method": "algorithmic",
+          "by": "mcnugget",
+          "solver": "re86_solver.py",
+          "levels_won": 1,
+          "total_levels": 8,
+          "actions_used": 120,
+          "verified_live": false,
+          "state": "GAME_OVER",
+          "date": "2026-04-08"
+        }
+      ]
+    },
+    "sp80": {
+      "levels": 6,
+      "baseline": 472,
+      "solves": [
+        {
+          "method": "interactive",
+          "by": "thor+dp",
+          "levels_won": 6,
+          "actions_used": null,
+          "date": "2026-04-10",
+          "notes": "Gravity pipes water routing. 7w pipe fills 3 cups. adbrqflmwi IS movable. L-pipes deflect water 90\u00b0."
+        },
+        {
+          "method": "algorithmic",
+          "by": "mcnugget",
+          "solver": "sp80_solver.py",
+          "levels_won": 0,
+          "total_levels": 6,
+          "actions_used": 0,
+          "verified_live": false,
+          "state": "NOT_FINISHED",
+          "date": "2026-04-08"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "game_id": "cn04-65d47d14",
+  "player": "cn04_solver",
+  "started": "20260410_192333",
+  "win_levels": 5,
+  "baseline": 0,
+  "steps": [
+    {
+      "step": 1,
+      "level": 0,
+      "action": "RIGHT",
+      "png": "step_0001_L0_RIGHT.png"
+    },
+    {
+      "step": 2,
+      "level": 0,
+      "action": "RIGHT",
+      "png": "step_0002_L0_RIGHT.png"
+    },
+    {
+      "step": 3,
+      "level": 0,
+      "action": "RIGHT",
+      "png": "step_0003_L0_RIGHT.png"
+    },
+    {
+      "step": 4,
+      "level": 0,
+      "action": "DOWN",
+      "png": "step_0004_L0_DOWN.png"
+    },
+    {
+      "step": 5,
+      "level": 0,
+      "action": "DOWN",
+      "png": "step_0005_L0_DOWN.png"
+    },
+    {
+      "step": 6,
+      "level": 0,
+      "action": "DOWN",
+      "png": "step_0006_L0_DOWN.png"
+    },
+    {
+      "step": 7,
+      "level": 0,
+      "action": "DOWN",
+      "png": "step_0007_L0_DOWN.png"
+    },
+    {
+      "step": 8,
+      "level": 0,
+      "action": "DOWN",
+      "png": "step_0008_L0_DOWN.png"
+    },
+    {
+      "step": 9,
+      "level": 0,
+      "action": "DOWN",
+      "png": "step_0009_L0_DOWN.png",
+      "level_up": true,
+      "new_level": 1
+    }
+  ],
+  "finished": "20260410_192334",
+  "result": "NOT_FINISHED",
+  "levels_completed": 1,
+  "total_steps": 9
+}

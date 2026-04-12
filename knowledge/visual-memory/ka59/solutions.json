@@ -1,0 +1,23 @@
+{
+  "game_id": "ka59-9f096b4a",
+  "solver": "ka59_solve_final.py",
+  "result": "7/7 levels solved",
+  "total_actions": 239,
+  "solutions": {
+    "L0": {"moves": 10, "steps": 11, "method": "A* pixel-perfect sim"},
+    "L1": {"moves": 32, "steps": 41, "method": "A* pixel-perfect sim"},
+    "L2": {"moves": 33, "steps": 33, "method": "A* pixel-perfect sim, cross-shaped enemy targets"},
+    "L3": {"moves": 36, "steps": 39, "method": "A* pixel-perfect sim, secondary goals"},
+    "L4": {"moves": 20, "steps": 20, "method": "A* with bomb explosion simulation"},
+    "L5": {"moves": 46, "steps": 46, "method": "A* with bomb explosion simulation"},
+    "L6": {"moves": 62, "steps": 67, "method": "A* with bomb explosion simulation"}
+  },
+  "key_mechanics": [
+    "Pixel-perfect collision (not AABB) - sprites have transparent pixels",
+    "Push animation resolves within single env.step() (base game loops internally)",
+    "Pushed box slides 5 frames * 3px = 15px min, continues on gulch",
+    "Bombs consume 1 row per action, explode when all consumed, then reset",
+    "Explosion pushes nearby objects based on bomb rotation",
+    "Win: all rktpmjcpkt covered by xlfuqjygey, all ucjzrlvfkb covered by nnckfubbhi"
+  ]
+}

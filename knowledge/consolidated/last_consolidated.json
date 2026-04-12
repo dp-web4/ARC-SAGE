@@ -1,0 +1,30 @@
+{
+  "last_consolidated": "2026-04-12T04:00:02",
+  "total_entries": 349,
+  "machines": {
+    "cbp": 264,
+    "nomad": 59,
+    "sprout": 15,
+    "waving-cat": 11
+  },
+  "games": {
+    "sb26": 22,
+    "sc25": 26,
+    "tn36": 20,
+    "tr87": 19,
+    "tu93": 38,
+    "vc33": 59,
+    "cd82": 48,
+    "all": 15,
+    "r11l": 28,
+    "re86": 4,
+    "?": 4,
+    "su15": 34,
+    "meta": 9,
+    "ls20-9607627b": 12,
+    "sk48": 11
+  },
+  "solutions": 31,
+  "patterns": 2,
+  "insights": 25
+}

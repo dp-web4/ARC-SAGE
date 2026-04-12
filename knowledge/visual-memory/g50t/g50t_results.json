@@ -1,0 +1,18 @@
+{
+  "game_id": "g50t-5849a774",
+  "levels_solved": 7,
+  "total_actions": 311,
+  "per_level": {
+    "0": {"actions": 17, "status": "known_solution"},
+    "1": {"actions": 31, "status": "known_solution"},
+    "2": {"actions": 64, "status": "known_solution"},
+    "3": {"actions": 31, "status": "known_solution"},
+    "4": {"actions": 50, "status": "known_solution"},
+    "5": {"actions": 49, "status": "solved", "phases": "LLU|LLULL|LLDLLLLUULLLDDDDDRRUDLLUUUUURRRDDRRDDRR"},
+    "6": {"actions": 69, "status": "solved", "phases": "16 moves + UNDO + 24 moves + UNDO + 27 moves", "mechanics": "portal_swap + ghost_activated_toggle + non_toggle_hold"}
+  },
+  "l6_status": "solved",
+  "l6_mechanism": "Phase 0 ghost0 paces so its replay reaches portal pad (13,25) at P2 step 8, teleports to (13,13), walks UU to mod[3] at (13,1) and holds obs[0] open. Phase 1 ghost1 hits mod[2] at step 3 toggling obs[1] off, wild ghost then toggles mod[0] firing left portal swap, ghost1 navigates through (31,1) to mod[1] firing right portal swap. Phase 2 player walks to (49,37), paces while swap triggers, teleports to (49,49), LLL to goal.",
+  "solver": "arc-agi-3/experiments/g50t_solve_final.py",
+  "analysis": "arc-agi-3/visual-memory/g50t/"
+}

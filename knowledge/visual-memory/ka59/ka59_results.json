@@ -1,0 +1,42 @@
+{
+  "game_id": "ka59-9f096b4a",
+  "levels_solved": 7,
+  "total_actions": 239,
+  "per_level": {
+    "0": {
+      "actions": 10,
+      "engine_steps": 11,
+      "time": 0.042940378189086914
+    },
+    "1": {
+      "actions": 32,
+      "engine_steps": 41,
+      "time": 20.26296377182007
+    },
+    "2": {
+      "actions": 33,
+      "engine_steps": 33,
+      "time": 0.10011172294616699
+    },
+    "3": {
+      "actions": 36,
+      "engine_steps": 39,
+      "time": 1.0855815410614014
+    },
+    "4": {
+      "actions": 20,
+      "engine_steps": 20,
+      "time": 0.02014327049255371
+    },
+    "5": {
+      "actions": 46,
+      "engine_steps": 46,
+      "time": 1.5381345748901367
+    },
+    "6": {
+      "actions": 62,
+      "engine_steps": 67,
+      "time": 52.35834574699402
+    }
+  }
+}
