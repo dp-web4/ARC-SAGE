@@ -316,8 +316,10 @@
       "levels": 9,
       "status": "in_progress",
       "claimed_by": "mcnugget",
-      "best_level": 3,
-      "solved": false
+      "best_level": 7,
+      "levels_solved": 7,
+      "solved": false,
+      "notes": "L0-L6 solved (7/9, was 3/9). L3 cracked via hand-crafted wall-handoff plan distributing 6 box-pieces to 3 blues by dropping on box wall cells each blue can grab (57 moves). L4/L5 fell to existing greedy after L3 unlock. L6 (saboteur white, no blues): wait for white to self-stall carrying a piece, destroy it, ferry both pieces (50 moves). L7 (13 pieces, 2 blues, 2 whites) caps at 8/13 with greedy — needs smarter multi-agent planning."
     }
   ]
 }
