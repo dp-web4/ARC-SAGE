@@ -165,11 +165,11 @@ def collect_trace(game):
     return trace, f'{run_dir.name}', expected, win_levels
 
 
-def replay_one_game(arc, game_id, trace, label=""):
+def replay_one_game(arc, game_id, trace, label="", scorecard_id=None):
     """Play trace against a fresh env. Returns (state, levels_completed,
     win_levels, actions_played, elapsed_sec). Raises on make/reset failure."""
     t0 = time.time()
-    env = arc.make(game_id)
+    env = arc.make(game_id, scorecard_id=scorecard_id)
     if env is None:
         raise RuntimeError(f"make({game_id}) returned None")
     fd = env.reset()
@@ -274,7 +274,7 @@ def main():
         while True:
             attempts += 1
             try:
-                state, lc, wl, played, elapsed = replay_one_game(arc, full, trace)
+                state, lc, wl, played, elapsed = replay_one_game(arc, full, trace, scorecard_id=card_id)
                 ok = (state == GameState.WIN) or (lc >= expected)
                 mark = '✓' if ok else '~'
                 print(f"  {mark} {short:6s}  state={state.name:12s}  "
