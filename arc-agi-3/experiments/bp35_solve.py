@@ -5,6 +5,12 @@ Actions: LEFT(3), RIGHT(4), CLICK(6 with x,y), UNDO(7)
 Gravity UP: player falls upward through empty space.
 Click destroyable block: removes it. If directly above player, triggers fall.
 Reach gem = WIN. Land on spike = LOSE.
+
+Viewport-aware version:
+- ACTION6 click x,y must be in [0,63] (API requirement).
+- Camera only moves when player falls (camera_y = player_y*6 - 36 grav up, *6-26 grav dn).
+- To click cells outside current viewport, player position must be changed via falls.
+- click_act enforces viewport compliance; raises ValueError if OOB.
 """
 import sys, os, time
 sys.stdout.reconfigure(line_buffering=True)
@@ -18,10 +24,42 @@ CLICK = GameAction.ACTION6
 UNDO = GameAction.ACTION7
 
 
-def click_act(env, gx, gy):
+OOB_CLICKS = []   # records (level, gx, gy, vx, vy, cam_y) for diagnostics
+
+
+def click_act(env, gx, gy, *, strict=False):
+    """Click world-coordinate (gx, gy). Records viewport-compliance status.
+
+    The API rejects click (x,y) outside [0,63]. Camera only shifts when player
+    falls, so the caller must arrange the camera via preceding moves/clicks.
+
+    If strict=True, raises ValueError on OOB (useful while developing a level).
+    Otherwise, records the OOB but issues the click anyway — the local engine
+    accepts it, so dry-run replays will match the old OOB-tolerant solver.
+    This lets us still reach unfixed levels during development even when
+    earlier levels still have OOB clicks.
+    """
     engine = env._game.oztjzzyqoek
     cam_y = engine.camera.rczgvgfsfb[1]
-    return env.step(CLICK, data={"x": gx*6, "y": gy*6 - cam_y})
+    vx = gx * 6
+    vy = gy * 6 - cam_y
+    oob = not (0 <= vx <= 63 and 0 <= vy <= 63)
+    if oob:
+        OOB_CLICKS.append({
+            "level": env._game.level_index,
+            "gx": gx, "gy": gy,
+            "vx": vx, "vy": vy,
+            "cam_y": cam_y,
+            "player": tuple(engine.twdpowducb.qumspquyus),
+            "grav_up": engine.vivnprldht,
+        })
+        if strict:
+            raise ValueError(
+                f"click_act OOB: world ({gx},{gy}) -> viewport ({vx},{vy}) "
+                f"with cam_y={cam_y}. Player={engine.twdpowducb.qumspquyus}, "
+                f"grav_up={engine.vivnprldht}"
+            )
+    return env.step(CLICK, data={"x": vx, "y": vy})
 
 
 def execute_and_advance(env, moves, level_name=""):
@@ -138,306 +176,273 @@ L0_SOL = [
 ]
 
 # L1: player (3,37), gem (5,7), gravity UP
-# Navigate: right side (avoid y=32 spikes) → cross left (avoid y=25 spikes) →
-# x=3 shaft (y=18 safe) → right side (avoid y=12 spikes) → gem
 L1_SOL = [
-    # Phase 1: right side, past D ceiling
-    R, R, R, R, R,       # → (8,37)
-    C(8,36),             # fall to (8,36)
-    C(8,35),             # fall to (8,29)
-
-    # Phase 2: cross left through y=29 D blocks
-    L, L,                # → (6,29)
-    C(5,29), L,          # destroy, walk to (5,29)
-    C(4,29), L,          # destroy, walk to (4,29)
-    C(3,29), L,          # destroy, walk to (3,29)
-    C(2,29), L,          # destroy, walk to (2,29)
-
-    # Phase 3: up through y=28 to safe left side
-    C(2,28),             # destroy, fall to (2,25)
-
-    # Phase 4: navigate to x=5 and up through y=24-23
-    R, R, R,             # → (5,25)
-    C(5,24),             # destroy, fall to (5,24)
-    C(5,23),             # destroy, fall to (5,21)
-
-    # Phase 5: x=3 safe passage through y=18
-    L, L,                # → (3,21)
-    C(3,20),             # destroy, fall to (3,18)
-
-    # Phase 6: through D shaft and right
-    C(3,17),             # destroy, fall to (3,17)
-    C(3,16),             # destroy, fall to (3,16)
-
-    # Phase 6b: traverse y=16 D blocks rightward
-    C(4,16), R,          # → (4,16)
-    C(5,16), R,          # → (5,16)
-    C(6,16), R,          # → (6,16)
-    C(7,16), R,          # → (7,16)
-    C(8,16), R,          # → (8,16)
-
-    # Phase 6c: up through right side
-    C(8,15),             # destroy, fall to (8,15)
-    C(8,14),             # destroy, fall to (8,11)
-
-    # Phase 6d: navigate left to gem column
-    L,                   # → (7,11)
-    L,                   # → (6,11) → falls to (6,10)
-    L,                   # → (5,10)
-    C(5,9),              # destroy, fall to gem (5,7)! WIN
+    R, R, R, R, R,
+    C(8,36),
+    C(8,35),
+    L, L,
+    C(5,29), L,
+    C(4,29), L,
+    C(3,29), L,
+    C(2,29), L,
+    C(2,28),
+    R, R, R,
+    C(5,24),
+    C(5,23),
+    L, L,
+    C(3,20),
+    C(3,17),
+    C(3,16),
+    C(4,16), R,
+    C(5,16), R,
+    C(6,16), R,
+    C(7,16), R,
+    C(8,16), R,
+    C(8,15),
+    C(8,14),
+    L,
+    L,
+    L,
+    C(5,9),
 ]
 
 
-# L2: player (3,28), gem (7,7), gravity UP, rising floor y=34
-# Route: destroy D→fall(6,24) → toggle y=23 → fall(2,19) → cross y=17/18 →
-# fall(7,13) → toggle y=12 → fall(3,7) → toggle (5,7) → walk to gem
+# L2: player (3,28), gem (7,7), gravity UP
 L2_SOL = [
-    # Phase A: get to (6,24) via D destruction (5 actions)
     C(5,28), R, R, R, C(6,27),
-    # Phase B: toggle y=23 O→B, walk left, fall to (2,19) (7 actions)
     C(5,23), C(4,23), C(3,23), L, L, L, L,
-    # Phase C: cross right to (3,18) (1 action)
     R,
-    # Phase D: toggle y=17/18, cross to (7,13) (8 actions)
     C(5,17), C(6,17), C(5,18), C(6,18), R, R, R, R,
-    # Phase E: toggle y=12, navigate to (3,7) (8 actions)
     C(6,12), C(5,12), C(4,12), C(3,12), L, L, L, L,
-    # Phase F: reach gem (5 actions)
     C(5,7), R, R, R, R,
 ]
 
-# L3: player (4,14), gem (4,27), gravity UP, no rising floor
-# Key: 4th hidden G block at (4,31) behind walls, clickable remotely
-# Destroy D blocks to create fall paths, use all 4 G flips to navigate
+# L3: player (4,14), gem (4,27), gravity UP
+# Viewport-aware rewrite: original used OOB clicks at steps 1,2,3 (world y=23,24,7).
+# Fix: walk R,R first to trigger a fall (lands at (6,13)), bringing cam_y=42
+# which makes y=7 clickable (vy=0). After G-flip, player falls to (6,16) grav DN,
+# walks L,L,L to (3,16), falls through destroyed D(3,17) to (3,21), then the
+# D-destroys and subsequent flips proceed with in-viewport coords.
 L3_SOL = [
-    C(3,17),        # destroy D
-    C(7,23),        # destroy D
-    C(7,24),        # destroy D
-    C(5,7),         # G flip → grav DOWN, fall to (4,16)
-    L,              # fall to (3,21)
-    R, R,           # → (5,21)
-    C(3,23),        # G flip → grav UP, rise to (5,20)
-    R, R,           # → (7,20)
-    C(5,23),        # G flip → grav DOWN, fall to (7,29)
-    L, L, L,        # → (4,29)
-    C(4,31),        # G flip → grav UP, fall up to gem (4,27)!
+    C(3,17),              # destroy D(3,17) (cam_y=48)
+    R, R,                 # (4,14)→(5,14)→fall to (6,13), cam_y=42
+    C(5,7),               # G flip DN — now vy=0 ✓, player → (6,16)
+    L, L, L,              # (6,16)→(5,16)→(4,16)→fall to (3,21), cam_y=100
+    R, R,                 # → (5,21)
+    C(7,23), C(7,24),     # destroy right-column D's (now in view)
+    C(3,23),              # G flip UP, player → (5,20), cam_y=84
+    R, R,                 # → (7,20)
+    C(5,23),              # G flip DN, player falls through destroyed y=23,24 to (7,29)
+    L, L, L,              # → (4,29)
+    C(4,31),              # G flip UP, player falls up to gem (4,27)!
 ]
 
 
 # L4: player (3,12), gem (5,7), gravity UP
-# Walk staircase, destroy D row, double G flip to navigate shaft
+# Viewport-aware rewrite: original used OOB click C(8,29) from cam_y=64.
+# Fix: after G flip at (8,12) and cascading down column 7 (via C(7,16), C(7,20)),
+# walk R to column 8, destroy D(8,21) to fall to (8,23) cam_y=112. Walk L to
+# (7,24) cam_y=118, so C(8,29) is in view (vy=56). Before flipping, toggle
+# O(3,21) and O(4,21) to B so the fall-up after flip stops at a safe column
+# (col 3 via B at y=21) instead of hitting a spike. After flip, player at (3,22)
+# falls up through col 2 to (2,17), walks R through y=17 platform, falls at col 7
+# to (7,12), continues to (9,9), then L to gem.
 L4_SOL = [
-    R, R, R, R,      # walk to x=7 via staircase
-    C(7,9),           # destroy D
-    C(8,9),           # destroy D
-    C(9,9),           # destroy D
-    C(8,12),          # G flip → grav DOWN, fall to (7,15)
-    C(8,29),          # G flip → grav UP, rise to (7,12)
-    R, R,             # walk right through shaft → (9,9)
-    L, L, L, L,       # walk left → (5,7) gem!
+    R, R, R, R,                 # → (7,12)
+    C(7,9), C(8,9), C(9,9),     # destroy ceiling D
+    C(8,12),                    # G flip DN, player → (7,15)
+    C(7,16),                    # cascade down col 7 to (7,19)
+    C(7,20),                    # → (7,20)
+    R,                          # → (8,20)
+    C(8,21),                    # D destroy → (8,23), cam_y=112
+    L, L, L, L, L,              # walk y=23,24 to (3,25) via fall at (4,25)
+    C(3,21), C(4,21),           # O→B toggles (create stop for fall-up in col 3)
+    C(8,29),                    # G flip UP, player → (3,22), cam_y=96
+    L,                          # → (2,22) → fall up to (2,17), cam_y=66
+    R, R, R, R, R,              # walk y=17 platform to (6,17), then fall (R at (6,17) → (7,12))
+    R, R,                       # (7,12) → (8,12) → fall to (9,9)
+    L, L, L, L,                 # → (5,7) = gem
 ]
 
 
 # L5: player (3,23), gem (2,31), gravity UP
-# Walk right to shaft, G(4,31) flip → fall to y=31, walk left to gem
+# TODO: viewport-compliant solution blocked — only 2 of 3 G blocks reachable,
+# and after consuming both the player is stuck above a wall barrier that
+# cannot be bypassed without the third G(8,1), which is unreachable without
+# OOB clicks. Documented in run notes. Falling back to original (OOB).
 L5_SOL = [R, R, R, R, R, C(4,31), L, L, L, L, L, L]
 
 
-# L6: player (3,19), gem (3,25), gravity UP
-# 23 G blocks at x=0 (y=5-27), CONSUMABLE (single-use each!)
-# 29 O blocks + 2 B blocks (O/B toggleable), initial B: (6,9), (5,10)
-# Key: navigate through y=8-11 spike maze with toggle-retoggle tricks
-# to reach x=7 O-block column, drop through (8,7)→(9,7)→(9,26),
-# flip UP to y=23 corridor, walk left to gem
+# L6: player (3,19), gem (3,25), gravity UP (no OOB issues in original)
 L6_SOL = [
-    # Phase 1: Start → platform area via (8,15) (12 steps)
-    R, R, R,         # → (6,19) through O block
-    C(6, 21),        # toggle O→B (create floor at y=21)
-    C(0, 19),        # G flip #1 → DN, fall to (6,20) [floor B(6,21)]
-    R,               # → (7,20) [floor wall(7,21)]
-    C(0, 20),        # G flip #2 → UP, stays (7,20) [ceiling wall(7,19)]
-    R,               # → (8,15) fall UP [wall(8,14)]
-    L,               # → (7,13) fall UP [wall(7,12)]
-    L, L, L,         # → (4,13) through O blocks
-
-    # Phase 2: Platform → x=2 shaft (5 steps)
-    C(0, 14),        # G flip #3 → DN, fall to (4,17) [wall(4,18)]
-    C(4, 15),        # toggle O→B (create ceiling for return)
-    C(0, 16),        # G flip #4 → UP, fall to (4,16) [ceiling B(4,15)]
-    L,               # → (3,15) fall UP [wall(3,14)]
-    L,               # → (2,8) fall UP through x=2 shaft [wall(2,7)]
-
-    # Phase 3: Navigate y=8-11 spike maze to x=7 (14 steps)
-    R,               # → (3,8) O block [ceiling wall(3,7)]
-    C(0, 9),         # G flip #5 → DN, fall to (3,11) [wall(3,12)]
-    R,               # → (4,11) [floor wall(4,12)]
-    C(4, 9),         # toggle O→B (create ceiling at (4,9))
-    C(0, 10),        # G flip #6 → UP, fall to (4,10) [ceiling B(4,9)]
-    C(5, 10),        # toggle B→O (make (5,10) passable)
-    R,               # → (5,8) fall UP through (5,10) O, (5,9) [wall(5,7)]
-    C(5, 10),        # toggle O→B (restore floor at (5,10))
-    C(0, 8),         # G flip #7 → DN, fall to (5,9) [floor B(5,10)]
-    C(6, 9),         # toggle B→O (make (6,9) passable)
-    R,               # → (6,11) fall DN through (6,9) O [wall(6,12)]
-    C(6, 9),         # toggle O→B (restore ceiling at (6,9))
-    C(0, 11),        # G flip #8 → UP, fall to (6,10) [ceiling B(6,9)]
-    R,               # → (7,4) fall UP through x=7 O column [wall(7,3)]
-
-    # Phase 4: Through x=7 column to x=9 shaft (4 steps)
-    C(7, 8),         # toggle O→B (create floor at (7,8))
-    C(0, 6),         # G flip #9 → DN, fall to (7,7) [floor B(7,8)]
-    R,               # → (8,7) [floor wall(8,8)]
-    R,               # → (9,26) fall DN through entire x=9 shaft [wall(9,27)]
-
-    # Phase 5: Navigate to gem (8 steps)
-    L,               # → (8,26) [floor wall(8,27)]
-    L,               # → (7,26) [floor wall(7,27)]
-    C(0, 25),        # G flip #10 → UP, fall to (7,23) [ceiling wall(7,22)]
-    L, L, L, L,      # walk left across y=23 → (3,23)
-    C(0, 24),        # G flip #11 → DN, fall through (3,24) → gem (3,25)!
+    R, R, R,
+    C(6, 21),
+    C(0, 19),
+    R,
+    C(0, 20),
+    R,
+    L,
+    L, L, L,
+    C(0, 14),
+    C(4, 15),
+    C(0, 16),
+    L,
+    L,
+    R,
+    C(0, 9),
+    R,
+    C(4, 9),
+    C(0, 10),
+    C(5, 10),
+    R,
+    C(5, 10),
+    C(0, 8),
+    C(6, 9),
+    R,
+    C(6, 9),
+    C(0, 11),
+    R,
+    C(7, 8),
+    C(0, 6),
+    R,
+    R,
+    L,
+    L,
+    C(0, 25),
+    L, L, L, L,
+    C(0, 24),
 ]
 
 
 # L7: player (3,32), gem (9,19), gravity UP
-# Key mechanic: E entities SPREAD to adjacent empty cells when clicked.
-# "Push up" trick: clicking E ceiling removes it, player falls up into empty cell.
-# Route: E bridge at y=30 → walk to x=8 shaft → navigate to (5,20) →
-# push up ×3 to (5,17) → walk east clearing E → (8,17) →
-# G flip DN → toggle B(8,18)→O → fall to (8,19) → walk R to gem
+# TODO: viewport-compliant rewrite not yet completed — original has 8 OOB clicks
+# (C(3,18), C(4,18), C(5,18), C(6,18), C(7,25), C(8,22), C(5,2), and one more).
+# Most target world y=17-25 from cam_y=156.
 L7_SOL = [
-    # E bridge y=29-30 (5 clicks)
     C(2,29), C(3,29), C(4,29), C(5,29), C(6,29),
-    # E ceiling y=17-19 (4 clicks)
     C(3,18), C(4,18), C(5,18), C(6,18),
-    # B toggles for navigation
     C(7,25), C(8,22),
-    # Walk across bridge to x=8 shaft
     R, R, R, R, R,
-    # Navigate to (8,21) via B gaps
     L, L, R, R,
-    # Navigate to (5,20) via E ceiling
     L, L, L,
-    # Push up: click ceiling E ×3
     C(5,19), C(5,18), C(5,17),
-    # Walk east clearing E path
     C(6,17), R, C(7,17), R, C(8,17), R,
-    # G flip → grav DOWN, toggle B(8,18)→O → fall, walk to gem
     C(5,2), C(8,18), R,
 ]
 
 
 # L8: player (3,35), gem (2,40), gravity UP
-# ALL mechanics combined: E spread, G flip, B toggle, D destroy, spikes
-# 11 phases: setup → G-flip corridor → walk-and-clear → push-up →
-# walk-and-clear → navigate → x=9 push-up → walk-and-clear →
-# B toggle + D destroy → cross to x=0 → G flip fall to gem
+# TODO: viewport-compliant rewrite not yet completed — original has many OOB
+# clicks in the setup phase (batch of E-spreads and G-consumes at the start,
+# plus mid-level G-flip invocations).
 L8_SOL = [
-    # SETUP: E spread, G consume, D destroy (18 clicks, no movement)
-    C(7,8), C(6,8), C(5,8), C(4,8), C(3,8),     # E spread west at y=8
-    C(6,31), C(5,31), C(4,31), C(3,31),           # E spread west at y=31
-    C(0,15), C(0,19), C(0,21), C(0,25), C(0,33), C(0,35),  # consume 6 G blocks
-    C(2,26), C(3,26), C(4,26),                     # destroy D at y=26
+    C(7,8), C(6,8), C(5,8), C(4,8), C(3,8),
+    C(6,31), C(5,31), C(4,31), C(3,31),
+    C(0,15), C(0,19), C(0,21), C(0,25), C(0,33), C(0,35),
+    C(2,26), C(3,26), C(4,26),
 
-    # PHASE 1: G-flip cross y=34 gap → (7,32)
     C(1,1), R, R, R, R, C(2,1),
 
-    # PHASE 2: Walk-and-clear L along y=32
     C(6,32), L, C(5,32), L, C(4,32), L, C(3,32), L, C(2,32), L,
 
-    # PHASE 3: Push-up at x=2 from y=32 to y=21 (11 pushes)
     C(2,31), C(2,30), C(2,29), C(2,28), C(2,27),
     C(2,26), C(2,25), C(2,24), C(2,23), C(2,22), C(2,21),
 
-    # PHASE 4: Walk-and-clear R at y=21 to x=7
     C(3,21), R, C(4,21), R, C(5,21), R, C(6,21), R, C(7,21), R,
 
-    # PHASE 5: Navigate to (8,23) via G flips
     C(7,22), C(3,1), C(7,23), C(8,23), R, C(4,1),
 
-    # PHASE 6: Enter x=9 + push-up y=23→y=16 (7 pushes in 1-wide shaft)
     C(9,23), R,
     C(9,22), C(9,21), C(9,20), C(9,19), C(9,18), C(9,17), C(9,16),
 
-    # PHASE 7: Walk-and-clear L along y=16 to x=4
     C(8,16), L, C(7,16), L, C(6,16), L, C(5,16), L, C(4,16), L,
 
-    # PHASE 8: B toggle + D destroy → fly up
-    C(4,15),       # B→O, fly through to (4,14)
-    C(4,13),       # D destroy, fly to (4,10)
+    C(4,15),
+    C(4,13),
 
-    # PHASE 9: Walk L to x=2, push-up, cross to x=0
-    L, L,          # → (2,9)
-    C(2,8),        # push-up to (2,8)
-    C(1,8),        # destroy D(1,8)
-    L, L,          # → (0,7) via x=0 shaft
+    L, L,
+    C(2,8),
+    C(1,8),
+    L, L,
 
-    # PHASE 10: G flip DN → fall to (0,40), walk R to gem
-    C(5,1), R, R,  # → (2,40) = GEM!
+    C(5,1), R, R,
 ]
 
 
 # ============================================================
 # Main
 # ============================================================
-arcade = Arcade()
-env = arcade.make('bp35-0a0ad940')
-fd = env.reset()
+if __name__ == "__main__":
+    arcade = Arcade()
+    env = arcade.make('bp35-0a0ad940')
+    fd = env.reset()
 
-print("=" * 60)
-print("BP35 Solver")
-print("=" * 60)
+    print("=" * 60)
+    print("BP35 Solver (viewport-aware)")
+    print("=" * 60)
 
-# Solve levels
-solutions = [
-    ("L0", L0_SOL, 15),
-    ("L1", L1_SOL, 72),
-    ("L2", L2_SOL, 36),
-    ("L3", L3_SOL, 31),
-    ("L4", L4_SOL, 31),
-    ("L5", L5_SOL, 48),
-    ("L6", L6_SOL, 86),
-    ("L7", L7_SOL, 155),
-    ("L8", L8_SOL, 422),
-]
+    # Solve levels
+    solutions = [
+        ("L0", L0_SOL, 15),
+        ("L1", L1_SOL, 72),
+        ("L2", L2_SOL, 36),
+        ("L3", L3_SOL, 31),
+        ("L4", L4_SOL, 31),
+        ("L5", L5_SOL, 48),
+        ("L6", L6_SOL, 86),
+        ("L7", L7_SOL, 155),
+        ("L8", L8_SOL, 422),
+    ]
 
-for name, sol, baseline in solutions:
-    print(f"\n{'='*40}")
-    print(f"{name} (baseline={baseline}, our={len(sol)} actions)")
-    print(f"{'='*40}")
+    for name, sol, baseline in solutions:
+        print(f"\n{'='*40}")
+        print(f"{name} (baseline={baseline}, our={len(sol)} actions)")
+        print(f"{'='*40}")
 
-    engine = env._game.oztjzzyqoek
-    print_grid(engine)
-
-    success, steps_used = execute_and_advance(env, sol, name)
-    if not success:
-        # Last level doesn't advance — check win flag
         engine = env._game.oztjzzyqoek
-        if engine.nkuphphdgrp:
-            print(f"  {name} solved in {len(sol)} actions (baseline {baseline}) [WIN flag]")
-            print(f"\n  *** BP35 COMPLETE — ALL 9 LEVELS SOLVED ***")
-            total = sum(len(s) for _, s, _ in solutions)
-            print(f"  Total actions: {total}")
+        print_grid(engine)
+
+        success, steps_used = execute_and_advance(env, sol, name)
+        if not success:
+            engine = env._game.oztjzzyqoek
+            if engine.nkuphphdgrp:
+                print(f"  {name} solved in {len(sol)} actions (baseline {baseline}) [WIN flag]")
+                print(f"\n  *** BP35 COMPLETE — ALL 9 LEVELS SOLVED ***")
+                total = sum(len(s) for _, s, _ in solutions)
+                print(f"  Total actions: {total}")
+                break
+            print(f"\n{name} failed!")
             break
-        print(f"\n{name} failed!")
-        break
-    print(f"  {name} solved in {len(sol)} actions (baseline {baseline})")
+        print(f"  {name} solved in {len(sol)} actions (baseline {baseline})")
 
-    # Check if there are more levels
+        current_level = env._game.level_index
+        print(f"  Now on level {current_level}")
+
+        if name == "L8":
+            engine = env._game.oztjzzyqoek
+            if engine.nkuphphdgrp:
+                print(f"\n  *** BP35 COMPLETE — ALL 9 LEVELS SOLVED ***")
+            break
+
     current_level = env._game.level_index
-    print(f"  Now on level {current_level}")
-
-    # L8 is the last level — check win flag instead of level advance
-    if name == "L8":
+    if current_level < 8 and current_level >= len(solutions):
+        print(f"\n{'='*40}")
+        print(f"L{current_level} survey")
+        print(f"{'='*40}")
         engine = env._game.oztjzzyqoek
-        if engine.nkuphphdgrp:
-            print(f"\n  *** BP35 COMPLETE — ALL 9 LEVELS SOLVED ***")
-        break
+        print_grid(engine)
 
-# Survey next level if we have one
-current_level = env._game.level_index
-if current_level < 8 and current_level >= len(solutions):
-    print(f"\n{'='*40}")
-    print(f"L{current_level} survey")
-    print(f"{'='*40}")
-    engine = env._game.oztjzzyqoek
-    print_grid(engine)
+    # OOB summary
+    print("\n" + "=" * 60)
+    print(f"OOB CLICK SUMMARY: {len(OOB_CLICKS)} out-of-bounds clicks")
+    print("=" * 60)
+    by_level = {}
+    for c in OOB_CLICKS:
+        by_level.setdefault(c["level"], []).append(c)
+    for lvl in sorted(by_level):
+        clicks = by_level[lvl]
+        print(f"  L{lvl}: {len(clicks)} OOB")
+        for c in clicks[:5]:
+            print(f"    C({c['gx']},{c['gy']}) vy={c['vy']} cam_y={c['cam_y']} player={c['player']}")
+        if len(clicks) > 5:
+            print(f"    ... and {len(clicks)-5} more")
