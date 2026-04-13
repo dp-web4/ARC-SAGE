@@ -306,11 +306,11 @@
       "type": "move+click",
       "baseline": 1211,
       "levels": 10,
-      "status": "research_boundary",
+      "status": "terminal_engine_limit",
       "claimed_by": "cbp",
       "best_level": 6,
       "solved": false,
-      "blocker": "5 independent Opus agents converged: L7 structurally unsolvable in THIS engine version. Session 5 (2026-04-12) questioned the frame rather than re-verifying the work: full scene graph kdsncymzyeb enumeration + ndtvadsrqf/whdmasyorl probe + wide-scan for hidden objects — no hidden pieces, no alternate win paths (win() called only via cfilhtifcb->tdcblgbfxw, line 5581), cursor name is empty not 'fozwvlovdui' (doesn't contribute to counter). New minor finding: block at (22,4) can travel up col 22 to (22,0), more than prior 'shuttle' claim — but still can't reach (22,5) so right-N stays immobile. Likely engine-version bug or intentional stopping level. Recommend: accept L7 as terminal; do not re-investigate without engine file change. Probe: arc-agi-3/experiments/lf52_l7_context.py"
+      "blocker": "6 independent Opus agents converged. L7 fully characterized under this engine version. Game logic verified, path-independence verified, no hidden mechanics in distributed code. Either upstream engine version mismatch or genuinely broken level. Investigation complete."
     },
     {
       "id": "wa30-ee6fef47",
