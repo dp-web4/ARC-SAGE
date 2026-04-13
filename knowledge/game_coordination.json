@@ -228,11 +228,13 @@
       "type": "move+click",
       "baseline": 696,
       "levels": 8,
-      "status": "in_progress",
+      "status": "solved",
       "claimed_by": "waving-cat",
-      "best_level": 4,
-      "solved": false,
-      "notes": "L0-L3 solved (99 actions cumulative). Key discovery: engine budget must be restored during engine-backed search, otherwise state space collapses to ~33 states because failed moves still drain budget. With restoration, state space is thousands. L2 solved in 33 moves via column-slide + retract-drag after isolating target 14. L3 solved in 25 moves — the unpaired (5,42) rail is the player's arranger tool; paired rails are static targets. L4+ use multi-pair states requiring CLICK to switch between arranger rails (CLICK doesn't save history so beam search requires special handling)."
+      "best_level": 8,
+      "solved": true,
+      "notes": "All 8 levels solved 2026-04-12 via beam search (w=800) with CLICK support. Per-level moves: L0=14, L1=27, L2=33, L3=25, L4=77, L5=48, L6=38, L7=24 (total 286). Key fix: engine budget restoration during search. CLICK carried via action-data tuples with manual undo stack (click doesn't enter history). Multi-pair levels (L5-L7) use dual arranger rails; as rails extend, new segments become clickable sys_click sprites.",
+      "solved_by": "cbp",
+      "solved_actions": 286
     },
     {
       "id": "cn04-65d47d14",
@@ -304,11 +306,11 @@
       "type": "move+click",
       "baseline": 1211,
       "levels": 10,
-      "status": "blocked_needs_human_trajectory",
+      "status": "research_boundary",
       "claimed_by": "cbp",
       "best_level": 6,
       "solved": false,
-      "blocker": "L7 geometrically impossible under traced engine rules \u2014 need human-played L7 trajectory to diff against simulator"
+      "blocker": "5 independent Opus agents converged: L7 structurally unsolvable in THIS engine version. Session 5 (2026-04-12) questioned the frame rather than re-verifying the work: full scene graph kdsncymzyeb enumeration + ndtvadsrqf/whdmasyorl probe + wide-scan for hidden objects — no hidden pieces, no alternate win paths (win() called only via cfilhtifcb->tdcblgbfxw, line 5581), cursor name is empty not 'fozwvlovdui' (doesn't contribute to counter). New minor finding: block at (22,4) can travel up col 22 to (22,0), more than prior 'shuttle' claim — but still can't reach (22,5) so right-N stays immobile. Likely engine-version bug or intentional stopping level. Recommend: accept L7 as terminal; do not re-investigate without engine file change. Probe: arc-agi-3/experiments/lf52_l7_context.py"
     },
     {
       "id": "wa30-ee6fef47",

@@ -1,16 +1,15 @@
 {
   "game_id": "sk48-41055498",
-  "solved": 2,
-  "total": 41,
+  "solved": 8,
+  "total": 286,
   "per_level": {
     "0": 14,
-    "1": 27
-  },
-  "status": "L0-L1 solved. L2 requires manual arrangement of pinned-column targets.",
-  "l2_progress": {
-    "phase1": "Push targets below vert rail (13 moves)",
-    "phase2": "Clear (29,30) by pushing target(9) to x=35 (5 moves)",
-    "phase3": "Push target(14) from (29,24) to (29,30) via slide from y=18 (4 moves)",
-    "phase4_blocker": "Arranging 4 targets at distinct x on same row in ref order [8,12,9,14]"
+    "1": 27,
+    "2": 33,
+    "3": 25,
+    "4": 77,
+    "5": 48,
+    "6": 38,
+    "7": 24
   }
 }

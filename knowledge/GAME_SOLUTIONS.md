@@ -2,7 +2,7 @@
 
 *Fleet-maintained. Updated as games are solved.*
 
-## Solved Games (22/25)
+## Solved Games (23/25)
 
 ---
 
@@ -308,8 +308,8 @@
 
 | Category | Games |
 |----------|-------|
-| **Solved (22)** | sb26 8/8, vc33 7/7, cd82 6/6, lp85 8/8, ft09 6/6, sp80 6/6, tr87 6/6, sc25 6/6, tn36 7/7, tu93 9/9, ls20 7/7, s5i5 8/8, su15 9/9, cn04 5/5, ar25 8/8, bp35 9/9, re86 8/8, m0r0 6/6, r11l 6/6, g50t 7/7, ka59 7/7, wa30 9/9 |
-| **Partial (3)** | dc22 4/6 (L5 crane), lf52 6/10 (L7 topology), sk48 2/8 (L2 ordering) |
+| **Solved (23)** | sb26 8/8, vc33 7/7, cd82 6/6, lp85 8/8, ft09 6/6, sp80 6/6, tr87 6/6, sc25 6/6, tn36 7/7, tu93 9/9, ls20 7/7, s5i5 8/8, su15 9/9, cn04 5/5, ar25 8/8, bp35 9/9, re86 8/8, m0r0 6/6, r11l 6/6, g50t 7/7, ka59 7/7, wa30 9/9, sk48 8/8 |
+| **Partial (2)** | dc22 5/6 (L6 new mechanics), lf52 6/10 (L7 research boundary) |
 
 ### Algorithmic Solver Results (2026-04-08 batch run)
 

@@ -20,7 +20,7 @@ Solver Context (loaded on game init)
 Competition Model (gemma4 in sandbox)
 ```
 
-## Fleet Status: 22/25 Games Solved (88%)
+## Fleet Status: 23/25 Games Solved (92%)
 
 | Game | Type | Solved By | Actions | Baseline | Eff |
 |------|------|-----------|---------|----------|-----|
@@ -46,8 +46,9 @@ Competition Model (gemma4 in sandbox)
 | g50t | move | cbp | 311 | 575 | 1.8x |
 | ka59 | move+click | cbp | 239 | 826 | 3.5x |
 | wa30 | move | cbp | 637 | 1564 | 2.5x |
+| sk48 | move+click | cbp | 286 | 696 | 2.4x |
 
-**Solves by machine**: CBP 12, McNugget 3, Thor 3, Sprout 3, Nomad 1.
+**Solves by machine**: CBP 13, McNugget 3, Thor 3, Sprout 3, Nomad 1.
 
 ### Unsolved / Partial (3)
 
