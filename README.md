@@ -38,24 +38,26 @@ The result: 25 working solvers, each encoding a compressed ontology. A solver is
 
 | Directory | Contents |
 |-----------|----------|
-| `arc-agi-3/experiments/` | 25 game solvers + agent infrastructure (perception, session writer, world models) |
+| `arc-agi-3/experiments/` | 25 game solvers + capture/submit infrastructure (perception, session writer, world models, regen + competition submit) |
 | `environment_files/` | ARC-AGI-3 game engines (one per game, from the ARC Prize SDK) |
 | `knowledge/` | Game mechanics docs, cross-game patterns, visual memory, fleet learning logs |
 | `membot/` | Andy's paired-lattice memory system (public repo: github.com/dp-web4/membot) |
-| `sage-infrastructure/` | Minimal SAGE components used at runtime (IRP plugin framework) |
 
 See `PRUNE_NOTES.md` for what's been deliberately included, what was considered but excluded, and why.
 
 ## Results
 
+**Community leaderboard submission: 84.9%** (scorecard [`c0d62617`](https://arcprize.org/scorecards/c0d62617-a0bc-4100-bb4e-982fa5d7fde7))
+
 | Metric | Value |
 |--------|-------|
-| Games solved | 21 / 25 (84%) |
-| Games with partial solves | 4 / 25 |
-| Games without any progress | 0 / 25 |
-| Total action efficiency | ~1.9x baseline |
+| Overall score | **84.9%** |
+| Environments completed | 21 / 25 |
+| Levels completed | 160 / 183 |
+| Total actions | 5,159 |
+| Games at 100% per-level efficiency | 14 |
 
-All 25 games have documented world models. The 4 partial games (dc22, lf52, sk48, wa30) have specific blockers identified and proposed unblocking approaches. Nothing is opaque; everything is understood at the level where we know *why* it's hard.
+14 games hit perfect 100% (per-level action count at-or-below human baseline under RHAE-squared scoring): cd82, ft09, tn36, vc33, tr87, tu93, lp85, ls20, su15, s5i5, ka59, m0r0, re86, wa30. Four games partial due to structural blockers (dc22 L6, lf52 L7/L10, sb26 L4+) confirmed by multi-agent frame-questioning convergence. One game (lf52) had no captured replay trace at submission time.
 
 ## Phase 2: Gemma Integration
 

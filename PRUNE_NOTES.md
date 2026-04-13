@@ -96,3 +96,31 @@ can understand not just what's in the repo, but the process that shaped it.
 
 The very first git commit in this repo represents the full unfiltered copy.
 Everything after is pruning, reorganization, or new development.
+
+## Prune Log
+
+### 2026-04-13 — AGPL removal for MIT compatibility
+
+Removed AGPL-licensed SAGE research code and every file that imported from
+`sage.*` or `sage.irp.*`. ARC-SAGE is MIT; bundling AGPL code would be a
+license conflict. These files were scaffolding used during world-model
+discovery but are not part of the submission pipeline (which uses per-game
+solvers → `solutions.json` / `run.json` → `submit_competition.py`).
+
+- `sage-infrastructure/` (97 files, 1.1MB) — IRP plugin framework (AGPL)
+- `arc-agi-3/experiments/deprecated/` (13 files) — archived solver versions
+- `arc-agi-3/experiments/sage_game_runner*.py` — historical SAGE-integrated runners
+- `arc-agi-3/experiments/sage_solver.py` + `solver_*.py` + `model_backend.py` — v11 interactive solver stack
+- `arc-agi-3/experiments/sweep_all_games.py`, `test_imports.py`, `thor_game_runner.py`, `mcnugget_grid_vision_test.py` — sage.irp-dependent utilities
+
+The actual submission pipeline (regen_all_visuals, submit_competition,
+per-game solvers, SessionWriter) uses none of the removed code.
+
+### 2026-04-13 — README updates
+
+- Replaced stale "SAGE Entry" framing in arc-agi-3/README.md with
+  ARC-SAGE-specific scope
+- Removed references to private `shared-context/` paths in favor of
+  local `knowledge/` mirror
+- Added scorecard result (84.9%) to top-level README
+- Removed links to `private-context/` insights

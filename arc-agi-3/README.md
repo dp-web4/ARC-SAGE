@@ -1,10 +1,10 @@
-# ARC-AGI-3 — SAGE Entry
+# ARC-AGI-3 — ARC-SAGE Entry
 
 **Competition**: ARC Prize 2026
 **Prize**: $700K grand prize (100% score), $75K top score awards, $75K milestones
 **Milestones**: June 30, 2026 (Milestone 1), September 30, 2026 (Milestone 2)
 **Submission**: Via Kaggle. No internet during evaluation. All code must be open-source.
-**Current frontier**: 0.26% (all major AI labs). Human: 100%.
+**Our public-set score**: 84.9% ([scorecard](https://arcprize.org/scorecards/c0d62617-a0bc-4100-bb4e-982fa5d7fde7)) as of 2026-04-13.
 
 ---
 
@@ -156,98 +156,58 @@ python3 arc-agi-3/experiments/game_viewer.py
 
 Shows a 3x3 level grid: solved levels as start/final pairs, active level with current frame, future levels dimmed. All cells are 1:1 aspect ratio. Animations play once on the step they're triggered, then swap to the static frame. Actions sidebar scrolls with purple markers for animation events. Auto-refreshes via hash polling.
 
-### Canonical Solver: `sage_solver.py` (v11)
+### Per-Game Solvers
 
-**This is the ONE solver.** All development goes here. Do not modify or extend `sage_solver_v7.py`, `sage_solver_v9.py`, or `claude_solver.py` — they are archived references only.
+Each game has a dedicated solver at `experiments/<game>_solve*.py` encoding the decoded world model for that game. Solvers emit replayable action sequences either as a module-level `all_solutions` / `KNOWN_SOLUTIONS` variable or as `visual-memory/<game>/solutions.json`.
 
-v11 merges all three predecessors into a modular, model-agnostic architecture:
+### Capture (`experiments/regen_all_visuals.py`)
 
-```bash
-# Autonomous mode (Ollama models)
-python3 arc-agi-3/experiments/sage_solver.py --game lp85 -v
-python3 arc-agi-3/experiments/sage_solver.py --all --attempts 5
-
-# Specific model with vision
-python3 arc-agi-3/experiments/sage_solver.py --model gemma4:e4b --game cd82 -v
-
-# Interactive mode (Claude Code as the model)
-python3 arc-agi-3/experiments/sage_solver.py --interactive --game tn36 init
-python3 arc-agi-3/experiments/sage_solver.py --interactive step 6 34 54
-
-# Kaggle competition mode (no optional imports)
-python3 arc-agi-3/experiments/sage_solver.py --kaggle --all
-```
-
-**Architecture** (7 modules):
-- `sage_solver.py` — CLI entry point
-- `model_backend.py` — ModelBackend ABC (OllamaBackend, ClaudeInteractiveBackend, APIBackend)
-- `solver_config.py` — SolverConfig dataclass + argparse
-- `solver_context.py` — 4-layer context assembly (L4 meta + L3 fleet + L2 KB + L1 narrative)
-- `solver_probe.py` — probe + MechanicDiscovery wrapper
-- `solver_actions.py` — action parsing with REPEAT + color-name resolution
-- `solver_loop.py` — autonomous + interactive loops with animation capture
-
-**Features**: federation via multi-cart brain carts, vision (native multimodal or code-based), world-model planning, mechanic discovery, game viewer integration, animation capture, raising identity loading.
-
-**Deprecated solvers** (do not modify):
-- `sage_solver_v7.py` — text-only, archived
-- `sage_solver_v9.py` — vision, archived  
-- `claude_solver.py` — interactive, archived
-- `sage_solver_v5.py`, `sage_solver_v6.py` — earlier iterations, archived
-
-**Color palette**: ONE palette — the SDK's (`arc_agi/rendering.py`): 0=white, 5=black, 11=yellow, 14=green. All files use this. `arc_vision.py` previously had a wrong ARC-1/2 mapping (0=black) that was sending inverted images to multimodal models. Fixed 2026-04-08.
-
-### Fleet Learning (`experiments/publish_learning.py`)
-
-Publishes game learning to the federated fleet knowledge base.
+Regenerates replayable `run_` directories for every solver-backed game. Harvests canonical action sequences and replays them through `SessionWriter` for step-by-step PNG + run.json capture.
 
 ```bash
-# After interactive play
-python3 publish_learning.py --session /tmp/claude_solver/session.json
-
-# After model play (from GameKB)
-python3 publish_learning.py --kb cartridges/<game>.knowledge.json
+python3 arc-agi-3/experiments/regen_all_visuals.py         # all solved games
+python3 arc-agi-3/experiments/regen_all_visuals.py wa30    # subset
 ```
 
-Writes to `shared-context/arc-agi-3/fleet-learning/{machine}/`. Each machine writes only to its own directory — no git conflicts.
+### Competition submission (`experiments/submit_competition.py`)
 
-### Fleet Consolidation (`shared-context/arc-agi-3/consolidate.py`)
-
-Runs on CBP daily at 4am. Collects per-machine learning, deduplicates, extracts cross-machine patterns.
+Builds a scorecard for the ARC Prize community leaderboard. Collects action traces from `visual-memory/<game>/run.json` (or `solutions.json`) and replays them against the live API in `OperationMode.COMPETITION`.
 
 ```bash
-python3 consolidate.py              # Full consolidation
-python3 consolidate.py --dry-run    # Preview
-python3 consolidate.py --stats      # Show fleet stats
+python3 submit_competition.py --dry-run     # NORMAL mode, safe validation
+python3 submit_competition.py --compete     # COMPETITION mode, posts to leaderboard
 ```
 
-### Game Mechanics (`shared-context/arc-agi-3/game-mechanics/`)
+One-shot per scorecard. `ARC_API_KEY` is read from `.env`. Includes per-action throttling (default 0.15s) and exponential backoff on 429 rate-limits.
 
-25/25 game mechanics docs written by McNugget — source analysis of every game's rules, sprites, win conditions. These are learning scaffolds (not available in competition sandbox).
+### Fleet knowledge (`knowledge/`)
 
-### Game Solvers (`shared-context/arc-agi-3/game-solvers/`)
+Per-machine game discoveries, cross-game patterns, and visual memory accumulated during solver development. The fleet coordination and consolidation tooling that produced this lives in a separate private repo; the artifacts are mirrored here for readers.
 
-25/25 solver scripts written by McNugget. Untested drafts — need verification against the actual SDK.
+- `knowledge/game-mechanics/` — source-level analysis of each game's rules, sprites, win conditions
+- `knowledge/fleet-learning/<machine>/` — per-machine solve logs and findings
+- `knowledge/visual-memory/<game>/run_*/` — replayable step-by-step captures
+- `knowledge/cross-game-patterns.md` — patterns extracted across multiple games
 
-## Progress: 5/25 Games Solved
+## Progress: 21/25 Games Fully Solved (84.9% leaderboard score)
 
-See `SESSION_FOCUS.md` for full fleet status and machine assignments.
+Submitted to community leaderboard on 2026-04-13. See top-level `README.md` for per-game breakdown.
 
 ## Files
 
 ```
 arc-agi-3/
 ├── README.md                    # This file
-├── SESSION_FOCUS.md             # Current fleet priorities and status
 ├── ENVIRONMENT.md               # SDK scoring, sandbox, protocol
-├── experiments/
-│   ├── claude_solver.py         # Interactive solver (Claude as player)
-│   ├── game_viewer.py           # Localhost:8765 live dashboard
-│   ├── arc_perception.py        # Grid analysis toolkit
-│   ├── publish_learning.py      # Fleet learning publisher
-│   ├── sage_solver_v7.py        # Fleet-standard autonomous solver
-│   └── sage_solver_v9.py        # Multimodal branch (vision models)
-└── shared_knowledge/            # Per-machine game discoveries
+└── experiments/
+    ├── regen_all_visuals.py     # Rebuild replayable run_ dirs for all games
+    ├── submit_competition.py    # One-shot submit to community leaderboard
+    ├── game_viewer.py           # Localhost:8765 live dashboard
+    ├── capture_visuals.py       # ClickCollector + SessionWriter integration
+    ├── arc_perception.py        # Grid analysis toolkit
+    ├── arc_session_writer.py    # Step-by-step PNG + run.json emitter
+    ├── <game>_solve*.py         # Per-game canonical solver (one per game)
+    └── <game>_solutions.json    # Cached per-level winning action sequences
 ```
 
 ## References
@@ -255,9 +215,7 @@ arc-agi-3/
 - [ARC-AGI-3 Main Page](https://arcprize.org/arc-agi/3)
 - [ARC Prize 2026 Competition](https://arcprize.org/competitions/2026/arc-agi-3)
 - [30-Day Preview Learnings](https://arcprize.org/blog/arc-agi-3-preview-30-day-learnings)
-- [Our ARC-AGI-2 post-mortem](../sage/docs/) (SAGE architecture emerged from this)
-- [Cognitive Autonomy Gap](../../private-context/insights/2026-03-22-cognitive-autonomy-gap.md)
-- [Raising Deep Dive](../../private-context/insights/2026-03-27-raising-deep-dive-analysis.md)
+- [dp-web4/SAGE](https://github.com/dp-web4/SAGE) — the research framework that produced this
 
 ---
 
