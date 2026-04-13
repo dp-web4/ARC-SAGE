@@ -195,7 +195,33 @@ One game (`lf52`) scored 0 due to no captured replay at submission time; this is
 
 Our scorecard is on the public set (the 25 preview games). The official ARC-AGI-3 evaluation is against ~55 semi-private + ~55 private environments not yet exposed. Approaches that overfit to the public set (per-game hand-crafted solvers) generalize poorly by construction. Our solvers are per-game by design, for the public set result — but the Phase 2 plan explicitly addresses generalization via cartridge retrieval and world-model adaptation rather than per-game coding.
 
-### 5.4 The recognition-over-derivation thesis, stated precisely
+### 5.4 What we didn't derive until forced to: viewport as interaction constraint
+
+The `bp35` submission result (13.06%) illustrates something subtler than a bug. Our solver for `bp35` was developed against the local SDK (the `arc_agi` Python package, with the game engine running in-process). It produced a 304-action trace that completed all 9 levels under local replay. When submitted against the live competition API, the trace hit an HTTP 400 on the first action of level 4.
+
+Inspection revealed 28 click actions across 5 levels where the `y` coordinate fell outside `[0, 63]` — e.g., `CLICK (42, 90)`, `CLICK (30, -6)`. The game engine's click handler (`game.gwfodrkvzx`, bp35.py:4289) adds the current camera y-offset to the incoming y before computing the clicked object's world position. The solver's `click_act` subtracts the same offset before sending. In abstract algebra these cancel and both agree on the world-space object. In practice the *intermediate* value (what was sent to `env.step`) was sometimes outside `[0, 63]` because the camera hadn't scrolled far enough.
+
+**The local engine accepts it.** It never validates the coordinate range before forwarding to the game class, so the out-of-viewport click still clicks the right world object. **The remote API rejects it** with 400 before the game engine runs — enforcing the specification that click coordinates be valid viewport positions.
+
+The surface fact: 28 clicks locally-compatible but API-illegal, producing a 13.06% score on a game we could otherwise hit 100% on.
+
+The deeper fact: *the solver learned the correct world model for `bp35` without ever learning that the viewport is a first-class constraint on interaction.* It treated the viewport as a rendering concern rather than an interaction surface. The error did not surface during development because the local engine permitted the treatment.
+
+This has a direct implication for the Phase 2 plan. A small model reasoning against a cartridge that encodes the `bp35` world model would inherit the same blind spot — unless the cartridge bundle also carries an *interface primitives layer* that the small model can retrieve and apply. The primitive in question is simple to state:
+
+> *If the intended target's world position is outside the current viewport, scroll action comes first; choose scroll direction and magnitude to bring target into `[0, 63]` with minimum cost; then click with the computed viewport-relative coordinate.*
+
+This is not a `bp35`-specific rule. It applies to any game where the world exceeds the viewport and scrolling is a player action. `dc22`, `re86`, `ar25`, `lf52` all have camera scrolling; the same latent fragility may exist in their captured traces. Preliminary audit indicates `bp35` is the only submission where the fragility actually materialized in a scored run, but this is evidence of luck in target positioning, not evidence of absence.
+
+Reframing the finding as a positive claim about the architecture: **the capability a world model does not contain is exactly the capability external retrievable memory can supply.** Phase 1 models correct game mechanics at the cost of not modeling the substrate (how the game is perceived and acted on). Phase 2's cartridge schema is the natural home for those substrate primitives — viewport-aware click being one, action-budget awareness (see §3.2 and the `sk48` lesson in the cross-game patterns doc) being another. A local small model equipped with these retrievable primitives *alongside* the game-specific world model does not need to re-derive the substrate each time; it adapts the primitives to the current game's geometry.
+
+This suggests a two-layer cartridge bundle for Phase 2:
+- **Substrate cartridges**: viewport, action budget, animation timing, click classification (selection vs. action), undo semantics. Transferable across all games.
+- **Game-world cartridges**: per-game ontologies from Phase 1. Retrieved by visual signature.
+
+The substrate cartridges are, we claim, a finite and enumerable set. The game-world cartridges scale with the game catalog. This factoring matters for generalization: a new game drawn from the evaluation set is unlikely to have a matching game-world cartridge but is very likely to share substrate primitives with games we do have.
+
+### 5.5 The recognition-over-derivation thesis, stated precisely
 
 Define:
 - **Derivation**: the process by which an agent, given a novel problem, constructs the reasoning chain from first principles (or from sub-principles it has access to).
@@ -243,15 +269,28 @@ The Phase 2 objective is a Kaggle-sandbox-compatible local-model agent that scor
 
 The small model reasons only about *how this specific level-instance maps to the retrieved schema*. It does not derive the mechanic from scratch.
 
-### 6.2 Cartridge construction
+### 6.2 Cartridge construction — two-layer schema
 
-Each of the 25 Phase 1 world models becomes a cartridge entry in the `membot` paired-lattice format. A cartridge entry binds:
+Motivated by §5.4, the Phase 2 cartridge bundle is structured in two layers:
 
-- A **visual signature** (grid-vision features at multiple scales, sufficient to retrieve-by-similarity from a novel game frame)
-- A **textual world model** (the ontology, mechanics summary, win conditions, heuristics — exactly what the solver encodes)
-- Optionally, **representative action snippets** from the replay traces
+**Substrate cartridges** encode interface and interaction primitives that are invariant across games:
+- *Viewport-aware click*: if target world position is outside `[0, 63]`, scroll action comes first (chosen to minimize cost); click uses viewport-relative coordinates.
+- *Action budget*: every action (including rejected ones) may decrement a resource; monitor the budget; avoid speculative search that depletes it.
+- *Animation timing*: some actions complete over multiple frames; subsequent actions must wait or the state read is stale.
+- *Click classification*: small pixel changes (~1px) indicate selection or toggle; large changes indicate state transitions. Selection is cheap and reversible.
+- *Undo semantics*: when ACTION7 is available, undo reverts the most recent state change. When not available, dead-end recovery requires RESET.
 
-*(Section to be expanded by Andy Grossberg — membot architecture, paired-lattice mechanics, retrieval characteristics.)*
+These are ~5–10 primitives, finite and enumerable. They transfer to any game sharing that substrate feature (viewport for all scrolling games, action budget for all games with a turn counter, etc.).
+
+**Game-world cartridges** encode the per-game world models from Phase 1 — one cartridge per game, retrieved by visual signature from the current frame. Content:
+
+- A **visual signature** (grid-vision features at multiple scales, sufficient for retrieve-by-similarity from a novel game frame)
+- A **textual world model** (ontology, mechanics summary, win conditions, heuristics — what the solver encodes)
+- Optionally, **representative action snippets** from the replay traces — useful for few-shot prompting the small model on expected action patterns
+
+Retrieval at game-step time is therefore a two-stage lookup: substrate cartridges are always loaded (small, finite); game-world cartridge is retrieved by current-frame similarity. The small model reasons over both simultaneously.
+
+*(Section to be expanded by Andy Grossberg — `membot` paired-lattice mechanics, retrieval characteristics, how the two-layer schema maps onto membot's internal structure, whether substrate cartridges are a new schema type or fit into the existing paired-lattice format with a different lattice role.)*
 
 ### 6.3 Vision IRP
 

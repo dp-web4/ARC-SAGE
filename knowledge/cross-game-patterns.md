@@ -142,3 +142,23 @@ Every ARC-AGI-3 game has an action budget (`game.qiercdohl` or equivalent) that 
 **Lesson**: When engine-backed search "feels stuck" at a low state count, check whether failed moves consume resources that terminate the game. The signature of budget exhaustion is: "my beam keeps returning the same N states, heuristic won't drop, but my code looks correct." Always save/restore budget around expansions.
 
 **Games this might silently affect**: any game where previous solvers concluded "beam search is ineffective" at low state count. Worth auditing: dc22 (snapshot corruption noted by earlier agent — possibly same root cause), wa30 L7 10/13 ceiling, lf52 L7 2.2M state search (probably real, budget restoration applied).
+
+## Viewport ≠ World — Click Coordinates Must Stay In [0, 63]
+
+**Discovered**: bp35 competition submission 2026-04-13
+
+The ARC-AGI-3 API validates that ACTION6 click coordinates `x, y ∈ [0, 63]` *before* forwarding to the game engine. The **local engine** (used during solver development via `arc_agi.Arcade()`) has no such pre-validation — it passes the coordinates through to the game class's click handler, which may add a camera offset to derive a world position.
+
+**Symptom**: Solver works perfectly under local play (dry-run replay WINs). On live competition API, first click outside [0, 63] returns HTTP 400. Subsequent actions fail cascade because the game hasn't advanced.
+
+**Diagnostic**: grep the captured `run.json` for any CLICK step with `x` or `y` outside `[0, 63]`. bp35 had 28 out-of-bounds clicks across 5 levels; the 400 hit on the first of them.
+
+**Why local engine accepts it**: for games with scrolling cameras, the click handler uses `world_y = y + camera_y` to find the clicked object. A solver that addresses objects in world coordinates and subtracts `camera_y` before sending can end up with negative `y` or `y > 63` if the camera hasn't scrolled far enough. The local handler still finds a real object; the remote API rejects before the handler runs.
+
+**Fix pattern**: solvers must scroll the camera first so the target position falls inside the viewport, then click in-viewport coordinates. This costs extra actions per click (the scroll moves) and must be planned into the search — naïve world-coord-only solvers over-estimate click efficiency.
+
+**Meta-lesson — world model ≠ interface model**: the solver derived the game's world-level mechanics correctly (the solve graph is right) but did not derive the viewport as a first-class interaction constraint, because the local engine's leniency never forced the issue. The *world is bigger than the viewport* is a reasoning layer that has to sit alongside the world model, not inside it. If the intended target is outside viewport bounds, scroll comes first. This is a cross-game primitive — any game with camera scrolling shares it.
+
+**Games known to use camera scrolling** (source-audited): bp35, dc22, lf52, re86, ar25. bp35 exposed the issue because its scroll mechanics are central and frequently reached viewport edges. dc22/re86/ar25 may have latent OOB clicks that didn't happen to trigger 400s on specific traces — worth auditing `run.json` for each.
+
+**Schema implication for Phase 2**: viewport-aware click reasoning should be a standalone retrievable primitive in the membot cartridge bundle, distinct from game-specific world models. A small model equipped with this primitive adapts any scrolling game without re-deriving interface rules.
