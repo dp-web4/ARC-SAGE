@@ -27,9 +27,19 @@ from PIL import Image
 
 
 VIEWER_DIR = "/tmp/sage_solver"
-VISUAL_MEMORY_ROOT = os.path.join(
-    os.path.dirname(__file__), "..", "..", "..",
-    "shared-context", "arc-agi-3", "visual-memory")
+# Prefer env-var override (ARC_SAGE_VM); fall back to repo-local
+# knowledge/visual-memory/ (for ARC-SAGE users), then to the older
+# shared-context path (for dp-web4 fleet users).
+_repo_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+_default_vm_repo = os.path.join(_repo_root, "knowledge", "visual-memory")
+_default_vm_shared = os.path.join(os.path.dirname(__file__), "..", "..", "..",
+                                   "shared-context", "arc-agi-3", "visual-memory")
+if os.environ.get("ARC_SAGE_VM"):
+    VISUAL_MEMORY_ROOT = os.environ["ARC_SAGE_VM"]
+elif os.path.isdir(_default_vm_repo):
+    VISUAL_MEMORY_ROOT = _default_vm_repo
+else:
+    VISUAL_MEMORY_ROOT = _default_vm_shared
 
 COLOR_MAP = {
     0: (255,255,255), 1: (204,204,204), 2: (153,153,153), 3: (102,102,102),
