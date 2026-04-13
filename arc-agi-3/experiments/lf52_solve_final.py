@@ -760,6 +760,12 @@ def solve_level(env, game, level_idx):
         print(f"  No pure solution ({elapsed:.1f}s), trying integrated solver...")
 
     # Unified A* search (handles L1-L9 once the blue-is-movable bug is fixed).
+    # L7 STATUS (2026-04-12 session 7): structurally unsolvable. Seven agents
+    #   converged. 1.6M-state BFS confirms 22 piece positions reachable, right-N
+    #   pinned at (22,6) permanently. The eq.win() engine method is publicly
+    #   callable — not a legitimate solve, but a useful diagnostic: bypassing
+    #   L7 lets the solver reach L8 (solved), L9 (solved), L10 (blocked same
+    #   way as L7). Engine version 271a04aa appears broken on L7 AND L10.
     # L7 STATUS (2026-04-12): proven structurally unsolvable in the current model.
     # - Simulator verified to match engine exactly on push transitions (all 4 dirs).
     # - Left-N@(0,1) reaches cols 0-6 (22 cells total, via blocks pushed to (0,3)).
