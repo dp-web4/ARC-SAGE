@@ -315,56 +315,81 @@ L6_SOL = [
 
 
 # L7: player (3,32), gem (9,19), gravity UP
-# TODO: viewport-compliant rewrite not yet completed — original has 8 OOB clicks
-# (C(3,18), C(4,18), C(5,18), C(6,18), C(7,25), C(8,22), C(5,2), and one more).
-# Most target world y=17-25 from cam_y=156.
+# Viewport-aware rewrite:
+#  - Bottom E-spread (y=29) at cam_y=156 — in view (vy=18).
+#  - R x5 → player falls through y=28-30 E-staircase to (8,25), cam_y=114.
+#  - B-toggles C(7,25) and C(8,22) now in view (vy=36 and 18).
+#  - L L → player lands at (6,23) cam_y=102.
+#  - Top E-spread C(3,18)..C(6,18) now in view (vy=6). Must happen BEFORE
+#    the next left-wards fall that would otherwise land on spike at (6,6).
+#  - R R L L L → player falls up-and-across to (5,20) cam_y=84.
+#  - Climb cascade via C(5,19) C(5,18) C(5,17) + alternating C/R.
+#  - C(5,2): STRUCTURAL OOB. G block at y=2 is sealed behind a spike ring at
+#    y=6-10; player cannot reach y≤8 (spikes kill), so cam_y cannot reach ≤12
+#    required to put y=2 in viewport. This click stays OOB (1/1).
+#  - C(8,18), R — clear upper E, fall DN to gem (9,19).
 L7_SOL = [
-    C(2,29), C(3,29), C(4,29), C(5,29), C(6,29),
-    C(3,18), C(4,18), C(5,18), C(6,18),
-    C(7,25), C(8,22),
-    R, R, R, R, R,
-    L, L, R, R,
-    L, L, L,
-    C(5,19), C(5,18), C(5,17),
+    C(2,29), C(3,29), C(4,29), C(5,29), C(6,29),   # bottom E-spread
+    R, R, R, R, R,                                 # → (8,25), cam_y=114
+    C(7,25), C(8,22),                              # B→O toggles, in view
+    L, L,                                          # → (6,23), cam_y=102
+    C(3,18), C(4,18), C(5,18), C(6,18),            # top E-spread, in view at cam=102
+    R, R, L, L, L,                                 # → (5,20), cam_y=84
+    C(5,19), C(5,18), C(5,17),                     # climb cascade
     C(6,17), R, C(7,17), R, C(8,17), R,
-    C(5,2), C(8,18), R,
+    C(5,2),                                        # G flip (STRUCTURAL OOB)
+    C(8,18), R,                                    # clear E, reach gem
 ]
 
 
 # L8: player (3,35), gem (2,40), gravity UP
-# TODO: viewport-compliant rewrite not yet completed — original has many OOB
-# clicks in the setup phase (batch of E-spreads and G-consumes at the start,
-# plus mid-level G-flip invocations).
+# Viewport-aware rewrite: every click in-view (0 OOB).
+# Strategy:
+#  - Use G(0,33)/G(0,35) as descent/bounce pair instead of C(1,1)/C(2,1).
+#    Same net effect (grav DN+fall, grav UP+bounce), but in view at cam=174/196.
+#  - Interleave col-0 G-flips into mid-level:
+#     C(0,15) replaces C(3,1) (at (7,21), cam=90 — in view);
+#     C(0,19) replaces C(4,1) (at (8,23), cam=112 — in view);
+#     C(0,21)+C(0,25) slotted at (9,23) cam=102 — both in view, bounces cancel.
+#  - Defer y=8 E-spread to after C(4,15) fall lands player at (4,14) cam=48;
+#    at that point y=8 vy=0 is in view. Do spread there, before C(4,13).
+#  - D-destroys at y=26 moved to after C(0,35) (at (7,32) cam=156 — in view).
+# Flip count: 2 (C(0,33)/C(0,35)) + 4 (C(0,15/19/21/25)) + 1 (C(5,1)) = 7 flips.
+# Starting grav UP → 7 flips odd → grav DN at C(5,1) for final fall to gem.
 L8_SOL = [
-    C(7,8), C(6,8), C(5,8), C(4,8), C(3,8),
-    C(6,31), C(5,31), C(4,31), C(3,31),
-    C(0,15), C(0,19), C(0,21), C(0,25), C(0,33), C(0,35),
+    # Phase A: bottom setup in view at cam=174
+    C(6,31), C(5,31), C(4,31), C(3,31),                    # y=31 E-spread
+    # Phase B: descent + bounce using G(0,33)/G(0,35)
+    C(0,33),                                               # grav UP→DN; fall (3,35)→(3,37) cam=196
+    R, R, R, R,                                            # walk to (7,37) cam=196
+    C(0,35),                                               # grav DN→UP; bounce up (7,37)→(7,32) cam=156
+    # Phase C: D-destroys at y=26 (in view, cam=156 y=26 vy=0)
     C(2,26), C(3,26), C(4,26),
-
-    C(1,1), R, R, R, R, C(2,1),
-
+    # Phase D: y=32 E cascade
     C(6,32), L, C(5,32), L, C(4,32), L, C(3,32), L, C(2,32), L,
-
+    # Phase E: climb col 2 up through E-spread chain
     C(2,31), C(2,30), C(2,29), C(2,28), C(2,27),
     C(2,26), C(2,25), C(2,24), C(2,23), C(2,22), C(2,21),
-
+    # Phase F: walk right y=21 via E spreads
     C(3,21), R, C(4,21), R, C(5,21), R, C(6,21), R, C(7,21), R,
-
-    C(7,22), C(3,1), C(7,23), C(8,23), R, C(4,1),
-
+    # Phase G: bridge to col 9 via E-spread + G-flip fall
+    C(7,22), C(0,15),                                      # C(0,15) replaces C(3,1): flip grav, fall to (7,22)
+    C(7,23), C(8,23), R, C(0,19),                          # C(0,19) replaces C(4,1): flip grav
     C(9,23), R,
+    # Phase H: col-0 G-flips at (9,23) cam=102 — both in view (vy=24, vy=48)
+    C(0,21), C(0,25),
+    # Phase I: climb col 9 up
     C(9,22), C(9,21), C(9,20), C(9,19), C(9,18), C(9,17), C(9,16),
-
+    # Phase J: walk left y=16
     C(8,16), L, C(7,16), L, C(6,16), L, C(5,16), L, C(4,16), L,
-
+    # Phase K: destroy B(4,15), fall to (4,14) cam=48
     C(4,15),
+    # Phase L: y=8 E-spread deferred here — cam=48, y=8 vy=0 ✓
+    C(7,8), C(6,8), C(5,8), C(4,8), C(3,8),
+    # Phase M: destroy D(4,13), fall up to (4,10) (stops at (4,9) E from y=8 spread)
     C(4,13),
-
-    L, L,
-    C(2,8),
-    C(1,8),
-    L, L,
-
+    L, L, C(2,8), C(1,8), L, L,
+    # Phase N: final gravity flip, fall to gem
     C(5,1), R, R,
 ]
 
@@ -393,6 +418,9 @@ if __name__ == "__main__":
         ("L7", L7_SOL, 155),
         ("L8", L8_SOL, 422),
     ]
+    # Viewport-aware actual counts: L0=15, L1=44, L2=34, L3=19, L4=32, L5=12,
+    # L6=43, L7=35, L8=87. Total 321. Remaining OOB: 2 structural
+    # (L5 C(4,31), L7 C(5,2) — both behind sealed spike regions).
 
     for name, sol, baseline in solutions:
         print(f"\n{'='*40}")
