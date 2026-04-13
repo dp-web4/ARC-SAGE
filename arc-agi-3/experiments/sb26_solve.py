@@ -1,16 +1,33 @@
 #!/usr/bin/env python3
-"""
-sb26 World-Model Solver — Sequence-matching puzzle.
+"""sb26 Solver — Evaluator-Simulation-Based.
 
-Uses game.set_level() to quickly reset between permutation attempts.
-For each level, tries all permutations of palette tokens into frame slots.
+The sb26 mechanic (all levels): you arrange colored tokens and portals into
+frame slots. When ACTION5 is pressed, an evaluator walks the frames:
+  - Start at frame 0, slot 0.
+  - At each slot: if the item is a regular token, its color must equal the
+    current target color; advance target pointer and slot pointer.
+  - If the item is a portal, push current frame, jump to frame whose border
+    color matches the portal's inner color, start at slot 0 there.
+  - When a frame's slots are exhausted, pop back to the parent frame one
+    slot past the portal, continue.
+  - Win when all targets matched.
+
+L4+ adds: (a) multiple frames reachable via portals contribute slots, so
+total_slots can exceed first-frame slots; (b) pre-placed tokens inside
+frames are fixed contributions to the sequence; (c) portals themselves
+are palette items that must be placed in specific slots.
+
+Solver strategy: model the layout, then DFS over palette-to-slot
+assignments that make the evaluator's walk produce exactly the target
+sequence. Since each step has a required color (target[p]), branching is
+narrow: only try palette items with the required color, plus portals
+whose target frame would produce the needed remaining subsequence.
 """
 import sys, os, json, time
 import warnings
 warnings.filterwarnings("ignore")
 os.environ.setdefault("NUMPY_EXPERIMENTAL_DTYPE_API", "1")
 import numpy as np
-from itertools import permutations
 
 sys.path.insert(0, os.path.dirname(__file__))
 from arc_agi import Arcade
@@ -18,6 +35,7 @@ from arcengine import GameAction
 
 GAME_ID = 'sb26-7fbdac44'
 
+# -- Helpers ---------------------------------------------------------------
 
 def get_frame(fd):
     grid = np.array(fd.frame)
@@ -35,198 +53,355 @@ def wait_anim(env, game, fd, max_frames=300):
     return fd
 
 
-def get_palette_and_slots(game):
-    """Get palette tokens and empty slots in EVALUATION ORDER.
+# -- World model -----------------------------------------------------------
 
-    The evaluation reads frame contents left-to-right. Portal tokens
-    redirect to matching-color frames. After reading the redirected frame,
-    evaluation returns and continues in the original frame.
+def build_level_model(game):
+    """Extract frames, slots, palette items from the current level.
+
+    Returns:
+      frames: list of dicts with keys:
+        'idx': engine index in game.qaagahahj (0-based)
+        'border': border color
+        'slots': list of N slot dicts (N = frame width slot count).
+                 Each slot: {'x','y' (top-left), 'click_x','click_y',
+                             'fixed': (None | {'color': int, 'is_portal': bool}),
+                             'empty_slot_sprite_exists': bool}
+      palette: list of dicts with keys 'color','is_portal','click_x','click_y','source_x','source_y'
+      targets: list of target colors in order
+      kojduumcap: slot stride (6)
     """
-    palette = []
-    for s in game.dkouqqads:
-        if s.y >= 50:
-            color = int(s.pixels[1, 1])
-            palette.append((s.x + 3, s.y + 3, color))
-    palette.sort(key=lambda t: t[0])
-
-    # Get all frame slots (including portals) in frame order
+    kojduumcap = 6
     frames = sorted(game.qaagahahj, key=lambda f: (f.y, f.x))
+    # first-frame-first ordering is important: engine starts at qaagahahj[0]
+    # which is the one sorted by (y, x) — same as above.
 
-    # Build frame contents: for each frame, get items sorted by x
-    frame_items = {}
-    for frame in frames:
-        items = []
-        # Check tokens placed in this frame
-        for token in game.dkouqqads:
-            if token.y < 50 and token.y >= frame.y and token.y < frame.y + frame.height:
-                if token.x >= frame.x and token.x < frame.x + frame.width:
-                    is_portal = token.name == 'vgszefyyyp'
-                    items.append(('token', token.x, token.y, int(token.pixels[1, 1]), is_portal))
-        # Check empty slots in this frame
-        for slot in game.dewwplfix:
-            if not slot.is_visible:
-                continue
-            if slot.y >= frame.y and slot.y < frame.y + frame.height:
-                if slot.x >= frame.x and slot.x < frame.x + frame.width:
-                    items.append(('slot', slot.x, slot.y, -1, False))
-        items.sort(key=lambda i: i[1])  # Sort by x
-        frame_items[id(frame)] = (frame, items)
-
-    # Compute evaluation order by traversing frames with portal jumps
-    # Start with first frame
-    eval_order = []
+    # Map border color -> frame index (for portal jumps)
     frame_by_border = {}
-    for frame in frames:
+    for i, f in enumerate(frames):
+        frame_by_border[int(f.pixels[0, 0])] = i
+
+    model_frames = []
+    for fi, frame in enumerate(frames):
+        width_count = int(frame.name[-1])
         border = int(frame.pixels[0, 0])
-        frame_by_border[border] = frame
+        slots = []
+        for i in range(width_count):
+            # Per engine rfdjlhefnd: x = frame.x + 2 + i*6, y = frame.y + 2
+            sx = int(frame.x) + 2 + i * kojduumcap
+            sy = int(frame.y) + 2
+            cx, cy = sx + 3, sy + 3  # click position (center)
+            fixed = None
+            empty_exists = False
 
-    def traverse(frame, visited=None):
-        if visited is None:
-            visited = set()
-        if id(frame) in visited:
-            return
-        visited.add(id(frame))
+            # Find pre-placed token (fixed for this solve)
+            for t in game.dkouqqads:
+                if int(t.x) == sx and int(t.y) == sy:
+                    is_portal = t.name == 'vgszefyyyp'
+                    if is_portal:
+                        color = int(t.pixels[1, 1])  # inner color
+                    else:
+                        color = int(t.pixels[1, 1])
+                    fixed = {'color': color, 'is_portal': is_portal}
+                    break
 
-        items = frame_items.get(id(frame), (frame, []))[1]
-        deferred = []  # Items after a portal jump
+            # Find empty slot sprite
+            for s in game.dewwplfix:
+                if not s.is_visible:
+                    continue
+                if int(s.x) == sx and int(s.y) == sy:
+                    empty_exists = True
+                    break
 
-        for item in items:
-            item_type, ix, iy, color, is_portal = item
-            if is_portal:
-                # Jump to frame with matching border color
-                target_frame = frame_by_border.get(color)
-                if target_frame and id(target_frame) not in visited:
-                    traverse(target_frame, visited)
-                # After returning, continue with remaining items
-            elif item_type == 'slot':
-                eval_order.append((ix + 3, iy + 3))
+            slots.append({
+                'x': sx, 'y': sy,
+                'click_x': cx, 'click_y': cy,
+                'fixed': fixed,
+                'empty_exists': empty_exists,
+            })
+        model_frames.append({
+            'idx': fi, 'border': border, 'slots': slots, 'name': frame.name,
+        })
 
-    if frames:
-        traverse(frames[0])
+    # Palette (row at y >= 50)
+    palette = []
+    for t in game.dkouqqads:
+        if int(t.y) < 50:
+            continue
+        is_portal = t.name == 'vgszefyyyp'
+        color = int(t.pixels[1, 1])  # for portals, this is the inner color (= target frame border)
+        palette.append({
+            'color': color,
+            'is_portal': is_portal,
+            'click_x': int(t.x) + 3, 'click_y': int(t.y) + 3,
+            'source_x': int(t.x), 'source_y': int(t.y),
+        })
 
-    return palette, eval_order
+    targets = [int(s.pixels[0, 0]) for s in game.wcfyiodrx]
+
+    return {
+        'frames': model_frames,
+        'palette': palette,
+        'targets': targets,
+        'frame_by_border': frame_by_border,
+    }
 
 
-def try_perm(env, game, palette, slots, perm):
-    """Place tokens in given order and submit. Returns (won, action_count)."""
-    prev = game.level_index
-    ac = 0
+# -- Simulated evaluator + search -----------------------------------------
 
-    for slot_idx, pal_idx in enumerate(perm):
-        if slot_idx >= len(slots) or pal_idx >= len(palette):
+class Solver:
+    def __init__(self, model):
+        self.frames = model['frames']
+        self.targets = model['targets']
+        self.frame_by_border = model['frame_by_border']
+        self.palette = model['palette']
+        # assignment[(frame_idx, slot_idx)] = palette index (int)
+        self.assignment = {}
+        # used[palette_idx] = bool
+        self.used = [False] * len(self.palette)
+
+    def item_at(self, frame_idx, slot_idx):
+        """Return {'color','is_portal'} for the item at (frame_idx, slot_idx),
+        or None if empty and unassigned."""
+        slot = self.frames[frame_idx]['slots'][slot_idx]
+        if slot['fixed'] is not None:
+            return slot['fixed']
+        if (frame_idx, slot_idx) in self.assignment:
+            pi = self.assignment[(frame_idx, slot_idx)]
+            p = self.palette[pi]
+            return {'color': p['color'], 'is_portal': p['is_portal']}
+        return None
+
+    def can_place(self, frame_idx, slot_idx):
+        """True if this slot is fillable (empty slot sprite exists and not fixed)."""
+        slot = self.frames[frame_idx]['slots'][slot_idx]
+        return slot['fixed'] is None and slot['empty_exists']
+
+    def solve(self):
+        """Return list of (frame_idx, slot_idx, palette_idx) for placements,
+        or None if no solution."""
+        # Start: stack [(frame 0, slot 0)], target pointer p = 0
+        stack = [(0, 0)]
+        ok = self._walk(stack, 0)
+        if not ok:
+            return None
+        # Return placements in palette-usage order? No — we want an order
+        # that matches engine behavior. Engine checks each slot at evaluator
+        # time; placements can be done in any order before pressing PLAY.
+        # But "place portal into a slot that has a pre-placed fixed" is
+        # impossible — we only assign to fillable slots.
+        placements = []
+        for (fi, si), pi in self.assignment.items():
+            placements.append((fi, si, pi))
+        return placements
+
+    def _walk(self, stack, p):
+        """Recursive evaluator simulation + DFS over palette assignments.
+
+        stack: [(frame_idx, slot_idx), ...] — current frame call stack
+        p: next target index to match
+        Returns True on success.
+        """
+        if p == len(self.targets):
+            # All targets matched. But engine win requires the LAST target
+            # to be matched, not just "run out". Actually re-reading:
+            # `if pmygakdvy == len(wcfyiodrx)-1 and wrudcanmwy` is checked
+            # INSIDE dbfxrigdqx, so once the last target is matched, win
+            # triggers before anything else runs.
+            # If we reach here, p has been incremented past last target,
+            # meaning we matched all. Success.
+            return True
+
+        if not stack:
+            # Stack empty but more targets unmatched -> fail
+            return False
+
+        frame_idx, slot_idx = stack[-1]
+        frame = self.frames[frame_idx]
+        slot_count = len(frame['slots'])
+
+        if slot_idx >= slot_count:
+            # Frame exhausted: pop and continue in parent at next slot
+            # But engine only allows pop if len(buvfjfmpp) > 1; otherwise
+            # it's a failure (out of items, more targets remaining).
+            if len(stack) < 2:
+                return False
+            new_stack = stack[:-1]
+            pf_idx, pf_slot = new_stack[-1]
+            new_stack[-1] = (pf_idx, pf_slot + 1)
+            return self._walk(new_stack, p)
+
+        # Look at item at (frame_idx, slot_idx)
+        item = self.item_at(frame_idx, slot_idx)
+        target = self.targets[p]
+
+        if item is not None:
+            # Item is fixed or already assigned
+            return self._consume(stack, p, item)
+
+        # Slot is empty and unassigned; try placing palette items.
+        if not self.can_place(frame_idx, slot_idx):
+            return False
+
+        # Try a regular token matching target color.
+        for pi, pitem in enumerate(self.palette):
+            if self.used[pi]:
+                continue
+            if pitem['is_portal']:
+                continue
+            if pitem['color'] != target:
+                continue
+            self.used[pi] = True
+            self.assignment[(frame_idx, slot_idx)] = pi
+            if self._consume(stack, p, {'color': pitem['color'], 'is_portal': False}):
+                return True
+            self.used[pi] = False
+            del self.assignment[(frame_idx, slot_idx)]
+            # Only need to try one such token (they produce identical walks
+            # from here on for the evaluator); remaining copies of same color
+            # matter only if later slot needs them.
+            # Actually: with multiple tokens of same color, which one we use
+            # here doesn't change walk correctness but affects action ordering.
+            # Break is safe for correctness search.
             break
-        tx, ty, _ = palette[pal_idx]
-        sx, sy = slots[slot_idx]
-        env.step(GameAction.ACTION6, data={'x': tx, 'y': ty})
-        env.step(GameAction.ACTION6, data={'x': sx, 'y': sy})
+
+        # Try a portal: portal's inner color = target frame's border color.
+        # When evaluator reads a portal, it pushes that target frame (at idx 0).
+        for pi, pitem in enumerate(self.palette):
+            if self.used[pi]:
+                continue
+            if not pitem['is_portal']:
+                continue
+            target_border = pitem['color']
+            if target_border not in self.frame_by_border:
+                continue
+            target_frame_idx = self.frame_by_border[target_border]
+            # Engine guard (line 976): portal re-entry fails only if entering
+            # at slot 0 AND the matching parent call is also at slot 0 AND the
+            # call just before top of stack was at slot 0. Simplification:
+            # we check whether placing here reproduces exactly the problematic
+            # pattern. In practice, re-entry mid-frame is allowed.
+            # The "push" is always to slot 0, so check: would this re-push an
+            # already-present (frame, 0)? If yes, engine fails.
+            if any((fi, si) == (target_frame_idx, 0) for fi, si in stack):
+                # Engine will detect and fail via sibihgzarf.
+                continue
+            # Bound recursion to avoid runaway.
+            if len(stack) > 32:
+                continue
+            self.used[pi] = True
+            self.assignment[(frame_idx, slot_idx)] = pi
+            new_stack = stack + [(target_frame_idx, 0)]
+            # Engine: portal itself doesn't consume a target; next step
+            # is reading slot 0 of the target frame.
+            if self._walk(new_stack, p):
+                return True
+            self.used[pi] = False
+            del self.assignment[(frame_idx, slot_idx)]
+
+        return False
+
+    def _consume(self, stack, p, item):
+        """Consume the item at top-of-stack. If token, check color match and
+        advance. If portal, jump to target frame."""
+        frame_idx, slot_idx = stack[-1]
+
+        if item['is_portal']:
+            target_border = item['color']
+            if target_border not in self.frame_by_border:
+                return False
+            target_frame_idx = self.frame_by_border[target_border]
+            # Engine fails only if pushing an already-at-slot-0 frame.
+            if any((fi, si) == (target_frame_idx, 0) for fi, si in stack):
+                return False
+            if len(stack) > 32:
+                return False
+            new_stack = stack + [(target_frame_idx, 0)]
+            return self._walk(new_stack, p)
+
+        # Regular token: must match current target
+        target = self.targets[p]
+        if item['color'] != target:
+            return False
+
+        # Check win condition BEFORE advancing (engine line 926):
+        # if pmygakdvy == len(wcfyiodrx)-1 and wrudcanmwy -> win
+        if p == len(self.targets) - 1:
+            return True
+
+        # Advance within frame. If slot is last in frame, pop.
+        new_stack = list(stack)
+        new_stack[-1] = (frame_idx, slot_idx + 1)
+        return self._walk(new_stack, p + 1)
+
+
+# -- Live interaction ------------------------------------------------------
+
+def apply_placements(env, game, model, placements, verbose=False):
+    """Click tokens from palette into slots. Returns action count and clicks
+    list."""
+    clicks = []
+    ac = 0
+    for fi, si, pi in placements:
+        slot = model['frames'][fi]['slots'][si]
+        pitem = model['palette'][pi]
+        # Click token (from palette)
+        env.step(GameAction.ACTION6, data={'x': pitem['click_x'], 'y': pitem['click_y']})
+        clicks.append(('click', pitem['click_x'], pitem['click_y']))
+        # Click slot
+        env.step(GameAction.ACTION6, data={'x': slot['click_x'], 'y': slot['click_y']})
+        clicks.append(('click', slot['click_x'], slot['click_y']))
         ac += 2
-
-    fd = env.step(GameAction.ACTION5)
-    ac += 1
-    fd = wait_anim(env, game, fd)
-
-    won = fd.levels_completed > prev
-    return won, ac, fd
+        if verbose:
+            kind = 'PORTAL' if pitem['is_portal'] else f"color={pitem['color']}"
+            print(f"    place {kind} into frame{fi}.slot{si} ({slot['x']},{slot['y']})")
+    return ac, clicks
 
 
 def solve_level(env, game, verbose=False):
-    """Solve current level by trying permutations with level reset."""
+    """Solve current level via evaluator simulation."""
     level_idx = game.level_index
-    palette, slots = get_palette_and_slots(game)
-    n = min(len(palette), len(slots))
-
-    targets = [int(s.pixels[0, 0]) for s in game.wcfyiodrx]
-    pal_colors = [c for _, _, c in palette]
+    model = build_level_model(game)
 
     if verbose:
-        print(f"  Targets: {targets}")
-        print(f"  Palette: {pal_colors}")
-        print(f"  Slots: {len(slots)}")
+        print(f"  Targets ({len(model['targets'])}): {model['targets']}")
+        pal_summary = [('P' if p['is_portal'] else 'T', p['color']) for p in model['palette']]
+        print(f"  Palette: {pal_summary}")
+        print(f"  Frames: {[(f['name'], f['border'], len(f['slots'])) for f in model['frames']]}")
 
-    if n == 0:
+    solver = Solver(model)
+    placements = solver.solve()
+
+    if placements is None:
+        if verbose:
+            print("  NO SIMULATED SOLUTION FOUND")
         return None, 0, []
 
-    # Try direct color match first
-    pal_by_color = {}
-    for i, c in enumerate(pal_colors):
-        pal_by_color.setdefault(c, []).append(i)
-
-    direct = []
-    temp_map = {c: list(idxs) for c, idxs in pal_by_color.items()}
-    for tc in targets[:n]:
-        if tc in temp_map and temp_map[tc]:
-            direct.append(temp_map[tc].pop(0))
-        else:
-            direct = None
-            break
-
-    if direct:
-        won, ac, fd = try_perm(env, game, palette, slots, direct)
-        if won:
-            # Build click sequence
-            clicks = []
-            for si, pi in enumerate(direct):
-                tx, ty, _ = palette[pi]
-                sx, sy = slots[si]
-                clicks.extend([('click', tx, ty), ('click', sx, sy)])
-            clicks.append(('submit', 0, 0))
-            if verbose:
-                print(f"  Direct match: {ac} actions")
-            return fd, ac, clicks
-
-        # Reset level
-        game.set_level(level_idx)
-        env.step(GameAction.RESET)
-
-    # Try all permutations
-    total = 1
-    for i in range(1, n + 1):
-        total *= i
-
     if verbose:
-        print(f"  Trying {total} permutations...")
+        print(f"  Simulation found {len(placements)} placements")
 
-    for idx, perm in enumerate(permutations(range(n))):
-        if direct and list(perm) == direct:
-            continue
+    # Apply placements live to verify
+    ac, clicks = apply_placements(env, game, model, placements, verbose=verbose)
 
-        # Reset level between attempts
-        game.set_level(level_idx)
-        fd = env.step(GameAction.RESET)
+    # Submit
+    fd = env.step(GameAction.ACTION5)
+    clicks.append(('submit', 0, 0))
+    ac += 1
+    fd = wait_anim(env, game, fd)
 
-        # Re-read palette and slots (positions reset)
-        palette, slots = get_palette_and_slots(game)
-        if len(palette) < n or len(slots) < n:
-            continue
-
-        won, ac, fd = try_perm(env, game, palette, slots, perm)
-
-        if won:
-            perm_colors = [palette[i][2] for i in perm]
-            clicks = []
-            for si, pi in enumerate(perm):
-                tx, ty, _ = palette[pi]
-                sx, sy = slots[si]
-                clicks.extend([('click', tx, ty), ('click', sx, sy)])
-            clicks.append(('submit', 0, 0))
-            if verbose:
-                print(f"  Perm {idx}/{total}: {perm_colors} SOLVED in {ac} actions")
-            return fd, ac, clicks
-
-        if idx % 500 == 0 and verbose and idx > 0:
-            print(f"    Tried {idx}/{total}...")
-
+    won = fd.levels_completed > level_idx
     if verbose:
-        print(f"  No permutation worked ({total} tried)")
+        status = "WON" if won else "FAILED"
+        print(f"  {status} in {ac} actions (level_index now {game.level_index}, levels_completed={fd.levels_completed})")
 
-    # Reset level for next attempt
-    game.set_level(level_idx)
-    env.step(GameAction.RESET)
-    return None, 0, []
+    if not won:
+        # Reset level for retry / next attempt
+        game.set_level(level_idx)
+        return None, 0, []
+
+    return fd, ac, clicks
 
 
 def solve_all_levels(verbose=True):
-    """Solve all 8 sb26 levels."""
     arcade = Arcade()
     env = arcade.make(GAME_ID)
     fd = env.reset()
@@ -249,7 +424,7 @@ def solve_all_levels(verbose=True):
                 print(f"  -> Total: {total} actions, {fd.levels_completed} levels")
         else:
             if verbose:
-                print(f"  FAILED L{level_idx+1}")
+                print(f"  FAILED L{level_idx + 1}")
             break
 
         if fd.state.name == 'GAME_OVER':
@@ -257,14 +432,11 @@ def solve_all_levels(verbose=True):
                 print(f"  GAME OVER at L{level_idx+1}")
             break
 
-    # Track levels solved
     levels_solved = len(all_level_clicks)
-
     return all_level_clicks, total, levels_solved, env, game
 
 
 def replay_and_capture(arcade, all_level_clicks, verbose=True):
-    """Replay with visual capture."""
     try:
         from arc_session_writer import SessionWriter
     except ImportError:
@@ -282,7 +454,7 @@ def replay_and_capture(arcade, all_level_clicks, verbose=True):
             win_levels=fd.win_levels,
             available_actions=[int(a) for a in fd.available_actions],
             baseline=153,
-            player="sb26_world_model_solver"
+            player="sb26_simulation_solver",
         )
         writer.record_step(0, grid, levels_completed=0, state="PLAYING")
 
@@ -313,7 +485,7 @@ def replay_and_capture(arcade, all_level_clicks, verbose=True):
 def main():
     import time as _time
     print("=" * 60)
-    print("sb26 World-Model Solver")
+    print("sb26 Evaluator-Simulation Solver")
     print("=" * 60)
 
     t0 = _time.monotonic()
