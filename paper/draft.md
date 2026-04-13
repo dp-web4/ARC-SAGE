@@ -221,6 +221,8 @@ This suggests a two-layer cartridge bundle for Phase 2:
 
 The substrate cartridges are, we claim, a finite and enumerable set. The game-world cartridges scale with the game catalog. This factoring matters for generalization: a new game drawn from the evaluation set is unlikely to have a matching game-world cartridge but is very likely to share substrate primitives with games we do have.
 
+**Scope of substrate primitives is conditional, not universal.** A probe triggered by the bp35 finding applied the same viewport-aware-click analysis to `lf52` (one of our structurally-stuck games from §4.3). Empirically, lf52's click handler exhibits the same camera-offset pattern as bp35: out-of-viewport clicks do reach off-screen pegs and trigger the game's selection mechanic. But lf52 L7 remains unsolved under this reframe, because the binding constraint is in the tile-movement graph, not the interface: selected pegs have no legal jumps regardless of how selection happened. The viewport primitive therefore applies when (a) the target is in-world but out-of-viewport AND (b) selecting it enables a new state transition. bp35 satisfies both; lf52 L7 satisfies only (a). The primitive pair brackets the scope — and the lesson for the cartridge schema is that substrate primitives carry preconditions, checked against the game-world cartridge's legal-action function. A naive "always scroll if OOB" heuristic would generate no-op action sequences in games like lf52; a cartridge-aware small model should know the difference.
+
 ### 5.5 The recognition-over-derivation thesis, stated precisely
 
 Define:

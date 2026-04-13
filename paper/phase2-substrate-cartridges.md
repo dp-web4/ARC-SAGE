@@ -17,7 +17,9 @@ Based on the 25-game Phase 1 dataset, the following substrate primitives are can
 
 ### 1. Viewport-aware click
 
-**Trigger**: game has scrolling camera; ACTION6 is available; target object identified.
+**Trigger**: game has scrolling camera; ACTION6 is available; target object identified; AND clicking the target is expected to trigger a state-changing game action (not merely select it with no follow-on transition).
+
+**Scope bracket (from lf52 session 8)**: this primitive applies when both (a) the target is in-world but outside viewport, AND (b) selecting it enables a new state transition. The condition (b) must be evaluated against the game-world cartridge. bp35 clicks satisfy both; lf52 L7 clicks satisfy only (a) — the selected peg has no legal jumps, so OOB clicks reach it but produce no progress. A naive "always scroll if OOB" heuristic would waste action budget on lf52-like games. The cartridge schema must carry this precondition explicitly.
 
 **Rule**:
 ```
