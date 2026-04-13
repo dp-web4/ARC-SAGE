@@ -30,6 +30,14 @@ from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(__file__))
 
+# Load registered ARC_API_KEY from the shared .env BEFORE importing arc_agi
+# (arc_agi only auto-loads .env.example, not .env)
+try:
+    from dotenv import load_dotenv
+    load_dotenv('/mnt/c/exe/projects/ai-agents/.env')
+except ImportError:
+    pass
+
 from arc_agi import Arcade, OperationMode
 from arcengine import GameAction, GameState
 
@@ -165,7 +173,8 @@ def collect_trace(game):
     return trace, f'{run_dir.name}', expected, win_levels
 
 
-def replay_one_game(arc, game_id, trace, label="", scorecard_id=None):
+def replay_one_game(arc, game_id, trace, label="", scorecard_id=None,
+                    step_delay=0.0):
     """Play trace against a fresh env. Returns (state, levels_completed,
     win_levels, actions_played, elapsed_sec). Raises on make/reset failure."""
     t0 = time.time()
@@ -177,6 +186,8 @@ def replay_one_game(arc, game_id, trace, label="", scorecard_id=None):
         raise RuntimeError(f"reset({game_id}) returned None (likely 429)")
     played = 0
     for action, data in trace:
+        if step_delay > 0:
+            time.sleep(step_delay)
         fd = env.step(action, data=data)
         if fd is None:
             raise RuntimeError(f"step failed at action {played+1}")
@@ -207,6 +218,10 @@ def main():
                    help='Scorecard tag for compete mode')
     p.add_argument('--source-url', default='https://github.com/dp-web4/ARC-SAGE',
                    help='Source URL for scorecard')
+    p.add_argument('--step-delay', type=float, default=0.0,
+                   help='Seconds to sleep between env.step calls (rate limit mitigation)')
+    p.add_argument('--game-interval', type=float, default=3.0,
+                   help='Seconds to sleep between games')
     args = p.parse_args()
 
     games = load_game_ids()
@@ -242,6 +257,12 @@ def main():
         return
 
     if args.compete:
+        key = os.getenv('ARC_API_KEY', '')
+        if not key or key.startswith('anon') or len(key) < 20:
+            print(f"✗ ARC_API_KEY not set or looks invalid (got: {key[:10]!r}). "
+                  f"Ensure /mnt/c/exe/projects/ai-agents/.env has ARC_API_KEY=<registered>")
+            return
+        print(f"\nUsing registered API key: {key[:8]}…{key[-4:]}")
         print("\n⚠  COMPETITION MODE — one-shot, no retries. Continue? [y/N]")
         resp = input().strip().lower()
         if resp != 'y':
@@ -261,7 +282,8 @@ def main():
 
     # Step 3: replay each game, with throttling + 429 backoff
     results = []
-    interval = 3.0  # seconds between games
+    interval = args.game_interval  # seconds between games
+    step_delay = args.step_delay
     consecutive_429 = 0
     aborted = False
     for i, (short, full, trace, source, expected, win_levels) in enumerate(traces):
@@ -274,7 +296,8 @@ def main():
         while True:
             attempts += 1
             try:
-                state, lc, wl, played, elapsed = replay_one_game(arc, full, trace, scorecard_id=card_id)
+                state, lc, wl, played, elapsed = replay_one_game(
+                    arc, full, trace, scorecard_id=card_id, step_delay=step_delay)
                 ok = (state == GameState.WIN) or (lc >= expected)
                 mark = '✓' if ok else '~'
                 print(f"  {mark} {short:6s}  state={state.name:12s}  "
