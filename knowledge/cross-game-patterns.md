@@ -126,3 +126,19 @@ When encountering a NEW game:
 11. **Objects may not be solid to tools.** In sk48, the rail passes THROUGH target blocks instead of pushing them. The visual signature is a 3-frame animation (vs 2-frame normal) and reduced pixel change. Don't assume collision — test it. If an extension produces fewer pixels changed than expected, the tool may have passed through an object. | NEW | sk48 |
 12. **Animation frame count encodes interaction type.** Normal actions produce 2-frame animations. Object interactions (pass-through, embed, crush) produce 3+ frame animations. Use frame count as a classifier for what kind of interaction occurred. | NEW | sk48 |
 13. **Retraction can pull, not just shorten.** In rail/track games, retracting the tool may pull embedded objects toward the head. This is a second use of the same action — the tool doubles as both a pusher (extend) and a puller (retract). | NEW | sk48 |
+
+## Engine Budget Exhaustion Masquerading as State-Space Exhaustion
+
+**Discovered**: sk48 session 2026-04-12
+
+Every ARC-AGI-3 game has an action budget (`game.qiercdohl` or equivalent) that ticks down on each action — INCLUDING failed moves (blocked extensions, out-of-bounds slides, invalid clicks). Once the budget hits 0, the game enters `GAME_OVER` and silently rejects further state changes.
+
+**Symptom**: Beam search or BFS "gets stuck" at suspiciously small reachable state count (e.g. 33 states on sk48 L2). Heuristic stops dropping. Search declares exhaustion.
+
+**Root cause**: The 34th expansion hits budget=0 → GAME_OVER → subsequent state reads return stale/invalid data → dedup thinks the state is already visited → search believes it's explored everything.
+
+**Fix**: Save `init_budget = game.qiercdohl` at search start, restore `game.qiercdohl = init_budget` after each beam expansion. This unlocks thousands of reachable states.
+
+**Lesson**: When engine-backed search "feels stuck" at a low state count, check whether failed moves consume resources that terminate the game. The signature of budget exhaustion is: "my beam keeps returning the same N states, heuristic won't drop, but my code looks correct." Always save/restore budget around expansions.
+
+**Games this might silently affect**: any game where previous solvers concluded "beam search is ineffective" at low state count. Worth auditing: dc22 (snapshot corruption noted by earlier agent — possibly same root cause), wa30 L7 10/13 ceiling, lf52 L7 2.2M state search (probably real, budget restoration applied).
