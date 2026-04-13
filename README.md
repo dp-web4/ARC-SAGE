@@ -41,7 +41,7 @@ The result: 25 working solvers, each encoding a compressed ontology. A solver is
 | `arc-agi-3/experiments/` | 25 game solvers + capture/submit infrastructure (perception, session writer, world models, regen + competition submit) |
 | `environment_files/` | ARC-AGI-3 game engines (one per game, from the ARC Prize SDK) |
 | `knowledge/` | Game mechanics docs, cross-game patterns, visual memory, fleet learning logs |
-| `membot/` | Andy's paired-lattice memory system (public repo: github.com/dp-web4/membot) |
+| `membot/` | Andy's paired-lattice memory system (upstream: github.com/project-you-apps/membot) |
 
 See `PRUNE_NOTES.md` for what's been deliberately included, what was considered but excluded, and why.
 
@@ -77,7 +77,7 @@ Proof that:
 - Memory + retrieval can substitute for raw model capacity
 - The SAGE architectural approach (consciousness loop, experience buffer, memory consolidation) produces tractable AI systems
 
-If ARC-SAGE places well, it draws attention to the broader work: [dp-web4](https://github.com/dp-web4), [membot](https://github.com/dp-web4/membot), [SAGE](https://github.com/dp-web4/SAGE), [synchronism](https://github.com/dp-web4/synchronism), [web4](https://github.com/dp-web4/web4), [hardbound](https://github.com/dp-web4/hardbound).
+If ARC-SAGE places well, it draws attention to the broader work: [dp-web4](https://github.com/dp-web4), [membot](https://github.com/project-you-apps/membot), [SAGE](https://github.com/dp-web4/SAGE), [synchronism](https://github.com/dp-web4/synchronism), [web4](https://github.com/dp-web4/web4), [hardbound](https://github.com/dp-web4/hardbound).
 
 If it doesn't place well, the code and world models are still useful as a reference implementation of the approach.
 

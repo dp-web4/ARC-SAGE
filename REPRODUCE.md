@@ -56,7 +56,7 @@ Most solvers cache their winning sequences in `visual-memory/<game>/solutions.js
 
 - **Live training / fleet coordination code** — the multi-machine fleet infrastructure that ran these solvers across 6 machines lives in the private `shared-context` repo. Not needed for replay or submission; relevant for understanding *how* the solves were developed.
 
-- **SAGE cognition loop, raising framework, membot internals** — these sit in adjacent public repos (`dp-web4/SAGE` — AGPL, `dp-web4/membot` — MIT). ARC-SAGE is deliberately scoped to the game-solving surface.
+- **SAGE cognition loop, raising framework, membot internals** — these sit in adjacent public repos (`dp-web4/SAGE` — AGPL, `project-you-apps/membot` — MIT, Andy Grossberg upstream). ARC-SAGE is deliberately scoped to the game-solving surface.
 
 ## Contact
 

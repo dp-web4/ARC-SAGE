@@ -5,7 +5,7 @@
 ### Andy Grossberg
 **Role**: Memory architecture lead.
 **Contributions**: `membot` — the paired-lattice cartridge system that binds visual features to semantic content. The vision memory module (`membot/vision/`) that makes grid-aware retrieval possible. Cross-session continuity for AI agents.
-**Repos**: [membot](https://github.com/dp-web4/membot), [Project You](https://github.com/dp-web4/project-you)
+**Repos**: [membot](https://github.com/project-you-apps/membot), [Project You](https://github.com/dp-web4/project-you)
 
 ### Dennis Palatov (dp-web4)
 **Role**: System architecture and research direction.

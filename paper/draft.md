@@ -10,7 +10,7 @@
 **Public artifacts** (all MIT):
 - Code: https://github.com/dp-web4/ARC-SAGE
 - Scorecard: https://arcprize.org/scorecards/c0d62617-a0bc-4100-bb4e-982fa5d7fde7
-- Memory system: https://github.com/dp-web4/membot
+- Memory system: https://github.com/project-you-apps/membot
 
 **Draft date**: 2026-04-13
 

@@ -15,7 +15,7 @@ worth including, and what was removed and why.
 | dp-web4/SAGE (environment_files/) | MIT (via arc-agi SDK) | `environment_files/` | ARC-AGI-3 game engines |
 | dp-web4/SAGE (sage/irp/) | AGPL-3.0 (private) | `sage-infrastructure/irp/` | IRP plugin framework |
 | dp-web4/shared-context (arc-agi-3/) | Private | `knowledge/` | Fleet learning, game mechanics, visual memory |
-| dp-web4/membot | MIT (public) | `membot/` | Memory system (Andy's work, curated subset) |
+| project-you-apps/membot | MIT (public) | `membot/` | Memory system (Andy Grossberg's work, curated subset) |
 
 ## What Was Included
 
