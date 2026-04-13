@@ -1,0 +1,592 @@
+{
+  "game_id": "wa30-ee6fef47",
+  "player": "wa30-solver",
+  "started": "20260412_210433",
+  "win_levels": 9,
+  "baseline": 0,
+  "steps": [
+    {
+      "step": 1,
+      "level": 0,
+      "action": "UP",
+      "png": "step_0001_L0_UP.png"
+    },
+    {
+      "step": 2,
+      "level": 0,
+      "action": "UP",
+      "png": "step_0002_L0_UP.png"
+    },
+    {
+      "step": 3,
+      "level": 0,
+      "action": "LEFT",
+      "png": "step_0003_L0_LEFT.png"
+    },
+    {
+      "step": 4,
+      "level": 0,
+      "action": "UP",
+      "png": "step_0004_L0_UP.png"
+    },
+    {
+      "step": 5,
+      "level": 0,
+      "action": "UP",
+      "png": "step_0005_L0_UP.png"
+    },
+    {
+      "step": 6,
+      "level": 0,
+      "action": "UP",
+      "png": "step_0006_L0_UP.png"
+    },
+    {
+      "step": 7,
+      "level": 0,
+      "action": "LEFT",
+      "png": "step_0007_L0_LEFT.png"
+    },
+    {
+      "step": 8,
+      "level": 0,
+      "action": "LEFT",
+      "png": "step_0008_L0_LEFT.png"
+    },
+    {
+      "step": 9,
+      "level": 0,
+      "action": "SELECT",
+      "png": "step_0009_L0_SELECT.png"
+    },
+    {
+      "step": 10,
+      "level": 0,
+      "action": "RIGHT",
+      "png": "step_0010_L0_RIGHT.png"
+    },
+    {
+      "step": 11,
+      "level": 0,
+      "action": "RIGHT",
+      "png": "step_0011_L0_RIGHT.png"
+    },
+    {
+      "step": 12,
+      "level": 0,
+      "action": "RIGHT",
+      "png": "step_0012_L0_RIGHT.png"
+    },
+    {
+      "step": 13,
+      "level": 0,
+      "action": "SELECT",
+      "png": "step_0013_L0_SELECT.png"
+    },
+    {
+      "step": 14,
+      "level": 0,
+      "action": "UP",
+      "png": "step_0014_L0_UP.png"
+    },
+    {
+      "step": 15,
+      "level": 0,
+      "action": "RIGHT",
+      "png": "step_0015_L0_RIGHT.png"
+    },
+    {
+      "step": 16,
+      "level": 0,
+      "action": "RIGHT",
+      "png": "step_0016_L0_RIGHT.png"
+    },
+    {
+      "step": 17,
+      "level": 0,
+      "action": "SELECT",
+      "png": "step_0017_L0_SELECT.png"
+    },
+    {
+      "step": 18,
+      "level": 0,
+      "action": "DOWN",
+      "png": "step_0018_L0_DOWN.png"
+    },
+    {
+      "step": 19,
+      "level": 0,
+      "action": "LEFT",
+      "png": "step_0019_L0_LEFT.png"
+    },
+    {
+      "step": 20,
+      "level": 0,
+      "action": "LEFT",
+      "png": "step_0020_L0_LEFT.png"
+    },
+    {
+      "step": 21,
+      "level": 0,
+      "action": "SELECT",
+      "png": "step_0021_L0_SELECT.png"
+    },
+    {
+      "step": 22,
+      "level": 0,
+      "action": "DOWN",
+      "png": "step_0022_L0_DOWN.png"
+    },
+    {
+      "step": 23,
+      "level": 0,
+      "action": "SELECT",
+      "png": "step_0023_L0_SELECT.png"
+    },
+    {
+      "step": 24,
+      "level": 0,
+      "action": "UP",
+      "png": "step_0024_L0_UP.png"
+    },
+    {
+      "step": 25,
+      "level": 0,
+      "action": "UP",
+      "png": "step_0025_L0_UP.png"
+    },
+    {
+      "step": 26,
+      "level": 0,
+      "action": "SELECT",
+      "png": "step_0026_L0_SELECT.png",
+      "gif": "step_0026_L0_anim.gif",
+      "level_up": true,
+      "new_level": 1
+    },
+    {
+      "step": 27,
+      "level": 1,
+      "action": "UP",
+      "png": "step_0027_L1_UP.png"
+    },
+    {
+      "step": 28,
+      "level": 1,
+      "action": "UP",
+      "png": "step_0028_L1_UP.png"
+    },
+    {
+      "step": 29,
+      "level": 1,
+      "action": "LEFT",
+      "png": "step_0029_L1_LEFT.png"
+    },
+    {
+      "step": 30,
+      "level": 1,
+      "action": "UP",
+      "png": "step_0030_L1_UP.png"
+    },
+    {
+      "step": 31,
+      "level": 1,
+      "action": "UP",
+      "png": "step_0031_L1_UP.png"
+    },
+    {
+      "step": 32,
+      "level": 1,
+      "action": "UP",
+      "png": "step_0032_L1_UP.png"
+    },
+    {
+      "step": 33,
+      "level": 1,
+      "action": "LEFT",
+      "png": "step_0033_L1_LEFT.png"
+    },
+    {
+      "step": 34,
+      "level": 1,
+      "action": "LEFT",
+      "png": "step_0034_L1_LEFT.png"
+    },
+    {
+      "step": 35,
+      "level": 1,
+      "action": "SELECT",
+      "png": "step_0035_L1_SELECT.png"
+    },
+    {
+      "step": 36,
+      "level": 1,
+      "action": "RIGHT",
+      "png": "step_0036_L1_RIGHT.png"
+    },
+    {
+      "step": 37,
+      "level": 1,
+      "action": "RIGHT",
+      "png": "step_0037_L1_RIGHT.png"
+    },
+    {
+      "step": 38,
+      "level": 1,
+      "action": "RIGHT",
+      "png": "step_0038_L1_RIGHT.png"
+    },
+    {
+      "step": 39,
+      "level": 1,
+      "action": "SELECT",
+      "png": "step_0039_L1_SELECT.png"
+    },
+    {
+      "step": 40,
+      "level": 1,
+      "action": "UP",
+      "png": "step_0040_L1_UP.png"
+    },
+    {
+      "step": 41,
+      "level": 1,
+      "action": "RIGHT",
+      "png": "step_0041_L1_RIGHT.png"
+    },
+    {
+      "step": 42,
+      "level": 1,
+      "action": "RIGHT",
+      "png": "step_0042_L1_RIGHT.png"
+    },
+    {
+      "step": 43,
+      "level": 1,
+      "action": "SELECT",
+      "png": "step_0043_L1_SELECT.png"
+    },
+    {
+      "step": 44,
+      "level": 1,
+      "action": "DOWN",
+      "png": "step_0044_L1_DOWN.png"
+    },
+    {
+      "step": 45,
+      "level": 1,
+      "action": "LEFT",
+      "png": "step_0045_L1_LEFT.png"
+    },
+    {
+      "step": 46,
+      "level": 1,
+      "action": "LEFT",
+      "png": "step_0046_L1_LEFT.png"
+    },
+    {
+      "step": 47,
+      "level": 1,
+      "action": "SELECT",
+      "png": "step_0047_L1_SELECT.png"
+    },
+    {
+      "step": 48,
+      "level": 1,
+      "action": "DOWN",
+      "png": "step_0048_L1_DOWN.png"
+    },
+    {
+      "step": 49,
+      "level": 1,
+      "action": "SELECT",
+      "png": "step_0049_L1_SELECT.png"
+    },
+    {
+      "step": 50,
+      "level": 1,
+      "action": "UP",
+      "png": "step_0050_L1_UP.png"
+    },
+    {
+      "step": 51,
+      "level": 1,
+      "action": "UP",
+      "png": "step_0051_L1_UP.png"
+    },
+    {
+      "step": 52,
+      "level": 1,
+      "action": "SELECT",
+      "png": "step_0052_L1_SELECT.png"
+    },
+    {
+      "step": 53,
+      "level": 1,
+      "action": "UP",
+      "png": "step_0053_L1_UP.png"
+    },
+    {
+      "step": 54,
+      "level": 1,
+      "action": "UP",
+      "png": "step_0054_L1_UP.png"
+    },
+    {
+      "step": 55,
+      "level": 1,
+      "action": "LEFT",
+      "png": "step_0055_L1_LEFT.png"
+    },
+    {
+      "step": 56,
+      "level": 1,
+      "action": "UP",
+      "png": "step_0056_L1_UP.png"
+    },
+    {
+      "step": 57,
+      "level": 1,
+      "action": "UP",
+      "png": "step_0057_L1_UP.png"
+    },
+    {
+      "step": 58,
+      "level": 1,
+      "action": "UP",
+      "png": "step_0058_L1_UP.png"
+    },
+    {
+      "step": 59,
+      "level": 1,
+      "action": "LEFT",
+      "png": "step_0059_L1_LEFT.png"
+    },
+    {
+      "step": 60,
+      "level": 1,
+      "action": "LEFT",
+      "png": "step_0060_L1_LEFT.png"
+    },
+    {
+      "step": 61,
+      "level": 1,
+      "action": "SELECT",
+      "png": "step_0061_L1_SELECT.png"
+    },
+    {
+      "step": 62,
+      "level": 1,
+      "action": "RIGHT",
+      "png": "step_0062_L1_RIGHT.png"
+    },
+    {
+      "step": 63,
+      "level": 1,
+      "action": "RIGHT",
+      "png": "step_0063_L1_RIGHT.png"
+    },
+    {
+      "step": 64,
+      "level": 1,
+      "action": "RIGHT",
+      "png": "step_0064_L1_RIGHT.png"
+    },
+    {
+      "step": 65,
+      "level": 1,
+      "action": "SELECT",
+      "png": "step_0065_L1_SELECT.png"
+    },
+    {
+      "step": 66,
+      "level": 1,
+      "action": "UP",
+      "png": "step_0066_L1_UP.png"
+    },
+    {
+      "step": 67,
+      "level": 1,
+      "action": "RIGHT",
+      "png": "step_0067_L1_RIGHT.png"
+    },
+    {
+      "step": 68,
+      "level": 1,
+      "action": "RIGHT",
+      "png": "step_0068_L1_RIGHT.png"
+    },
+    {
+      "step": 69,
+      "level": 1,
+      "action": "SELECT",
+      "png": "step_0069_L1_SELECT.png"
+    },
+    {
+      "step": 70,
+      "level": 1,
+      "action": "DOWN",
+      "png": "step_0070_L1_DOWN.png"
+    },
+    {
+      "step": 71,
+      "level": 1,
+      "action": "LEFT",
+      "png": "step_0071_L1_LEFT.png"
+    },
+    {
+      "step": 72,
+      "level": 1,
+      "action": "LEFT",
+      "png": "step_0072_L1_LEFT.png"
+    },
+    {
+      "step": 73,
+      "level": 1,
+      "action": "SELECT",
+      "png": "step_0073_L1_SELECT.png"
+    },
+    {
+      "step": 74,
+      "level": 1,
+      "action": "DOWN",
+      "png": "step_0074_L1_DOWN.png"
+    },
+    {
+      "step": 75,
+      "level": 1,
+      "action": "SELECT",
+      "png": "step_0075_L1_SELECT.png"
+    },
+    {
+      "step": 76,
+      "level": 1,
+      "action": "UP",
+      "png": "step_0076_L1_UP.png"
+    },
+    {
+      "step": 77,
+      "level": 1,
+      "action": "UP",
+      "png": "step_0077_L1_UP.png"
+    },
+    {
+      "step": 78,
+      "level": 1,
+      "action": "SELECT",
+      "png": "step_0078_L1_SELECT.png"
+    },
+    {
+      "step": 79,
+      "level": 1,
+      "action": "DOWN",
+      "png": "step_0079_L1_DOWN.png"
+    },
+    {
+      "step": 80,
+      "level": 1,
+      "action": "DOWN",
+      "png": "step_0080_L1_DOWN.png"
+    },
+    {
+      "step": 81,
+      "level": 1,
+      "action": "DOWN",
+      "png": "step_0081_L1_DOWN.png"
+    },
+    {
+      "step": 82,
+      "level": 1,
+      "action": "DOWN",
+      "png": "step_0082_L1_DOWN.png"
+    },
+    {
+      "step": 83,
+      "level": 1,
+      "action": "RIGHT",
+      "png": "step_0083_L1_RIGHT.png"
+    },
+    {
+      "step": 84,
+      "level": 1,
+      "action": "RIGHT",
+      "png": "step_0084_L1_RIGHT.png"
+    },
+    {
+      "step": 85,
+      "level": 1,
+      "action": "RIGHT",
+      "png": "step_0085_L1_RIGHT.png"
+    },
+    {
+      "step": 86,
+      "level": 1,
+      "action": "RIGHT",
+      "png": "step_0086_L1_RIGHT.png"
+    },
+    {
+      "step": 87,
+      "level": 1,
+      "action": "RIGHT",
+      "png": "step_0087_L1_RIGHT.png"
+    },
+    {
+      "step": 88,
+      "level": 1,
+      "action": "RIGHT",
+      "png": "step_0088_L1_RIGHT.png"
+    },
+    {
+      "step": 89,
+      "level": 1,
+      "action": "RIGHT",
+      "png": "step_0089_L1_RIGHT.png"
+    },
+    {
+      "step": 90,
+      "level": 1,
+      "action": "UP",
+      "png": "step_0090_L1_UP.png"
+    },
+    {
+      "step": 91,
+      "level": 1,
+      "action": "SELECT",
+      "png": "step_0091_L1_SELECT.png"
+    },
+    {
+      "step": 92,
+      "level": 1,
+      "action": "DOWN",
+      "png": "step_0092_L1_DOWN.png"
+    },
+    {
+      "step": 93,
+      "level": 1,
+      "action": "LEFT",
+      "png": "step_0093_L1_LEFT.png"
+    },
+    {
+      "step": 94,
+      "level": 1,
+      "action": "LEFT",
+      "png": "step_0094_L1_LEFT.png"
+    },
+    {
+      "step": 95,
+      "level": 1,
+      "action": "DOWN",
+      "png": "step_0095_L1_DOWN.png"
+    },
+    {
+      "step": 96,
+      "level": 1,
+      "action": "DOWN",
+      "png": "step_0096_L1_DOWN.png"
+    }
+  ],
+  "finished": "20260412_210435",
+  "result": "GAME_OVER",
+  "levels_completed": 1,
+  "total_steps": 96
+}

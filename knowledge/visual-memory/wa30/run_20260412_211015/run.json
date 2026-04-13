@@ -1,0 +1,3861 @@
+{
+  "game_id": "wa30-ee6fef47",
+  "player": "wa30-solver",
+  "started": "20260412_211015",
+  "win_levels": 9,
+  "baseline": 0,
+  "steps": [
+    {
+      "step": 1,
+      "level": 0,
+      "action": "UP",
+      "png": "step_0001_L0_UP.png"
+    },
+    {
+      "step": 2,
+      "level": 0,
+      "action": "UP",
+      "png": "step_0002_L0_UP.png"
+    },
+    {
+      "step": 3,
+      "level": 0,
+      "action": "LEFT",
+      "png": "step_0003_L0_LEFT.png"
+    },
+    {
+      "step": 4,
+      "level": 0,
+      "action": "UP",
+      "png": "step_0004_L0_UP.png"
+    },
+    {
+      "step": 5,
+      "level": 0,
+      "action": "UP",
+      "png": "step_0005_L0_UP.png"
+    },
+    {
+      "step": 6,
+      "level": 0,
+      "action": "UP",
+      "png": "step_0006_L0_UP.png"
+    },
+    {
+      "step": 7,
+      "level": 0,
+      "action": "LEFT",
+      "png": "step_0007_L0_LEFT.png"
+    },
+    {
+      "step": 8,
+      "level": 0,
+      "action": "LEFT",
+      "png": "step_0008_L0_LEFT.png"
+    },
+    {
+      "step": 9,
+      "level": 0,
+      "action": "SELECT",
+      "png": "step_0009_L0_SELECT.png"
+    },
+    {
+      "step": 10,
+      "level": 0,
+      "action": "RIGHT",
+      "png": "step_0010_L0_RIGHT.png"
+    },
+    {
+      "step": 11,
+      "level": 0,
+      "action": "RIGHT",
+      "png": "step_0011_L0_RIGHT.png"
+    },
+    {
+      "step": 12,
+      "level": 0,
+      "action": "RIGHT",
+      "png": "step_0012_L0_RIGHT.png"
+    },
+    {
+      "step": 13,
+      "level": 0,
+      "action": "SELECT",
+      "png": "step_0013_L0_SELECT.png"
+    },
+    {
+      "step": 14,
+      "level": 0,
+      "action": "UP",
+      "png": "step_0014_L0_UP.png"
+    },
+    {
+      "step": 15,
+      "level": 0,
+      "action": "RIGHT",
+      "png": "step_0015_L0_RIGHT.png"
+    },
+    {
+      "step": 16,
+      "level": 0,
+      "action": "RIGHT",
+      "png": "step_0016_L0_RIGHT.png"
+    },
+    {
+      "step": 17,
+      "level": 0,
+      "action": "SELECT",
+      "png": "step_0017_L0_SELECT.png"
+    },
+    {
+      "step": 18,
+      "level": 0,
+      "action": "DOWN",
+      "png": "step_0018_L0_DOWN.png"
+    },
+    {
+      "step": 19,
+      "level": 0,
+      "action": "LEFT",
+      "png": "step_0019_L0_LEFT.png"
+    },
+    {
+      "step": 20,
+      "level": 0,
+      "action": "LEFT",
+      "png": "step_0020_L0_LEFT.png"
+    },
+    {
+      "step": 21,
+      "level": 0,
+      "action": "SELECT",
+      "png": "step_0021_L0_SELECT.png"
+    },
+    {
+      "step": 22,
+      "level": 0,
+      "action": "DOWN",
+      "png": "step_0022_L0_DOWN.png"
+    },
+    {
+      "step": 23,
+      "level": 0,
+      "action": "SELECT",
+      "png": "step_0023_L0_SELECT.png"
+    },
+    {
+      "step": 24,
+      "level": 0,
+      "action": "UP",
+      "png": "step_0024_L0_UP.png"
+    },
+    {
+      "step": 25,
+      "level": 0,
+      "action": "UP",
+      "png": "step_0025_L0_UP.png"
+    },
+    {
+      "step": 26,
+      "level": 0,
+      "action": "SELECT",
+      "png": "step_0026_L0_SELECT.png",
+      "gif": "step_0026_L0_anim.gif",
+      "level_up": true,
+      "new_level": 1
+    },
+    {
+      "step": 27,
+      "level": 1,
+      "action": "DOWN",
+      "png": "step_0027_L1_DOWN.png"
+    },
+    {
+      "step": 28,
+      "level": 1,
+      "action": "DOWN",
+      "png": "step_0028_L1_DOWN.png"
+    },
+    {
+      "step": 29,
+      "level": 1,
+      "action": "DOWN",
+      "png": "step_0029_L1_DOWN.png"
+    },
+    {
+      "step": 30,
+      "level": 1,
+      "action": "DOWN",
+      "png": "step_0030_L1_DOWN.png"
+    },
+    {
+      "step": 31,
+      "level": 1,
+      "action": "RIGHT",
+      "png": "step_0031_L1_RIGHT.png"
+    },
+    {
+      "step": 32,
+      "level": 1,
+      "action": "RIGHT",
+      "png": "step_0032_L1_RIGHT.png"
+    },
+    {
+      "step": 33,
+      "level": 1,
+      "action": "RIGHT",
+      "png": "step_0033_L1_RIGHT.png"
+    },
+    {
+      "step": 34,
+      "level": 1,
+      "action": "RIGHT",
+      "png": "step_0034_L1_RIGHT.png"
+    },
+    {
+      "step": 35,
+      "level": 1,
+      "action": "RIGHT",
+      "png": "step_0035_L1_RIGHT.png"
+    },
+    {
+      "step": 36,
+      "level": 1,
+      "action": "RIGHT",
+      "png": "step_0036_L1_RIGHT.png"
+    },
+    {
+      "step": 37,
+      "level": 1,
+      "action": "RIGHT",
+      "png": "step_0037_L1_RIGHT.png"
+    },
+    {
+      "step": 38,
+      "level": 1,
+      "action": "UP",
+      "png": "step_0038_L1_UP.png"
+    },
+    {
+      "step": 39,
+      "level": 1,
+      "action": "SELECT",
+      "png": "step_0039_L1_SELECT.png"
+    },
+    {
+      "step": 40,
+      "level": 1,
+      "action": "DOWN",
+      "png": "step_0040_L1_DOWN.png"
+    },
+    {
+      "step": 41,
+      "level": 1,
+      "action": "LEFT",
+      "png": "step_0041_L1_LEFT.png"
+    },
+    {
+      "step": 42,
+      "level": 1,
+      "action": "LEFT",
+      "png": "step_0042_L1_LEFT.png"
+    },
+    {
+      "step": 43,
+      "level": 1,
+      "action": "DOWN",
+      "png": "step_0043_L1_DOWN.png"
+    },
+    {
+      "step": 44,
+      "level": 1,
+      "action": "DOWN",
+      "png": "step_0044_L1_DOWN.png"
+    },
+    {
+      "step": 45,
+      "level": 1,
+      "action": "LEFT",
+      "png": "step_0045_L1_LEFT.png"
+    },
+    {
+      "step": 46,
+      "level": 1,
+      "action": "LEFT",
+      "png": "step_0046_L1_LEFT.png"
+    },
+    {
+      "step": 47,
+      "level": 1,
+      "action": "LEFT",
+      "png": "step_0047_L1_LEFT.png"
+    },
+    {
+      "step": 48,
+      "level": 1,
+      "action": "LEFT",
+      "png": "step_0048_L1_LEFT.png"
+    },
+    {
+      "step": 49,
+      "level": 1,
+      "action": "SELECT",
+      "png": "step_0049_L1_SELECT.png"
+    },
+    {
+      "step": 50,
+      "level": 1,
+      "action": "DOWN",
+      "png": "step_0050_L1_DOWN.png"
+    },
+    {
+      "step": 51,
+      "level": 1,
+      "action": "RIGHT",
+      "png": "step_0051_L1_RIGHT.png"
+    },
+    {
+      "step": 52,
+      "level": 1,
+      "action": "RIGHT",
+      "png": "step_0052_L1_RIGHT.png"
+    },
+    {
+      "step": 53,
+      "level": 1,
+      "action": "RIGHT",
+      "png": "step_0053_L1_RIGHT.png"
+    },
+    {
+      "step": 54,
+      "level": 1,
+      "action": "RIGHT",
+      "png": "step_0054_L1_RIGHT.png"
+    },
+    {
+      "step": 55,
+      "level": 1,
+      "action": "RIGHT",
+      "png": "step_0055_L1_RIGHT.png"
+    },
+    {
+      "step": 56,
+      "level": 1,
+      "action": "RIGHT",
+      "png": "step_0056_L1_RIGHT.png"
+    },
+    {
+      "step": 57,
+      "level": 1,
+      "action": "SELECT",
+      "png": "step_0057_L1_SELECT.png"
+    },
+    {
+      "step": 58,
+      "level": 1,
+      "action": "DOWN",
+      "png": "step_0058_L1_DOWN.png"
+    },
+    {
+      "step": 59,
+      "level": 1,
+      "action": "LEFT",
+      "png": "step_0059_L1_LEFT.png"
+    },
+    {
+      "step": 60,
+      "level": 1,
+      "action": "LEFT",
+      "png": "step_0060_L1_LEFT.png"
+    },
+    {
+      "step": 61,
+      "level": 1,
+      "action": "LEFT",
+      "png": "step_0061_L1_LEFT.png"
+    },
+    {
+      "step": 62,
+      "level": 1,
+      "action": "LEFT",
+      "png": "step_0062_L1_LEFT.png"
+    },
+    {
+      "step": 63,
+      "level": 1,
+      "action": "UP",
+      "png": "step_0063_L1_UP.png"
+    },
+    {
+      "step": 64,
+      "level": 1,
+      "action": "LEFT",
+      "png": "step_0064_L1_LEFT.png"
+    },
+    {
+      "step": 65,
+      "level": 1,
+      "action": "LEFT",
+      "png": "step_0065_L1_LEFT.png"
+    },
+    {
+      "step": 66,
+      "level": 1,
+      "action": "LEFT",
+      "png": "step_0066_L1_LEFT.png"
+    },
+    {
+      "step": 67,
+      "level": 1,
+      "action": "LEFT",
+      "png": "step_0067_L1_LEFT.png"
+    },
+    {
+      "step": 68,
+      "level": 1,
+      "action": "UP",
+      "png": "step_0068_L1_UP.png"
+    },
+    {
+      "step": 69,
+      "level": 1,
+      "action": "SELECT",
+      "png": "step_0069_L1_SELECT.png"
+    },
+    {
+      "step": 70,
+      "level": 1,
+      "action": "UP",
+      "png": "step_0070_L1_UP.png"
+    },
+    {
+      "step": 71,
+      "level": 1,
+      "action": "UP",
+      "png": "step_0071_L1_UP.png"
+    },
+    {
+      "step": 72,
+      "level": 1,
+      "action": "UP",
+      "png": "step_0072_L1_UP.png"
+    },
+    {
+      "step": 73,
+      "level": 1,
+      "action": "UP",
+      "png": "step_0073_L1_UP.png"
+    },
+    {
+      "step": 74,
+      "level": 1,
+      "action": "UP",
+      "png": "step_0074_L1_UP.png"
+    },
+    {
+      "step": 75,
+      "level": 1,
+      "action": "UP",
+      "png": "step_0075_L1_UP.png"
+    },
+    {
+      "step": 76,
+      "level": 1,
+      "action": "UP",
+      "png": "step_0076_L1_UP.png"
+    },
+    {
+      "step": 77,
+      "level": 1,
+      "action": "UP",
+      "png": "step_0077_L1_UP.png"
+    },
+    {
+      "step": 78,
+      "level": 1,
+      "action": "UP",
+      "png": "step_0078_L1_UP.png"
+    },
+    {
+      "step": 79,
+      "level": 1,
+      "action": "DOWN",
+      "png": "step_0079_L1_DOWN.png"
+    },
+    {
+      "step": 80,
+      "level": 1,
+      "action": "UP",
+      "png": "step_0080_L1_UP.png"
+    },
+    {
+      "step": 81,
+      "level": 1,
+      "action": "DOWN",
+      "png": "step_0081_L1_DOWN.png"
+    },
+    {
+      "step": 82,
+      "level": 1,
+      "action": "UP",
+      "png": "step_0082_L1_UP.png",
+      "gif": "step_0082_L1_anim.gif",
+      "level_up": true,
+      "new_level": 2
+    },
+    {
+      "step": 83,
+      "level": 2,
+      "action": "LEFT",
+      "png": "step_0083_L2_LEFT.png"
+    },
+    {
+      "step": 84,
+      "level": 2,
+      "action": "LEFT",
+      "png": "step_0084_L2_LEFT.png"
+    },
+    {
+      "step": 85,
+      "level": 2,
+      "action": "DOWN",
+      "png": "step_0085_L2_DOWN.png"
+    },
+    {
+      "step": 86,
+      "level": 2,
+      "action": "DOWN",
+      "png": "step_0086_L2_DOWN.png"
+    },
+    {
+      "step": 87,
+      "level": 2,
+      "action": "RIGHT",
+      "png": "step_0087_L2_RIGHT.png"
+    },
+    {
+      "step": 88,
+      "level": 2,
+      "action": "SELECT",
+      "png": "step_0088_L2_SELECT.png"
+    },
+    {
+      "step": 89,
+      "level": 2,
+      "action": "RIGHT",
+      "png": "step_0089_L2_RIGHT.png"
+    },
+    {
+      "step": 90,
+      "level": 2,
+      "action": "RIGHT",
+      "png": "step_0090_L2_RIGHT.png"
+    },
+    {
+      "step": 91,
+      "level": 2,
+      "action": "RIGHT",
+      "png": "step_0091_L2_RIGHT.png"
+    },
+    {
+      "step": 92,
+      "level": 2,
+      "action": "RIGHT",
+      "png": "step_0092_L2_RIGHT.png"
+    },
+    {
+      "step": 93,
+      "level": 2,
+      "action": "RIGHT",
+      "png": "step_0093_L2_RIGHT.png"
+    },
+    {
+      "step": 94,
+      "level": 2,
+      "action": "SELECT",
+      "png": "step_0094_L2_SELECT.png"
+    },
+    {
+      "step": 95,
+      "level": 2,
+      "action": "LEFT",
+      "png": "step_0095_L2_LEFT.png"
+    },
+    {
+      "step": 96,
+      "level": 2,
+      "action": "LEFT",
+      "png": "step_0096_L2_LEFT.png"
+    },
+    {
+      "step": 97,
+      "level": 2,
+      "action": "LEFT",
+      "png": "step_0097_L2_LEFT.png"
+    },
+    {
+      "step": 98,
+      "level": 2,
+      "action": "LEFT",
+      "png": "step_0098_L2_LEFT.png"
+    },
+    {
+      "step": 99,
+      "level": 2,
+      "action": "LEFT",
+      "png": "step_0099_L2_LEFT.png"
+    },
+    {
+      "step": 100,
+      "level": 2,
+      "action": "LEFT",
+      "png": "step_0100_L2_LEFT.png"
+    },
+    {
+      "step": 101,
+      "level": 2,
+      "action": "UP",
+      "png": "step_0101_L2_UP.png"
+    },
+    {
+      "step": 102,
+      "level": 2,
+      "action": "UP",
+      "png": "step_0102_L2_UP.png"
+    },
+    {
+      "step": 103,
+      "level": 2,
+      "action": "UP",
+      "png": "step_0103_L2_UP.png"
+    },
+    {
+      "step": 104,
+      "level": 2,
+      "action": "UP",
+      "png": "step_0104_L2_UP.png"
+    },
+    {
+      "step": 105,
+      "level": 2,
+      "action": "UP",
+      "png": "step_0105_L2_UP.png"
+    },
+    {
+      "step": 106,
+      "level": 2,
+      "action": "UP",
+      "png": "step_0106_L2_UP.png"
+    },
+    {
+      "step": 107,
+      "level": 2,
+      "action": "UP",
+      "png": "step_0107_L2_UP.png"
+    },
+    {
+      "step": 108,
+      "level": 2,
+      "action": "RIGHT",
+      "png": "step_0108_L2_RIGHT.png"
+    },
+    {
+      "step": 109,
+      "level": 2,
+      "action": "SELECT",
+      "png": "step_0109_L2_SELECT.png"
+    },
+    {
+      "step": 110,
+      "level": 2,
+      "action": "RIGHT",
+      "png": "step_0110_L2_RIGHT.png"
+    },
+    {
+      "step": 111,
+      "level": 2,
+      "action": "RIGHT",
+      "png": "step_0111_L2_RIGHT.png"
+    },
+    {
+      "step": 112,
+      "level": 2,
+      "action": "RIGHT",
+      "png": "step_0112_L2_RIGHT.png"
+    },
+    {
+      "step": 113,
+      "level": 2,
+      "action": "RIGHT",
+      "png": "step_0113_L2_RIGHT.png"
+    },
+    {
+      "step": 114,
+      "level": 2,
+      "action": "RIGHT",
+      "png": "step_0114_L2_RIGHT.png"
+    },
+    {
+      "step": 115,
+      "level": 2,
+      "action": "RIGHT",
+      "png": "step_0115_L2_RIGHT.png"
+    },
+    {
+      "step": 116,
+      "level": 2,
+      "action": "SELECT",
+      "png": "step_0116_L2_SELECT.png"
+    },
+    {
+      "step": 117,
+      "level": 2,
+      "action": "LEFT",
+      "png": "step_0117_L2_LEFT.png"
+    },
+    {
+      "step": 118,
+      "level": 2,
+      "action": "LEFT",
+      "png": "step_0118_L2_LEFT.png"
+    },
+    {
+      "step": 119,
+      "level": 2,
+      "action": "LEFT",
+      "png": "step_0119_L2_LEFT.png"
+    },
+    {
+      "step": 120,
+      "level": 2,
+      "action": "DOWN",
+      "png": "step_0120_L2_DOWN.png"
+    },
+    {
+      "step": 121,
+      "level": 2,
+      "action": "RIGHT",
+      "png": "step_0121_L2_RIGHT.png"
+    },
+    {
+      "step": 122,
+      "level": 2,
+      "action": "SELECT",
+      "png": "step_0122_L2_SELECT.png"
+    },
+    {
+      "step": 123,
+      "level": 2,
+      "action": "RIGHT",
+      "png": "step_0123_L2_RIGHT.png"
+    },
+    {
+      "step": 124,
+      "level": 2,
+      "action": "RIGHT",
+      "png": "step_0124_L2_RIGHT.png"
+    },
+    {
+      "step": 125,
+      "level": 2,
+      "action": "RIGHT",
+      "png": "step_0125_L2_RIGHT.png"
+    },
+    {
+      "step": 126,
+      "level": 2,
+      "action": "SELECT",
+      "png": "step_0126_L2_SELECT.png"
+    },
+    {
+      "step": 127,
+      "level": 2,
+      "action": "UP",
+      "png": "step_0127_L2_UP.png"
+    },
+    {
+      "step": 128,
+      "level": 2,
+      "action": "UP",
+      "png": "step_0128_L2_UP.png"
+    },
+    {
+      "step": 129,
+      "level": 2,
+      "action": "UP",
+      "png": "step_0129_L2_UP.png"
+    },
+    {
+      "step": 130,
+      "level": 2,
+      "action": "UP",
+      "png": "step_0130_L2_UP.png"
+    },
+    {
+      "step": 131,
+      "level": 2,
+      "action": "UP",
+      "png": "step_0131_L2_UP.png"
+    },
+    {
+      "step": 132,
+      "level": 2,
+      "action": "UP",
+      "png": "step_0132_L2_UP.png"
+    },
+    {
+      "step": 133,
+      "level": 2,
+      "action": "UP",
+      "png": "step_0133_L2_UP.png"
+    },
+    {
+      "step": 134,
+      "level": 2,
+      "action": "UP",
+      "png": "step_0134_L2_UP.png"
+    },
+    {
+      "step": 135,
+      "level": 2,
+      "action": "UP",
+      "png": "step_0135_L2_UP.png"
+    },
+    {
+      "step": 136,
+      "level": 2,
+      "action": "UP",
+      "png": "step_0136_L2_UP.png"
+    },
+    {
+      "step": 137,
+      "level": 2,
+      "action": "UP",
+      "png": "step_0137_L2_UP.png"
+    },
+    {
+      "step": 138,
+      "level": 2,
+      "action": "UP",
+      "png": "step_0138_L2_UP.png"
+    },
+    {
+      "step": 139,
+      "level": 2,
+      "action": "UP",
+      "png": "step_0139_L2_UP.png"
+    },
+    {
+      "step": 140,
+      "level": 2,
+      "action": "UP",
+      "png": "step_0140_L2_UP.png"
+    },
+    {
+      "step": 141,
+      "level": 2,
+      "action": "UP",
+      "png": "step_0141_L2_UP.png"
+    },
+    {
+      "step": 142,
+      "level": 2,
+      "action": "UP",
+      "png": "step_0142_L2_UP.png"
+    },
+    {
+      "step": 143,
+      "level": 2,
+      "action": "UP",
+      "png": "step_0143_L2_UP.png"
+    },
+    {
+      "step": 144,
+      "level": 2,
+      "action": "UP",
+      "png": "step_0144_L2_UP.png"
+    },
+    {
+      "step": 145,
+      "level": 2,
+      "action": "UP",
+      "png": "step_0145_L2_UP.png"
+    },
+    {
+      "step": 146,
+      "level": 2,
+      "action": "UP",
+      "png": "step_0146_L2_UP.png"
+    },
+    {
+      "step": 147,
+      "level": 2,
+      "action": "UP",
+      "png": "step_0147_L2_UP.png"
+    },
+    {
+      "step": 148,
+      "level": 2,
+      "action": "UP",
+      "png": "step_0148_L2_UP.png"
+    },
+    {
+      "step": 149,
+      "level": 2,
+      "action": "UP",
+      "png": "step_0149_L2_UP.png"
+    },
+    {
+      "step": 150,
+      "level": 2,
+      "action": "UP",
+      "png": "step_0150_L2_UP.png"
+    },
+    {
+      "step": 151,
+      "level": 2,
+      "action": "UP",
+      "png": "step_0151_L2_UP.png"
+    },
+    {
+      "step": 152,
+      "level": 2,
+      "action": "UP",
+      "png": "step_0152_L2_UP.png"
+    },
+    {
+      "step": 153,
+      "level": 2,
+      "action": "UP",
+      "png": "step_0153_L2_UP.png"
+    },
+    {
+      "step": 154,
+      "level": 2,
+      "action": "UP",
+      "png": "step_0154_L2_UP.png"
+    },
+    {
+      "step": 155,
+      "level": 2,
+      "action": "UP",
+      "png": "step_0155_L2_UP.png"
+    },
+    {
+      "step": 156,
+      "level": 2,
+      "action": "UP",
+      "png": "step_0156_L2_UP.png"
+    },
+    {
+      "step": 157,
+      "level": 2,
+      "action": "UP",
+      "png": "step_0157_L2_UP.png"
+    },
+    {
+      "step": 158,
+      "level": 2,
+      "action": "UP",
+      "png": "step_0158_L2_UP.png"
+    },
+    {
+      "step": 159,
+      "level": 2,
+      "action": "UP",
+      "png": "step_0159_L2_UP.png"
+    },
+    {
+      "step": 160,
+      "level": 2,
+      "action": "UP",
+      "png": "step_0160_L2_UP.png"
+    },
+    {
+      "step": 161,
+      "level": 2,
+      "action": "UP",
+      "png": "step_0161_L2_UP.png"
+    },
+    {
+      "step": 162,
+      "level": 2,
+      "action": "UP",
+      "png": "step_0162_L2_UP.png",
+      "gif": "step_0162_L2_anim.gif",
+      "level_up": true,
+      "new_level": 3
+    },
+    {
+      "step": 163,
+      "level": 3,
+      "action": "UP",
+      "png": "step_0163_L3_UP.png"
+    },
+    {
+      "step": 164,
+      "level": 3,
+      "action": "UP",
+      "png": "step_0164_L3_UP.png"
+    },
+    {
+      "step": 165,
+      "level": 3,
+      "action": "LEFT",
+      "png": "step_0165_L3_LEFT.png"
+    },
+    {
+      "step": 166,
+      "level": 3,
+      "action": "SELECT",
+      "png": "step_0166_L3_SELECT.png"
+    },
+    {
+      "step": 167,
+      "level": 3,
+      "action": "LEFT",
+      "png": "step_0167_L3_LEFT.png"
+    },
+    {
+      "step": 168,
+      "level": 3,
+      "action": "SELECT",
+      "png": "step_0168_L3_SELECT.png"
+    },
+    {
+      "step": 169,
+      "level": 3,
+      "action": "DOWN",
+      "png": "step_0169_L3_DOWN.png"
+    },
+    {
+      "step": 170,
+      "level": 3,
+      "action": "DOWN",
+      "png": "step_0170_L3_DOWN.png"
+    },
+    {
+      "step": 171,
+      "level": 3,
+      "action": "DOWN",
+      "png": "step_0171_L3_DOWN.png"
+    },
+    {
+      "step": 172,
+      "level": 3,
+      "action": "RIGHT",
+      "png": "step_0172_L3_RIGHT.png"
+    },
+    {
+      "step": 173,
+      "level": 3,
+      "action": "DOWN",
+      "png": "step_0173_L3_DOWN.png"
+    },
+    {
+      "step": 174,
+      "level": 3,
+      "action": "LEFT",
+      "png": "step_0174_L3_LEFT.png"
+    },
+    {
+      "step": 175,
+      "level": 3,
+      "action": "SELECT",
+      "png": "step_0175_L3_SELECT.png"
+    },
+    {
+      "step": 176,
+      "level": 3,
+      "action": "LEFT",
+      "png": "step_0176_L3_LEFT.png"
+    },
+    {
+      "step": 177,
+      "level": 3,
+      "action": "SELECT",
+      "png": "step_0177_L3_SELECT.png"
+    },
+    {
+      "step": 178,
+      "level": 3,
+      "action": "RIGHT",
+      "png": "step_0178_L3_RIGHT.png"
+    },
+    {
+      "step": 179,
+      "level": 3,
+      "action": "UP",
+      "png": "step_0179_L3_UP.png"
+    },
+    {
+      "step": 180,
+      "level": 3,
+      "action": "UP",
+      "png": "step_0180_L3_UP.png"
+    },
+    {
+      "step": 181,
+      "level": 3,
+      "action": "RIGHT",
+      "png": "step_0181_L3_RIGHT.png"
+    },
+    {
+      "step": 182,
+      "level": 3,
+      "action": "RIGHT",
+      "png": "step_0182_L3_RIGHT.png"
+    },
+    {
+      "step": 183,
+      "level": 3,
+      "action": "UP",
+      "png": "step_0183_L3_UP.png"
+    },
+    {
+      "step": 184,
+      "level": 3,
+      "action": "SELECT",
+      "png": "step_0184_L3_SELECT.png"
+    },
+    {
+      "step": 185,
+      "level": 3,
+      "action": "UP",
+      "png": "step_0185_L3_UP.png"
+    },
+    {
+      "step": 186,
+      "level": 3,
+      "action": "SELECT",
+      "png": "step_0186_L3_SELECT.png"
+    },
+    {
+      "step": 187,
+      "level": 3,
+      "action": "DOWN",
+      "png": "step_0187_L3_DOWN.png"
+    },
+    {
+      "step": 188,
+      "level": 3,
+      "action": "DOWN",
+      "png": "step_0188_L3_DOWN.png"
+    },
+    {
+      "step": 189,
+      "level": 3,
+      "action": "DOWN",
+      "png": "step_0189_L3_DOWN.png"
+    },
+    {
+      "step": 190,
+      "level": 3,
+      "action": "DOWN",
+      "png": "step_0190_L3_DOWN.png"
+    },
+    {
+      "step": 191,
+      "level": 3,
+      "action": "SELECT",
+      "png": "step_0191_L3_SELECT.png"
+    },
+    {
+      "step": 192,
+      "level": 3,
+      "action": "DOWN",
+      "png": "step_0192_L3_DOWN.png"
+    },
+    {
+      "step": 193,
+      "level": 3,
+      "action": "SELECT",
+      "png": "step_0193_L3_SELECT.png"
+    },
+    {
+      "step": 194,
+      "level": 3,
+      "action": "UP",
+      "png": "step_0194_L3_UP.png"
+    },
+    {
+      "step": 195,
+      "level": 3,
+      "action": "UP",
+      "png": "step_0195_L3_UP.png"
+    },
+    {
+      "step": 196,
+      "level": 3,
+      "action": "UP",
+      "png": "step_0196_L3_UP.png"
+    },
+    {
+      "step": 197,
+      "level": 3,
+      "action": "LEFT",
+      "png": "step_0197_L3_LEFT.png"
+    },
+    {
+      "step": 198,
+      "level": 3,
+      "action": "UP",
+      "png": "step_0198_L3_UP.png"
+    },
+    {
+      "step": 199,
+      "level": 3,
+      "action": "SELECT",
+      "png": "step_0199_L3_SELECT.png"
+    },
+    {
+      "step": 200,
+      "level": 3,
+      "action": "UP",
+      "png": "step_0200_L3_UP.png"
+    },
+    {
+      "step": 201,
+      "level": 3,
+      "action": "SELECT",
+      "png": "step_0201_L3_SELECT.png"
+    },
+    {
+      "step": 202,
+      "level": 3,
+      "action": "DOWN",
+      "png": "step_0202_L3_DOWN.png"
+    },
+    {
+      "step": 203,
+      "level": 3,
+      "action": "DOWN",
+      "png": "step_0203_L3_DOWN.png"
+    },
+    {
+      "step": 204,
+      "level": 3,
+      "action": "DOWN",
+      "png": "step_0204_L3_DOWN.png"
+    },
+    {
+      "step": 205,
+      "level": 3,
+      "action": "DOWN",
+      "png": "step_0205_L3_DOWN.png"
+    },
+    {
+      "step": 206,
+      "level": 3,
+      "action": "SELECT",
+      "png": "step_0206_L3_SELECT.png"
+    },
+    {
+      "step": 207,
+      "level": 3,
+      "action": "DOWN",
+      "png": "step_0207_L3_DOWN.png"
+    },
+    {
+      "step": 208,
+      "level": 3,
+      "action": "DOWN",
+      "png": "step_0208_L3_DOWN.png"
+    },
+    {
+      "step": 209,
+      "level": 3,
+      "action": "SELECT",
+      "png": "step_0209_L3_SELECT.png"
+    },
+    {
+      "step": 210,
+      "level": 3,
+      "action": "UP",
+      "png": "step_0210_L3_UP.png"
+    },
+    {
+      "step": 211,
+      "level": 3,
+      "action": "UP",
+      "png": "step_0211_L3_UP.png"
+    },
+    {
+      "step": 212,
+      "level": 3,
+      "action": "UP",
+      "png": "step_0212_L3_UP.png"
+    },
+    {
+      "step": 213,
+      "level": 3,
+      "action": "UP",
+      "png": "step_0213_L3_UP.png"
+    },
+    {
+      "step": 214,
+      "level": 3,
+      "action": "UP",
+      "png": "step_0214_L3_UP.png"
+    },
+    {
+      "step": 215,
+      "level": 3,
+      "action": "UP",
+      "png": "step_0215_L3_UP.png"
+    },
+    {
+      "step": 216,
+      "level": 3,
+      "action": "UP",
+      "png": "step_0216_L3_UP.png"
+    },
+    {
+      "step": 217,
+      "level": 3,
+      "action": "UP",
+      "png": "step_0217_L3_UP.png"
+    },
+    {
+      "step": 218,
+      "level": 3,
+      "action": "UP",
+      "png": "step_0218_L3_UP.png"
+    },
+    {
+      "step": 219,
+      "level": 3,
+      "action": "UP",
+      "png": "step_0219_L3_UP.png",
+      "gif": "step_0219_L3_anim.gif",
+      "level_up": true,
+      "new_level": 4
+    },
+    {
+      "step": 220,
+      "level": 4,
+      "action": "UP",
+      "png": "step_0220_L4_UP.png"
+    },
+    {
+      "step": 221,
+      "level": 4,
+      "action": "SELECT",
+      "png": "step_0221_L4_SELECT.png"
+    },
+    {
+      "step": 222,
+      "level": 4,
+      "action": "SELECT",
+      "png": "step_0222_L4_SELECT.png"
+    },
+    {
+      "step": 223,
+      "level": 4,
+      "action": "SELECT",
+      "png": "step_0223_L4_SELECT.png"
+    },
+    {
+      "step": 224,
+      "level": 4,
+      "action": "SELECT",
+      "png": "step_0224_L4_SELECT.png"
+    },
+    {
+      "step": 225,
+      "level": 4,
+      "action": "SELECT",
+      "png": "step_0225_L4_SELECT.png"
+    },
+    {
+      "step": 226,
+      "level": 4,
+      "action": "LEFT",
+      "png": "step_0226_L4_LEFT.png"
+    },
+    {
+      "step": 227,
+      "level": 4,
+      "action": "LEFT",
+      "png": "step_0227_L4_LEFT.png"
+    },
+    {
+      "step": 228,
+      "level": 4,
+      "action": "LEFT",
+      "png": "step_0228_L4_LEFT.png"
+    },
+    {
+      "step": 229,
+      "level": 4,
+      "action": "LEFT",
+      "png": "step_0229_L4_LEFT.png"
+    },
+    {
+      "step": 230,
+      "level": 4,
+      "action": "LEFT",
+      "png": "step_0230_L4_LEFT.png"
+    },
+    {
+      "step": 231,
+      "level": 4,
+      "action": "LEFT",
+      "png": "step_0231_L4_LEFT.png"
+    },
+    {
+      "step": 232,
+      "level": 4,
+      "action": "LEFT",
+      "png": "step_0232_L4_LEFT.png"
+    },
+    {
+      "step": 233,
+      "level": 4,
+      "action": "LEFT",
+      "png": "step_0233_L4_LEFT.png"
+    },
+    {
+      "step": 234,
+      "level": 4,
+      "action": "SELECT",
+      "png": "step_0234_L4_SELECT.png"
+    },
+    {
+      "step": 235,
+      "level": 4,
+      "action": "RIGHT",
+      "png": "step_0235_L4_RIGHT.png"
+    },
+    {
+      "step": 236,
+      "level": 4,
+      "action": "RIGHT",
+      "png": "step_0236_L4_RIGHT.png"
+    },
+    {
+      "step": 237,
+      "level": 4,
+      "action": "RIGHT",
+      "png": "step_0237_L4_RIGHT.png"
+    },
+    {
+      "step": 238,
+      "level": 4,
+      "action": "RIGHT",
+      "png": "step_0238_L4_RIGHT.png"
+    },
+    {
+      "step": 239,
+      "level": 4,
+      "action": "RIGHT",
+      "png": "step_0239_L4_RIGHT.png"
+    },
+    {
+      "step": 240,
+      "level": 4,
+      "action": "RIGHT",
+      "png": "step_0240_L4_RIGHT.png"
+    },
+    {
+      "step": 241,
+      "level": 4,
+      "action": "RIGHT",
+      "png": "step_0241_L4_RIGHT.png"
+    },
+    {
+      "step": 242,
+      "level": 4,
+      "action": "DOWN",
+      "png": "step_0242_L4_DOWN.png"
+    },
+    {
+      "step": 243,
+      "level": 4,
+      "action": "DOWN",
+      "png": "step_0243_L4_DOWN.png"
+    },
+    {
+      "step": 244,
+      "level": 4,
+      "action": "DOWN",
+      "png": "step_0244_L4_DOWN.png"
+    },
+    {
+      "step": 245,
+      "level": 4,
+      "action": "DOWN",
+      "png": "step_0245_L4_DOWN.png"
+    },
+    {
+      "step": 246,
+      "level": 4,
+      "action": "RIGHT",
+      "png": "step_0246_L4_RIGHT.png"
+    },
+    {
+      "step": 247,
+      "level": 4,
+      "action": "UP",
+      "png": "step_0247_L4_UP.png"
+    },
+    {
+      "step": 248,
+      "level": 4,
+      "action": "UP",
+      "png": "step_0248_L4_UP.png"
+    },
+    {
+      "step": 249,
+      "level": 4,
+      "action": "UP",
+      "png": "step_0249_L4_UP.png"
+    },
+    {
+      "step": 250,
+      "level": 4,
+      "action": "UP",
+      "png": "step_0250_L4_UP.png"
+    },
+    {
+      "step": 251,
+      "level": 4,
+      "action": "UP",
+      "png": "step_0251_L4_UP.png"
+    },
+    {
+      "step": 252,
+      "level": 4,
+      "action": "UP",
+      "png": "step_0252_L4_UP.png"
+    },
+    {
+      "step": 253,
+      "level": 4,
+      "action": "DOWN",
+      "png": "step_0253_L4_DOWN.png"
+    },
+    {
+      "step": 254,
+      "level": 4,
+      "action": "DOWN",
+      "png": "step_0254_L4_DOWN.png"
+    },
+    {
+      "step": 255,
+      "level": 4,
+      "action": "DOWN",
+      "png": "step_0255_L4_DOWN.png"
+    },
+    {
+      "step": 256,
+      "level": 4,
+      "action": "DOWN",
+      "png": "step_0256_L4_DOWN.png"
+    },
+    {
+      "step": 257,
+      "level": 4,
+      "action": "DOWN",
+      "png": "step_0257_L4_DOWN.png"
+    },
+    {
+      "step": 258,
+      "level": 4,
+      "action": "RIGHT",
+      "png": "step_0258_L4_RIGHT.png"
+    },
+    {
+      "step": 259,
+      "level": 4,
+      "action": "DOWN",
+      "png": "step_0259_L4_DOWN.png"
+    },
+    {
+      "step": 260,
+      "level": 4,
+      "action": "RIGHT",
+      "png": "step_0260_L4_RIGHT.png"
+    },
+    {
+      "step": 261,
+      "level": 4,
+      "action": "SELECT",
+      "png": "step_0261_L4_SELECT.png"
+    },
+    {
+      "step": 262,
+      "level": 4,
+      "action": "UP",
+      "png": "step_0262_L4_UP.png"
+    },
+    {
+      "step": 263,
+      "level": 4,
+      "action": "UP",
+      "png": "step_0263_L4_UP.png"
+    },
+    {
+      "step": 264,
+      "level": 4,
+      "action": "UP",
+      "png": "step_0264_L4_UP.png"
+    },
+    {
+      "step": 265,
+      "level": 4,
+      "action": "UP",
+      "png": "step_0265_L4_UP.png"
+    },
+    {
+      "step": 266,
+      "level": 4,
+      "action": "LEFT",
+      "png": "step_0266_L4_LEFT.png"
+    },
+    {
+      "step": 267,
+      "level": 4,
+      "action": "LEFT",
+      "png": "step_0267_L4_LEFT.png"
+    },
+    {
+      "step": 268,
+      "level": 4,
+      "action": "LEFT",
+      "png": "step_0268_L4_LEFT.png"
+    },
+    {
+      "step": 269,
+      "level": 4,
+      "action": "LEFT",
+      "png": "step_0269_L4_LEFT.png"
+    },
+    {
+      "step": 270,
+      "level": 4,
+      "action": "LEFT",
+      "png": "step_0270_L4_LEFT.png"
+    },
+    {
+      "step": 271,
+      "level": 4,
+      "action": "LEFT",
+      "png": "step_0271_L4_LEFT.png"
+    },
+    {
+      "step": 272,
+      "level": 4,
+      "action": "LEFT",
+      "png": "step_0272_L4_LEFT.png"
+    },
+    {
+      "step": 273,
+      "level": 4,
+      "action": "LEFT",
+      "png": "step_0273_L4_LEFT.png"
+    },
+    {
+      "step": 274,
+      "level": 4,
+      "action": "DOWN",
+      "png": "step_0274_L4_DOWN.png"
+    },
+    {
+      "step": 275,
+      "level": 4,
+      "action": "LEFT",
+      "png": "step_0275_L4_LEFT.png"
+    },
+    {
+      "step": 276,
+      "level": 4,
+      "action": "LEFT",
+      "png": "step_0276_L4_LEFT.png"
+    },
+    {
+      "step": 277,
+      "level": 4,
+      "action": "SELECT",
+      "png": "step_0277_L4_SELECT.png"
+    },
+    {
+      "step": 278,
+      "level": 4,
+      "action": "DOWN",
+      "png": "step_0278_L4_DOWN.png"
+    },
+    {
+      "step": 279,
+      "level": 4,
+      "action": "RIGHT",
+      "png": "step_0279_L4_RIGHT.png"
+    },
+    {
+      "step": 280,
+      "level": 4,
+      "action": "RIGHT",
+      "png": "step_0280_L4_RIGHT.png"
+    },
+    {
+      "step": 281,
+      "level": 4,
+      "action": "UP",
+      "png": "step_0281_L4_UP.png"
+    },
+    {
+      "step": 282,
+      "level": 4,
+      "action": "UP",
+      "png": "step_0282_L4_UP.png"
+    },
+    {
+      "step": 283,
+      "level": 4,
+      "action": "UP",
+      "png": "step_0283_L4_UP.png"
+    },
+    {
+      "step": 284,
+      "level": 4,
+      "action": "UP",
+      "png": "step_0284_L4_UP.png"
+    },
+    {
+      "step": 285,
+      "level": 4,
+      "action": "UP",
+      "png": "step_0285_L4_UP.png"
+    },
+    {
+      "step": 286,
+      "level": 4,
+      "action": "UP",
+      "png": "step_0286_L4_UP.png"
+    },
+    {
+      "step": 287,
+      "level": 4,
+      "action": "DOWN",
+      "png": "step_0287_L4_DOWN.png"
+    },
+    {
+      "step": 288,
+      "level": 4,
+      "action": "DOWN",
+      "png": "step_0288_L4_DOWN.png"
+    },
+    {
+      "step": 289,
+      "level": 4,
+      "action": "DOWN",
+      "png": "step_0289_L4_DOWN.png"
+    },
+    {
+      "step": 290,
+      "level": 4,
+      "action": "RIGHT",
+      "png": "step_0290_L4_RIGHT.png"
+    },
+    {
+      "step": 291,
+      "level": 4,
+      "action": "RIGHT",
+      "png": "step_0291_L4_RIGHT.png"
+    },
+    {
+      "step": 292,
+      "level": 4,
+      "action": "RIGHT",
+      "png": "step_0292_L4_RIGHT.png"
+    },
+    {
+      "step": 293,
+      "level": 4,
+      "action": "RIGHT",
+      "png": "step_0293_L4_RIGHT.png"
+    },
+    {
+      "step": 294,
+      "level": 4,
+      "action": "RIGHT",
+      "png": "step_0294_L4_RIGHT.png"
+    },
+    {
+      "step": 295,
+      "level": 4,
+      "action": "RIGHT",
+      "png": "step_0295_L4_RIGHT.png"
+    },
+    {
+      "step": 296,
+      "level": 4,
+      "action": "UP",
+      "png": "step_0296_L4_UP.png"
+    },
+    {
+      "step": 297,
+      "level": 4,
+      "action": "UP",
+      "png": "step_0297_L4_UP.png"
+    },
+    {
+      "step": 298,
+      "level": 4,
+      "action": "UP",
+      "png": "step_0298_L4_UP.png"
+    },
+    {
+      "step": 299,
+      "level": 4,
+      "action": "UP",
+      "png": "step_0299_L4_UP.png"
+    },
+    {
+      "step": 300,
+      "level": 4,
+      "action": "RIGHT",
+      "png": "step_0300_L4_RIGHT.png"
+    },
+    {
+      "step": 301,
+      "level": 4,
+      "action": "UP",
+      "png": "step_0301_L4_UP.png"
+    },
+    {
+      "step": 302,
+      "level": 4,
+      "action": "RIGHT",
+      "png": "step_0302_L4_RIGHT.png"
+    },
+    {
+      "step": 303,
+      "level": 4,
+      "action": "RIGHT",
+      "png": "step_0303_L4_RIGHT.png"
+    },
+    {
+      "step": 304,
+      "level": 4,
+      "action": "SELECT",
+      "png": "step_0304_L4_SELECT.png"
+    },
+    {
+      "step": 305,
+      "level": 4,
+      "action": "DOWN",
+      "png": "step_0305_L4_DOWN.png"
+    },
+    {
+      "step": 306,
+      "level": 4,
+      "action": "DOWN",
+      "png": "step_0306_L4_DOWN.png"
+    },
+    {
+      "step": 307,
+      "level": 4,
+      "action": "DOWN",
+      "png": "step_0307_L4_DOWN.png"
+    },
+    {
+      "step": 308,
+      "level": 4,
+      "action": "DOWN",
+      "png": "step_0308_L4_DOWN.png"
+    },
+    {
+      "step": 309,
+      "level": 4,
+      "action": "LEFT",
+      "png": "step_0309_L4_LEFT.png"
+    },
+    {
+      "step": 310,
+      "level": 4,
+      "action": "DOWN",
+      "png": "step_0310_L4_DOWN.png"
+    },
+    {
+      "step": 311,
+      "level": 4,
+      "action": "LEFT",
+      "png": "step_0311_L4_LEFT.png"
+    },
+    {
+      "step": 312,
+      "level": 4,
+      "action": "LEFT",
+      "png": "step_0312_L4_LEFT.png"
+    },
+    {
+      "step": 313,
+      "level": 4,
+      "action": "LEFT",
+      "png": "step_0313_L4_LEFT.png"
+    },
+    {
+      "step": 314,
+      "level": 4,
+      "action": "LEFT",
+      "png": "step_0314_L4_LEFT.png"
+    },
+    {
+      "step": 315,
+      "level": 4,
+      "action": "LEFT",
+      "png": "step_0315_L4_LEFT.png"
+    },
+    {
+      "step": 316,
+      "level": 4,
+      "action": "LEFT",
+      "png": "step_0316_L4_LEFT.png"
+    },
+    {
+      "step": 317,
+      "level": 4,
+      "action": "LEFT",
+      "png": "step_0317_L4_LEFT.png"
+    },
+    {
+      "step": 318,
+      "level": 4,
+      "action": "LEFT",
+      "png": "step_0318_L4_LEFT.png"
+    },
+    {
+      "step": 319,
+      "level": 4,
+      "action": "UP",
+      "png": "step_0319_L4_UP.png"
+    },
+    {
+      "step": 320,
+      "level": 4,
+      "action": "LEFT",
+      "png": "step_0320_L4_LEFT.png"
+    },
+    {
+      "step": 321,
+      "level": 4,
+      "action": "LEFT",
+      "png": "step_0321_L4_LEFT.png"
+    },
+    {
+      "step": 322,
+      "level": 4,
+      "action": "SELECT",
+      "png": "step_0322_L4_SELECT.png"
+    },
+    {
+      "step": 323,
+      "level": 4,
+      "action": "UP",
+      "png": "step_0323_L4_UP.png"
+    },
+    {
+      "step": 324,
+      "level": 4,
+      "action": "UP",
+      "png": "step_0324_L4_UP.png"
+    },
+    {
+      "step": 325,
+      "level": 4,
+      "action": "UP",
+      "png": "step_0325_L4_UP.png"
+    },
+    {
+      "step": 326,
+      "level": 4,
+      "action": "UP",
+      "png": "step_0326_L4_UP.png"
+    },
+    {
+      "step": 327,
+      "level": 4,
+      "action": "UP",
+      "png": "step_0327_L4_UP.png"
+    },
+    {
+      "step": 328,
+      "level": 4,
+      "action": "UP",
+      "png": "step_0328_L4_UP.png"
+    },
+    {
+      "step": 329,
+      "level": 4,
+      "action": "DOWN",
+      "png": "step_0329_L4_DOWN.png"
+    },
+    {
+      "step": 330,
+      "level": 4,
+      "action": "UP",
+      "png": "step_0330_L4_UP.png"
+    },
+    {
+      "step": 331,
+      "level": 4,
+      "action": "DOWN",
+      "png": "step_0331_L4_DOWN.png"
+    },
+    {
+      "step": 332,
+      "level": 4,
+      "action": "UP",
+      "png": "step_0332_L4_UP.png"
+    },
+    {
+      "step": 333,
+      "level": 4,
+      "action": "DOWN",
+      "png": "step_0333_L4_DOWN.png"
+    },
+    {
+      "step": 334,
+      "level": 4,
+      "action": "UP",
+      "png": "step_0334_L4_UP.png"
+    },
+    {
+      "step": 335,
+      "level": 4,
+      "action": "DOWN",
+      "png": "step_0335_L4_DOWN.png"
+    },
+    {
+      "step": 336,
+      "level": 4,
+      "action": "UP",
+      "png": "step_0336_L4_UP.png"
+    },
+    {
+      "step": 337,
+      "level": 4,
+      "action": "DOWN",
+      "png": "step_0337_L4_DOWN.png"
+    },
+    {
+      "step": 338,
+      "level": 4,
+      "action": "UP",
+      "png": "step_0338_L4_UP.png"
+    },
+    {
+      "step": 339,
+      "level": 4,
+      "action": "DOWN",
+      "png": "step_0339_L4_DOWN.png"
+    },
+    {
+      "step": 340,
+      "level": 4,
+      "action": "UP",
+      "png": "step_0340_L4_UP.png"
+    },
+    {
+      "step": 341,
+      "level": 4,
+      "action": "DOWN",
+      "png": "step_0341_L4_DOWN.png",
+      "gif": "step_0341_L4_anim.gif",
+      "level_up": true,
+      "new_level": 5
+    },
+    {
+      "step": 342,
+      "level": 5,
+      "action": "UP",
+      "png": "step_0342_L5_UP.png"
+    },
+    {
+      "step": 343,
+      "level": 5,
+      "action": "UP",
+      "png": "step_0343_L5_UP.png"
+    },
+    {
+      "step": 344,
+      "level": 5,
+      "action": "UP",
+      "png": "step_0344_L5_UP.png"
+    },
+    {
+      "step": 345,
+      "level": 5,
+      "action": "UP",
+      "png": "step_0345_L5_UP.png"
+    },
+    {
+      "step": 346,
+      "level": 5,
+      "action": "UP",
+      "png": "step_0346_L5_UP.png"
+    },
+    {
+      "step": 347,
+      "level": 5,
+      "action": "UP",
+      "png": "step_0347_L5_UP.png"
+    },
+    {
+      "step": 348,
+      "level": 5,
+      "action": "UP",
+      "png": "step_0348_L5_UP.png"
+    },
+    {
+      "step": 349,
+      "level": 5,
+      "action": "UP",
+      "png": "step_0349_L5_UP.png"
+    },
+    {
+      "step": 350,
+      "level": 5,
+      "action": "DOWN",
+      "png": "step_0350_L5_DOWN.png"
+    },
+    {
+      "step": 351,
+      "level": 5,
+      "action": "RIGHT",
+      "png": "step_0351_L5_RIGHT.png"
+    },
+    {
+      "step": 352,
+      "level": 5,
+      "action": "RIGHT",
+      "png": "step_0352_L5_RIGHT.png"
+    },
+    {
+      "step": 353,
+      "level": 5,
+      "action": "RIGHT",
+      "png": "step_0353_L5_RIGHT.png"
+    },
+    {
+      "step": 354,
+      "level": 5,
+      "action": "RIGHT",
+      "png": "step_0354_L5_RIGHT.png"
+    },
+    {
+      "step": 355,
+      "level": 5,
+      "action": "RIGHT",
+      "png": "step_0355_L5_RIGHT.png"
+    },
+    {
+      "step": 356,
+      "level": 5,
+      "action": "RIGHT",
+      "png": "step_0356_L5_RIGHT.png"
+    },
+    {
+      "step": 357,
+      "level": 5,
+      "action": "SELECT",
+      "png": "step_0357_L5_SELECT.png"
+    },
+    {
+      "step": 358,
+      "level": 5,
+      "action": "RIGHT",
+      "png": "step_0358_L5_RIGHT.png"
+    },
+    {
+      "step": 359,
+      "level": 5,
+      "action": "SELECT",
+      "png": "step_0359_L5_SELECT.png"
+    },
+    {
+      "step": 360,
+      "level": 5,
+      "action": "LEFT",
+      "png": "step_0360_L5_LEFT.png"
+    },
+    {
+      "step": 361,
+      "level": 5,
+      "action": "LEFT",
+      "png": "step_0361_L5_LEFT.png"
+    },
+    {
+      "step": 362,
+      "level": 5,
+      "action": "LEFT",
+      "png": "step_0362_L5_LEFT.png"
+    },
+    {
+      "step": 363,
+      "level": 5,
+      "action": "UP",
+      "png": "step_0363_L5_UP.png"
+    },
+    {
+      "step": 364,
+      "level": 5,
+      "action": "UP",
+      "png": "step_0364_L5_UP.png"
+    },
+    {
+      "step": 365,
+      "level": 5,
+      "action": "LEFT",
+      "png": "step_0365_L5_LEFT.png"
+    },
+    {
+      "step": 366,
+      "level": 5,
+      "action": "LEFT",
+      "png": "step_0366_L5_LEFT.png"
+    },
+    {
+      "step": 367,
+      "level": 5,
+      "action": "SELECT",
+      "png": "step_0367_L5_SELECT.png"
+    },
+    {
+      "step": 368,
+      "level": 5,
+      "action": "DOWN",
+      "png": "step_0368_L5_DOWN.png"
+    },
+    {
+      "step": 369,
+      "level": 5,
+      "action": "DOWN",
+      "png": "step_0369_L5_DOWN.png"
+    },
+    {
+      "step": 370,
+      "level": 5,
+      "action": "RIGHT",
+      "png": "step_0370_L5_RIGHT.png"
+    },
+    {
+      "step": 371,
+      "level": 5,
+      "action": "RIGHT",
+      "png": "step_0371_L5_RIGHT.png"
+    },
+    {
+      "step": 372,
+      "level": 5,
+      "action": "RIGHT",
+      "png": "step_0372_L5_RIGHT.png"
+    },
+    {
+      "step": 373,
+      "level": 5,
+      "action": "RIGHT",
+      "png": "step_0373_L5_RIGHT.png"
+    },
+    {
+      "step": 374,
+      "level": 5,
+      "action": "RIGHT",
+      "png": "step_0374_L5_RIGHT.png"
+    },
+    {
+      "step": 375,
+      "level": 5,
+      "action": "RIGHT",
+      "png": "step_0375_L5_RIGHT.png"
+    },
+    {
+      "step": 376,
+      "level": 5,
+      "action": "DOWN",
+      "png": "step_0376_L5_DOWN.png"
+    },
+    {
+      "step": 377,
+      "level": 5,
+      "action": "RIGHT",
+      "png": "step_0377_L5_RIGHT.png"
+    },
+    {
+      "step": 378,
+      "level": 5,
+      "action": "SELECT",
+      "png": "step_0378_L5_SELECT.png"
+    },
+    {
+      "step": 379,
+      "level": 5,
+      "action": "UP",
+      "png": "step_0379_L5_UP.png"
+    },
+    {
+      "step": 380,
+      "level": 5,
+      "action": "LEFT",
+      "png": "step_0380_L5_LEFT.png"
+    },
+    {
+      "step": 381,
+      "level": 5,
+      "action": "LEFT",
+      "png": "step_0381_L5_LEFT.png"
+    },
+    {
+      "step": 382,
+      "level": 5,
+      "action": "LEFT",
+      "png": "step_0382_L5_LEFT.png"
+    },
+    {
+      "step": 383,
+      "level": 5,
+      "action": "LEFT",
+      "png": "step_0383_L5_LEFT.png"
+    },
+    {
+      "step": 384,
+      "level": 5,
+      "action": "UP",
+      "png": "step_0384_L5_UP.png"
+    },
+    {
+      "step": 385,
+      "level": 5,
+      "action": "UP",
+      "png": "step_0385_L5_UP.png"
+    },
+    {
+      "step": 386,
+      "level": 5,
+      "action": "UP",
+      "png": "step_0386_L5_UP.png"
+    },
+    {
+      "step": 387,
+      "level": 5,
+      "action": "LEFT",
+      "png": "step_0387_L5_LEFT.png"
+    },
+    {
+      "step": 388,
+      "level": 5,
+      "action": "LEFT",
+      "png": "step_0388_L5_LEFT.png"
+    },
+    {
+      "step": 389,
+      "level": 5,
+      "action": "SELECT",
+      "png": "step_0389_L5_SELECT.png",
+      "gif": "step_0389_L5_anim.gif",
+      "level_up": true,
+      "new_level": 6
+    },
+    {
+      "step": 390,
+      "level": 6,
+      "action": "UP",
+      "png": "step_0390_L6_UP.png"
+    },
+    {
+      "step": 391,
+      "level": 6,
+      "action": "UP",
+      "png": "step_0391_L6_UP.png"
+    },
+    {
+      "step": 392,
+      "level": 6,
+      "action": "UP",
+      "png": "step_0392_L6_UP.png"
+    },
+    {
+      "step": 393,
+      "level": 6,
+      "action": "UP",
+      "png": "step_0393_L6_UP.png"
+    },
+    {
+      "step": 394,
+      "level": 6,
+      "action": "UP",
+      "png": "step_0394_L6_UP.png"
+    },
+    {
+      "step": 395,
+      "level": 6,
+      "action": "UP",
+      "png": "step_0395_L6_UP.png"
+    },
+    {
+      "step": 396,
+      "level": 6,
+      "action": "UP",
+      "png": "step_0396_L6_UP.png"
+    },
+    {
+      "step": 397,
+      "level": 6,
+      "action": "UP",
+      "png": "step_0397_L6_UP.png"
+    },
+    {
+      "step": 398,
+      "level": 6,
+      "action": "UP",
+      "png": "step_0398_L6_UP.png"
+    },
+    {
+      "step": 399,
+      "level": 6,
+      "action": "UP",
+      "png": "step_0399_L6_UP.png"
+    },
+    {
+      "step": 400,
+      "level": 6,
+      "action": "UP",
+      "png": "step_0400_L6_UP.png"
+    },
+    {
+      "step": 401,
+      "level": 6,
+      "action": "UP",
+      "png": "step_0401_L6_UP.png"
+    },
+    {
+      "step": 402,
+      "level": 6,
+      "action": "UP",
+      "png": "step_0402_L6_UP.png"
+    },
+    {
+      "step": 403,
+      "level": 6,
+      "action": "UP",
+      "png": "step_0403_L6_UP.png"
+    },
+    {
+      "step": 404,
+      "level": 6,
+      "action": "UP",
+      "png": "step_0404_L6_UP.png"
+    },
+    {
+      "step": 405,
+      "level": 6,
+      "action": "DOWN",
+      "png": "step_0405_L6_DOWN.png"
+    },
+    {
+      "step": 406,
+      "level": 6,
+      "action": "DOWN",
+      "png": "step_0406_L6_DOWN.png"
+    },
+    {
+      "step": 407,
+      "level": 6,
+      "action": "RIGHT",
+      "png": "step_0407_L6_RIGHT.png"
+    },
+    {
+      "step": 408,
+      "level": 6,
+      "action": "RIGHT",
+      "png": "step_0408_L6_RIGHT.png"
+    },
+    {
+      "step": 409,
+      "level": 6,
+      "action": "SELECT",
+      "png": "step_0409_L6_SELECT.png"
+    },
+    {
+      "step": 410,
+      "level": 6,
+      "action": "RIGHT",
+      "png": "step_0410_L6_RIGHT.png"
+    },
+    {
+      "step": 411,
+      "level": 6,
+      "action": "UP",
+      "png": "step_0411_L6_UP.png"
+    },
+    {
+      "step": 412,
+      "level": 6,
+      "action": "SELECT",
+      "png": "step_0412_L6_SELECT.png"
+    },
+    {
+      "step": 413,
+      "level": 6,
+      "action": "LEFT",
+      "png": "step_0413_L6_LEFT.png"
+    },
+    {
+      "step": 414,
+      "level": 6,
+      "action": "LEFT",
+      "png": "step_0414_L6_LEFT.png"
+    },
+    {
+      "step": 415,
+      "level": 6,
+      "action": "LEFT",
+      "png": "step_0415_L6_LEFT.png"
+    },
+    {
+      "step": 416,
+      "level": 6,
+      "action": "LEFT",
+      "png": "step_0416_L6_LEFT.png"
+    },
+    {
+      "step": 417,
+      "level": 6,
+      "action": "LEFT",
+      "png": "step_0417_L6_LEFT.png"
+    },
+    {
+      "step": 418,
+      "level": 6,
+      "action": "DOWN",
+      "png": "step_0418_L6_DOWN.png"
+    },
+    {
+      "step": 419,
+      "level": 6,
+      "action": "SELECT",
+      "png": "step_0419_L6_SELECT.png"
+    },
+    {
+      "step": 420,
+      "level": 6,
+      "action": "RIGHT",
+      "png": "step_0420_L6_RIGHT.png"
+    },
+    {
+      "step": 421,
+      "level": 6,
+      "action": "RIGHT",
+      "png": "step_0421_L6_RIGHT.png"
+    },
+    {
+      "step": 422,
+      "level": 6,
+      "action": "RIGHT",
+      "png": "step_0422_L6_RIGHT.png"
+    },
+    {
+      "step": 423,
+      "level": 6,
+      "action": "RIGHT",
+      "png": "step_0423_L6_RIGHT.png"
+    },
+    {
+      "step": 424,
+      "level": 6,
+      "action": "RIGHT",
+      "png": "step_0424_L6_RIGHT.png"
+    },
+    {
+      "step": 425,
+      "level": 6,
+      "action": "RIGHT",
+      "png": "step_0425_L6_RIGHT.png"
+    },
+    {
+      "step": 426,
+      "level": 6,
+      "action": "RIGHT",
+      "png": "step_0426_L6_RIGHT.png"
+    },
+    {
+      "step": 427,
+      "level": 6,
+      "action": "RIGHT",
+      "png": "step_0427_L6_RIGHT.png"
+    },
+    {
+      "step": 428,
+      "level": 6,
+      "action": "RIGHT",
+      "png": "step_0428_L6_RIGHT.png"
+    },
+    {
+      "step": 429,
+      "level": 6,
+      "action": "SELECT",
+      "png": "step_0429_L6_SELECT.png"
+    },
+    {
+      "step": 430,
+      "level": 6,
+      "action": "LEFT",
+      "png": "step_0430_L6_LEFT.png"
+    },
+    {
+      "step": 431,
+      "level": 6,
+      "action": "LEFT",
+      "png": "step_0431_L6_LEFT.png"
+    },
+    {
+      "step": 432,
+      "level": 6,
+      "action": "LEFT",
+      "png": "step_0432_L6_LEFT.png"
+    },
+    {
+      "step": 433,
+      "level": 6,
+      "action": "LEFT",
+      "png": "step_0433_L6_LEFT.png"
+    },
+    {
+      "step": 434,
+      "level": 6,
+      "action": "LEFT",
+      "png": "step_0434_L6_LEFT.png"
+    },
+    {
+      "step": 435,
+      "level": 6,
+      "action": "LEFT",
+      "png": "step_0435_L6_LEFT.png"
+    },
+    {
+      "step": 436,
+      "level": 6,
+      "action": "LEFT",
+      "png": "step_0436_L6_LEFT.png"
+    },
+    {
+      "step": 437,
+      "level": 6,
+      "action": "LEFT",
+      "png": "step_0437_L6_LEFT.png"
+    },
+    {
+      "step": 438,
+      "level": 6,
+      "action": "LEFT",
+      "png": "step_0438_L6_LEFT.png"
+    },
+    {
+      "step": 439,
+      "level": 6,
+      "action": "SELECT",
+      "png": "step_0439_L6_SELECT.png",
+      "gif": "step_0439_L6_anim.gif",
+      "level_up": true,
+      "new_level": 7
+    },
+    {
+      "step": 440,
+      "level": 7,
+      "action": "RIGHT",
+      "png": "step_0440_L7_RIGHT.png"
+    },
+    {
+      "step": 441,
+      "level": 7,
+      "action": "RIGHT",
+      "png": "step_0441_L7_RIGHT.png"
+    },
+    {
+      "step": 442,
+      "level": 7,
+      "action": "RIGHT",
+      "png": "step_0442_L7_RIGHT.png"
+    },
+    {
+      "step": 443,
+      "level": 7,
+      "action": "RIGHT",
+      "png": "step_0443_L7_RIGHT.png"
+    },
+    {
+      "step": 444,
+      "level": 7,
+      "action": "RIGHT",
+      "png": "step_0444_L7_RIGHT.png"
+    },
+    {
+      "step": 445,
+      "level": 7,
+      "action": "RIGHT",
+      "png": "step_0445_L7_RIGHT.png"
+    },
+    {
+      "step": 446,
+      "level": 7,
+      "action": "RIGHT",
+      "png": "step_0446_L7_RIGHT.png"
+    },
+    {
+      "step": 447,
+      "level": 7,
+      "action": "RIGHT",
+      "png": "step_0447_L7_RIGHT.png"
+    },
+    {
+      "step": 448,
+      "level": 7,
+      "action": "DOWN",
+      "png": "step_0448_L7_DOWN.png"
+    },
+    {
+      "step": 449,
+      "level": 7,
+      "action": "DOWN",
+      "png": "step_0449_L7_DOWN.png"
+    },
+    {
+      "step": 450,
+      "level": 7,
+      "action": "DOWN",
+      "png": "step_0450_L7_DOWN.png"
+    },
+    {
+      "step": 451,
+      "level": 7,
+      "action": "DOWN",
+      "png": "step_0451_L7_DOWN.png"
+    },
+    {
+      "step": 452,
+      "level": 7,
+      "action": "DOWN",
+      "png": "step_0452_L7_DOWN.png"
+    },
+    {
+      "step": 453,
+      "level": 7,
+      "action": "DOWN",
+      "png": "step_0453_L7_DOWN.png"
+    },
+    {
+      "step": 454,
+      "level": 7,
+      "action": "UP",
+      "png": "step_0454_L7_UP.png"
+    },
+    {
+      "step": 455,
+      "level": 7,
+      "action": "LEFT",
+      "png": "step_0455_L7_LEFT.png"
+    },
+    {
+      "step": 456,
+      "level": 7,
+      "action": "LEFT",
+      "png": "step_0456_L7_LEFT.png"
+    },
+    {
+      "step": 457,
+      "level": 7,
+      "action": "SELECT",
+      "png": "step_0457_L7_SELECT.png"
+    },
+    {
+      "step": 458,
+      "level": 7,
+      "action": "UP",
+      "png": "step_0458_L7_UP.png"
+    },
+    {
+      "step": 459,
+      "level": 7,
+      "action": "UP",
+      "png": "step_0459_L7_UP.png"
+    },
+    {
+      "step": 460,
+      "level": 7,
+      "action": "UP",
+      "png": "step_0460_L7_UP.png"
+    },
+    {
+      "step": 461,
+      "level": 7,
+      "action": "RIGHT",
+      "png": "step_0461_L7_RIGHT.png"
+    },
+    {
+      "step": 462,
+      "level": 7,
+      "action": "RIGHT",
+      "png": "step_0462_L7_RIGHT.png"
+    },
+    {
+      "step": 463,
+      "level": 7,
+      "action": "UP",
+      "png": "step_0463_L7_UP.png"
+    },
+    {
+      "step": 464,
+      "level": 7,
+      "action": "UP",
+      "png": "step_0464_L7_UP.png"
+    },
+    {
+      "step": 465,
+      "level": 7,
+      "action": "UP",
+      "png": "step_0465_L7_UP.png"
+    },
+    {
+      "step": 466,
+      "level": 7,
+      "action": "LEFT",
+      "png": "step_0466_L7_LEFT.png"
+    },
+    {
+      "step": 467,
+      "level": 7,
+      "action": "LEFT",
+      "png": "step_0467_L7_LEFT.png"
+    },
+    {
+      "step": 468,
+      "level": 7,
+      "action": "LEFT",
+      "png": "step_0468_L7_LEFT.png"
+    },
+    {
+      "step": 469,
+      "level": 7,
+      "action": "LEFT",
+      "png": "step_0469_L7_LEFT.png"
+    },
+    {
+      "step": 470,
+      "level": 7,
+      "action": "UP",
+      "png": "step_0470_L7_UP.png"
+    },
+    {
+      "step": 471,
+      "level": 7,
+      "action": "UP",
+      "png": "step_0471_L7_UP.png"
+    },
+    {
+      "step": 472,
+      "level": 7,
+      "action": "UP",
+      "png": "step_0472_L7_UP.png"
+    },
+    {
+      "step": 473,
+      "level": 7,
+      "action": "UP",
+      "png": "step_0473_L7_UP.png"
+    },
+    {
+      "step": 474,
+      "level": 7,
+      "action": "UP",
+      "png": "step_0474_L7_UP.png"
+    },
+    {
+      "step": 475,
+      "level": 7,
+      "action": "UP",
+      "png": "step_0475_L7_UP.png"
+    },
+    {
+      "step": 476,
+      "level": 7,
+      "action": "DOWN",
+      "png": "step_0476_L7_DOWN.png"
+    },
+    {
+      "step": 477,
+      "level": 7,
+      "action": "UP",
+      "png": "step_0477_L7_UP.png"
+    },
+    {
+      "step": 478,
+      "level": 7,
+      "action": "DOWN",
+      "png": "step_0478_L7_DOWN.png"
+    },
+    {
+      "step": 479,
+      "level": 7,
+      "action": "DOWN",
+      "png": "step_0479_L7_DOWN.png"
+    },
+    {
+      "step": 480,
+      "level": 7,
+      "action": "DOWN",
+      "png": "step_0480_L7_DOWN.png"
+    },
+    {
+      "step": 481,
+      "level": 7,
+      "action": "LEFT",
+      "png": "step_0481_L7_LEFT.png"
+    },
+    {
+      "step": 482,
+      "level": 7,
+      "action": "SELECT",
+      "png": "step_0482_L7_SELECT.png"
+    },
+    {
+      "step": 483,
+      "level": 7,
+      "action": "UP",
+      "png": "step_0483_L7_UP.png"
+    },
+    {
+      "step": 484,
+      "level": 7,
+      "action": "RIGHT",
+      "png": "step_0484_L7_RIGHT.png"
+    },
+    {
+      "step": 485,
+      "level": 7,
+      "action": "RIGHT",
+      "png": "step_0485_L7_RIGHT.png"
+    },
+    {
+      "step": 486,
+      "level": 7,
+      "action": "RIGHT",
+      "png": "step_0486_L7_RIGHT.png"
+    },
+    {
+      "step": 487,
+      "level": 7,
+      "action": "RIGHT",
+      "png": "step_0487_L7_RIGHT.png"
+    },
+    {
+      "step": 488,
+      "level": 7,
+      "action": "RIGHT",
+      "png": "step_0488_L7_RIGHT.png"
+    },
+    {
+      "step": 489,
+      "level": 7,
+      "action": "RIGHT",
+      "png": "step_0489_L7_RIGHT.png"
+    },
+    {
+      "step": 490,
+      "level": 7,
+      "action": "RIGHT",
+      "png": "step_0490_L7_RIGHT.png"
+    },
+    {
+      "step": 491,
+      "level": 7,
+      "action": "RIGHT",
+      "png": "step_0491_L7_RIGHT.png"
+    },
+    {
+      "step": 492,
+      "level": 7,
+      "action": "SELECT",
+      "png": "step_0492_L7_SELECT.png"
+    },
+    {
+      "step": 493,
+      "level": 7,
+      "action": "DOWN",
+      "png": "step_0493_L7_DOWN.png"
+    },
+    {
+      "step": 494,
+      "level": 7,
+      "action": "LEFT",
+      "png": "step_0494_L7_LEFT.png"
+    },
+    {
+      "step": 495,
+      "level": 7,
+      "action": "LEFT",
+      "png": "step_0495_L7_LEFT.png"
+    },
+    {
+      "step": 496,
+      "level": 7,
+      "action": "UP",
+      "png": "step_0496_L7_UP.png"
+    },
+    {
+      "step": 497,
+      "level": 7,
+      "action": "SELECT",
+      "png": "step_0497_L7_SELECT.png"
+    },
+    {
+      "step": 498,
+      "level": 7,
+      "action": "LEFT",
+      "png": "step_0498_L7_LEFT.png"
+    },
+    {
+      "step": 499,
+      "level": 7,
+      "action": "LEFT",
+      "png": "step_0499_L7_LEFT.png"
+    },
+    {
+      "step": 500,
+      "level": 7,
+      "action": "LEFT",
+      "png": "step_0500_L7_LEFT.png"
+    },
+    {
+      "step": 501,
+      "level": 7,
+      "action": "LEFT",
+      "png": "step_0501_L7_LEFT.png"
+    },
+    {
+      "step": 502,
+      "level": 7,
+      "action": "LEFT",
+      "png": "step_0502_L7_LEFT.png"
+    },
+    {
+      "step": 503,
+      "level": 7,
+      "action": "LEFT",
+      "png": "step_0503_L7_LEFT.png"
+    },
+    {
+      "step": 504,
+      "level": 7,
+      "action": "LEFT",
+      "png": "step_0504_L7_LEFT.png"
+    },
+    {
+      "step": 505,
+      "level": 7,
+      "action": "LEFT",
+      "png": "step_0505_L7_LEFT.png"
+    },
+    {
+      "step": 506,
+      "level": 7,
+      "action": "UP",
+      "png": "step_0506_L7_UP.png"
+    },
+    {
+      "step": 507,
+      "level": 7,
+      "action": "SELECT",
+      "png": "step_0507_L7_SELECT.png"
+    },
+    {
+      "step": 508,
+      "level": 7,
+      "action": "DOWN",
+      "png": "step_0508_L7_DOWN.png"
+    },
+    {
+      "step": 509,
+      "level": 7,
+      "action": "RIGHT",
+      "png": "step_0509_L7_RIGHT.png"
+    },
+    {
+      "step": 510,
+      "level": 7,
+      "action": "RIGHT",
+      "png": "step_0510_L7_RIGHT.png"
+    },
+    {
+      "step": 511,
+      "level": 7,
+      "action": "RIGHT",
+      "png": "step_0511_L7_RIGHT.png"
+    },
+    {
+      "step": 512,
+      "level": 7,
+      "action": "RIGHT",
+      "png": "step_0512_L7_RIGHT.png"
+    },
+    {
+      "step": 513,
+      "level": 7,
+      "action": "RIGHT",
+      "png": "step_0513_L7_RIGHT.png"
+    },
+    {
+      "step": 514,
+      "level": 7,
+      "action": "RIGHT",
+      "png": "step_0514_L7_RIGHT.png"
+    },
+    {
+      "step": 515,
+      "level": 7,
+      "action": "RIGHT",
+      "png": "step_0515_L7_RIGHT.png"
+    },
+    {
+      "step": 516,
+      "level": 7,
+      "action": "RIGHT",
+      "png": "step_0516_L7_RIGHT.png"
+    },
+    {
+      "step": 517,
+      "level": 7,
+      "action": "RIGHT",
+      "png": "step_0517_L7_RIGHT.png"
+    },
+    {
+      "step": 518,
+      "level": 7,
+      "action": "RIGHT",
+      "png": "step_0518_L7_RIGHT.png"
+    },
+    {
+      "step": 519,
+      "level": 7,
+      "action": "UP",
+      "png": "step_0519_L7_UP.png"
+    },
+    {
+      "step": 520,
+      "level": 7,
+      "action": "SELECT",
+      "png": "step_0520_L7_SELECT.png"
+    },
+    {
+      "step": 521,
+      "level": 7,
+      "action": "LEFT",
+      "png": "step_0521_L7_LEFT.png"
+    },
+    {
+      "step": 522,
+      "level": 7,
+      "action": "LEFT",
+      "png": "step_0522_L7_LEFT.png"
+    },
+    {
+      "step": 523,
+      "level": 7,
+      "action": "LEFT",
+      "png": "step_0523_L7_LEFT.png"
+    },
+    {
+      "step": 524,
+      "level": 7,
+      "action": "LEFT",
+      "png": "step_0524_L7_LEFT.png"
+    },
+    {
+      "step": 525,
+      "level": 7,
+      "action": "LEFT",
+      "png": "step_0525_L7_LEFT.png"
+    },
+    {
+      "step": 526,
+      "level": 7,
+      "action": "LEFT",
+      "png": "step_0526_L7_LEFT.png"
+    },
+    {
+      "step": 527,
+      "level": 7,
+      "action": "LEFT",
+      "png": "step_0527_L7_LEFT.png"
+    },
+    {
+      "step": 528,
+      "level": 7,
+      "action": "LEFT",
+      "png": "step_0528_L7_LEFT.png"
+    },
+    {
+      "step": 529,
+      "level": 7,
+      "action": "LEFT",
+      "png": "step_0529_L7_LEFT.png"
+    },
+    {
+      "step": 530,
+      "level": 7,
+      "action": "LEFT",
+      "png": "step_0530_L7_LEFT.png"
+    },
+    {
+      "step": 531,
+      "level": 7,
+      "action": "LEFT",
+      "png": "step_0531_L7_LEFT.png"
+    },
+    {
+      "step": 532,
+      "level": 7,
+      "action": "UP",
+      "png": "step_0532_L7_UP.png"
+    },
+    {
+      "step": 533,
+      "level": 7,
+      "action": "SELECT",
+      "png": "step_0533_L7_SELECT.png"
+    },
+    {
+      "step": 534,
+      "level": 7,
+      "action": "DOWN",
+      "png": "step_0534_L7_DOWN.png"
+    },
+    {
+      "step": 535,
+      "level": 7,
+      "action": "RIGHT",
+      "png": "step_0535_L7_RIGHT.png"
+    },
+    {
+      "step": 536,
+      "level": 7,
+      "action": "RIGHT",
+      "png": "step_0536_L7_RIGHT.png"
+    },
+    {
+      "step": 537,
+      "level": 7,
+      "action": "RIGHT",
+      "png": "step_0537_L7_RIGHT.png"
+    },
+    {
+      "step": 538,
+      "level": 7,
+      "action": "RIGHT",
+      "png": "step_0538_L7_RIGHT.png"
+    },
+    {
+      "step": 539,
+      "level": 7,
+      "action": "RIGHT",
+      "png": "step_0539_L7_RIGHT.png"
+    },
+    {
+      "step": 540,
+      "level": 7,
+      "action": "RIGHT",
+      "png": "step_0540_L7_RIGHT.png"
+    },
+    {
+      "step": 541,
+      "level": 7,
+      "action": "RIGHT",
+      "png": "step_0541_L7_RIGHT.png"
+    },
+    {
+      "step": 542,
+      "level": 7,
+      "action": "RIGHT",
+      "png": "step_0542_L7_RIGHT.png"
+    },
+    {
+      "step": 543,
+      "level": 7,
+      "action": "RIGHT",
+      "png": "step_0543_L7_RIGHT.png"
+    },
+    {
+      "step": 544,
+      "level": 7,
+      "action": "RIGHT",
+      "png": "step_0544_L7_RIGHT.png"
+    },
+    {
+      "step": 545,
+      "level": 7,
+      "action": "RIGHT",
+      "png": "step_0545_L7_RIGHT.png"
+    },
+    {
+      "step": 546,
+      "level": 7,
+      "action": "RIGHT",
+      "png": "step_0546_L7_RIGHT.png"
+    },
+    {
+      "step": 547,
+      "level": 7,
+      "action": "UP",
+      "png": "step_0547_L7_UP.png"
+    },
+    {
+      "step": 548,
+      "level": 7,
+      "action": "SELECT",
+      "png": "step_0548_L7_SELECT.png"
+    },
+    {
+      "step": 549,
+      "level": 7,
+      "action": "DOWN",
+      "png": "step_0549_L7_DOWN.png"
+    },
+    {
+      "step": 550,
+      "level": 7,
+      "action": "UP",
+      "png": "step_0550_L7_UP.png"
+    },
+    {
+      "step": 551,
+      "level": 7,
+      "action": "DOWN",
+      "png": "step_0551_L7_DOWN.png"
+    },
+    {
+      "step": 552,
+      "level": 7,
+      "action": "UP",
+      "png": "step_0552_L7_UP.png"
+    },
+    {
+      "step": 553,
+      "level": 7,
+      "action": "DOWN",
+      "png": "step_0553_L7_DOWN.png"
+    },
+    {
+      "step": 554,
+      "level": 7,
+      "action": "UP",
+      "png": "step_0554_L7_UP.png"
+    },
+    {
+      "step": 555,
+      "level": 7,
+      "action": "DOWN",
+      "png": "step_0555_L7_DOWN.png"
+    },
+    {
+      "step": 556,
+      "level": 7,
+      "action": "UP",
+      "png": "step_0556_L7_UP.png"
+    },
+    {
+      "step": 557,
+      "level": 7,
+      "action": "DOWN",
+      "png": "step_0557_L7_DOWN.png"
+    },
+    {
+      "step": 558,
+      "level": 7,
+      "action": "UP",
+      "png": "step_0558_L7_UP.png"
+    },
+    {
+      "step": 559,
+      "level": 7,
+      "action": "DOWN",
+      "png": "step_0559_L7_DOWN.png"
+    },
+    {
+      "step": 560,
+      "level": 7,
+      "action": "UP",
+      "png": "step_0560_L7_UP.png"
+    },
+    {
+      "step": 561,
+      "level": 7,
+      "action": "DOWN",
+      "png": "step_0561_L7_DOWN.png"
+    },
+    {
+      "step": 562,
+      "level": 7,
+      "action": "UP",
+      "png": "step_0562_L7_UP.png"
+    },
+    {
+      "step": 563,
+      "level": 7,
+      "action": "DOWN",
+      "png": "step_0563_L7_DOWN.png"
+    },
+    {
+      "step": 564,
+      "level": 7,
+      "action": "UP",
+      "png": "step_0564_L7_UP.png"
+    },
+    {
+      "step": 565,
+      "level": 7,
+      "action": "DOWN",
+      "png": "step_0565_L7_DOWN.png"
+    },
+    {
+      "step": 566,
+      "level": 7,
+      "action": "UP",
+      "png": "step_0566_L7_UP.png"
+    },
+    {
+      "step": 567,
+      "level": 7,
+      "action": "DOWN",
+      "png": "step_0567_L7_DOWN.png"
+    },
+    {
+      "step": 568,
+      "level": 7,
+      "action": "UP",
+      "png": "step_0568_L7_UP.png"
+    },
+    {
+      "step": 569,
+      "level": 7,
+      "action": "DOWN",
+      "png": "step_0569_L7_DOWN.png"
+    },
+    {
+      "step": 570,
+      "level": 7,
+      "action": "UP",
+      "png": "step_0570_L7_UP.png",
+      "gif": "step_0570_L7_anim.gif",
+      "level_up": true,
+      "new_level": 8
+    },
+    {
+      "step": 571,
+      "level": 8,
+      "action": "RIGHT",
+      "png": "step_0571_L8_RIGHT.png"
+    },
+    {
+      "step": 572,
+      "level": 8,
+      "action": "RIGHT",
+      "png": "step_0572_L8_RIGHT.png"
+    },
+    {
+      "step": 573,
+      "level": 8,
+      "action": "RIGHT",
+      "png": "step_0573_L8_RIGHT.png"
+    },
+    {
+      "step": 574,
+      "level": 8,
+      "action": "RIGHT",
+      "png": "step_0574_L8_RIGHT.png"
+    },
+    {
+      "step": 575,
+      "level": 8,
+      "action": "UP",
+      "png": "step_0575_L8_UP.png"
+    },
+    {
+      "step": 576,
+      "level": 8,
+      "action": "SELECT",
+      "png": "step_0576_L8_SELECT.png"
+    },
+    {
+      "step": 577,
+      "level": 8,
+      "action": "UP",
+      "png": "step_0577_L8_UP.png"
+    },
+    {
+      "step": 578,
+      "level": 8,
+      "action": "RIGHT",
+      "png": "step_0578_L8_RIGHT.png"
+    },
+    {
+      "step": 579,
+      "level": 8,
+      "action": "SELECT",
+      "png": "step_0579_L8_SELECT.png"
+    },
+    {
+      "step": 580,
+      "level": 8,
+      "action": "LEFT",
+      "png": "step_0580_L8_LEFT.png"
+    },
+    {
+      "step": 581,
+      "level": 8,
+      "action": "RIGHT",
+      "png": "step_0581_L8_RIGHT.png"
+    },
+    {
+      "step": 582,
+      "level": 8,
+      "action": "RIGHT",
+      "png": "step_0582_L8_RIGHT.png"
+    },
+    {
+      "step": 583,
+      "level": 8,
+      "action": "DOWN",
+      "png": "step_0583_L8_DOWN.png"
+    },
+    {
+      "step": 584,
+      "level": 8,
+      "action": "SELECT",
+      "png": "step_0584_L8_SELECT.png"
+    },
+    {
+      "step": 585,
+      "level": 8,
+      "action": "UP",
+      "png": "step_0585_L8_UP.png"
+    },
+    {
+      "step": 586,
+      "level": 8,
+      "action": "UP",
+      "png": "step_0586_L8_UP.png"
+    },
+    {
+      "step": 587,
+      "level": 8,
+      "action": "SELECT",
+      "png": "step_0587_L8_SELECT.png"
+    },
+    {
+      "step": 588,
+      "level": 8,
+      "action": "LEFT",
+      "png": "step_0588_L8_LEFT.png"
+    },
+    {
+      "step": 589,
+      "level": 8,
+      "action": "LEFT",
+      "png": "step_0589_L8_LEFT.png"
+    },
+    {
+      "step": 590,
+      "level": 8,
+      "action": "SELECT",
+      "png": "step_0590_L8_SELECT.png"
+    },
+    {
+      "step": 591,
+      "level": 8,
+      "action": "DOWN",
+      "png": "step_0591_L8_DOWN.png"
+    },
+    {
+      "step": 592,
+      "level": 8,
+      "action": "DOWN",
+      "png": "step_0592_L8_DOWN.png"
+    },
+    {
+      "step": 593,
+      "level": 8,
+      "action": "DOWN",
+      "png": "step_0593_L8_DOWN.png"
+    },
+    {
+      "step": 594,
+      "level": 8,
+      "action": "LEFT",
+      "png": "step_0594_L8_LEFT.png"
+    },
+    {
+      "step": 595,
+      "level": 8,
+      "action": "LEFT",
+      "png": "step_0595_L8_LEFT.png"
+    },
+    {
+      "step": 596,
+      "level": 8,
+      "action": "LEFT",
+      "png": "step_0596_L8_LEFT.png"
+    },
+    {
+      "step": 597,
+      "level": 8,
+      "action": "UP",
+      "png": "step_0597_L8_UP.png"
+    },
+    {
+      "step": 598,
+      "level": 8,
+      "action": "LEFT",
+      "png": "step_0598_L8_LEFT.png"
+    },
+    {
+      "step": 599,
+      "level": 8,
+      "action": "UP",
+      "png": "step_0599_L8_UP.png"
+    },
+    {
+      "step": 600,
+      "level": 8,
+      "action": "UP",
+      "png": "step_0600_L8_UP.png"
+    },
+    {
+      "step": 601,
+      "level": 8,
+      "action": "UP",
+      "png": "step_0601_L8_UP.png"
+    },
+    {
+      "step": 602,
+      "level": 8,
+      "action": "SELECT",
+      "png": "step_0602_L8_SELECT.png"
+    },
+    {
+      "step": 603,
+      "level": 8,
+      "action": "DOWN",
+      "png": "step_0603_L8_DOWN.png"
+    },
+    {
+      "step": 604,
+      "level": 8,
+      "action": "LEFT",
+      "png": "step_0604_L8_LEFT.png"
+    },
+    {
+      "step": 605,
+      "level": 8,
+      "action": "DOWN",
+      "png": "step_0605_L8_DOWN.png"
+    },
+    {
+      "step": 606,
+      "level": 8,
+      "action": "DOWN",
+      "png": "step_0606_L8_DOWN.png"
+    },
+    {
+      "step": 607,
+      "level": 8,
+      "action": "DOWN",
+      "png": "step_0607_L8_DOWN.png"
+    },
+    {
+      "step": 608,
+      "level": 8,
+      "action": "LEFT",
+      "png": "step_0608_L8_LEFT.png"
+    },
+    {
+      "step": 609,
+      "level": 8,
+      "action": "LEFT",
+      "png": "step_0609_L8_LEFT.png"
+    },
+    {
+      "step": 610,
+      "level": 8,
+      "action": "LEFT",
+      "png": "step_0610_L8_LEFT.png"
+    },
+    {
+      "step": 611,
+      "level": 8,
+      "action": "LEFT",
+      "png": "step_0611_L8_LEFT.png"
+    },
+    {
+      "step": 612,
+      "level": 8,
+      "action": "DOWN",
+      "png": "step_0612_L8_DOWN.png"
+    },
+    {
+      "step": 613,
+      "level": 8,
+      "action": "SELECT",
+      "png": "step_0613_L8_SELECT.png"
+    },
+    {
+      "step": 614,
+      "level": 8,
+      "action": "LEFT",
+      "png": "step_0614_L8_LEFT.png"
+    },
+    {
+      "step": 615,
+      "level": 8,
+      "action": "LEFT",
+      "png": "step_0615_L8_LEFT.png"
+    },
+    {
+      "step": 616,
+      "level": 8,
+      "action": "UP",
+      "png": "step_0616_L8_UP.png"
+    },
+    {
+      "step": 617,
+      "level": 8,
+      "action": "SELECT",
+      "png": "step_0617_L8_SELECT.png"
+    },
+    {
+      "step": 618,
+      "level": 8,
+      "action": "RIGHT",
+      "png": "step_0618_L8_RIGHT.png"
+    },
+    {
+      "step": 619,
+      "level": 8,
+      "action": "UP",
+      "png": "step_0619_L8_UP.png"
+    },
+    {
+      "step": 620,
+      "level": 8,
+      "action": "UP",
+      "png": "step_0620_L8_UP.png"
+    },
+    {
+      "step": 621,
+      "level": 8,
+      "action": "RIGHT",
+      "png": "step_0621_L8_RIGHT.png"
+    },
+    {
+      "step": 622,
+      "level": 8,
+      "action": "RIGHT",
+      "png": "step_0622_L8_RIGHT.png"
+    },
+    {
+      "step": 623,
+      "level": 8,
+      "action": "RIGHT",
+      "png": "step_0623_L8_RIGHT.png"
+    },
+    {
+      "step": 624,
+      "level": 8,
+      "action": "RIGHT",
+      "png": "step_0624_L8_RIGHT.png"
+    },
+    {
+      "step": 625,
+      "level": 8,
+      "action": "UP",
+      "png": "step_0625_L8_UP.png"
+    },
+    {
+      "step": 626,
+      "level": 8,
+      "action": "UP",
+      "png": "step_0626_L8_UP.png"
+    },
+    {
+      "step": 627,
+      "level": 8,
+      "action": "SELECT",
+      "png": "step_0627_L8_SELECT.png"
+    },
+    {
+      "step": 628,
+      "level": 8,
+      "action": "DOWN",
+      "png": "step_0628_L8_DOWN.png"
+    },
+    {
+      "step": 629,
+      "level": 8,
+      "action": "UP",
+      "png": "step_0629_L8_UP.png"
+    },
+    {
+      "step": 630,
+      "level": 8,
+      "action": "UP",
+      "png": "step_0630_L8_UP.png"
+    },
+    {
+      "step": 631,
+      "level": 8,
+      "action": "DOWN",
+      "png": "step_0631_L8_DOWN.png"
+    },
+    {
+      "step": 632,
+      "level": 8,
+      "action": "UP",
+      "png": "step_0632_L8_UP.png"
+    },
+    {
+      "step": 633,
+      "level": 8,
+      "action": "DOWN",
+      "png": "step_0633_L8_DOWN.png"
+    },
+    {
+      "step": 634,
+      "level": 8,
+      "action": "UP",
+      "png": "step_0634_L8_UP.png"
+    },
+    {
+      "step": 635,
+      "level": 8,
+      "action": "DOWN",
+      "png": "step_0635_L8_DOWN.png"
+    },
+    {
+      "step": 636,
+      "level": 8,
+      "action": "UP",
+      "png": "step_0636_L8_UP.png"
+    },
+    {
+      "step": 637,
+      "level": 8,
+      "action": "DOWN",
+      "png": "step_0637_L8_DOWN.png",
+      "level_up": true,
+      "new_level": 9
+    }
+  ],
+  "finished": "20260412_211028",
+  "result": "WIN",
+  "levels_completed": 9,
+  "total_steps": 637
+}

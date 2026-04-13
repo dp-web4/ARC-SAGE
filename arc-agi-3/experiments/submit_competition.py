@@ -41,8 +41,11 @@ except ImportError:
 from arc_agi import Arcade, OperationMode
 from arcengine import GameAction, GameState
 
-VM = Path("/mnt/c/exe/projects/ai-agents/shared-context/arc-agi-3/visual-memory")
-COORD = Path("/mnt/c/exe/projects/ai-agents/shared-context/arc-agi-3/game_coordination.json")
+# Resolve paths relative to the repo root (script lives in arc-agi-3/experiments/).
+# Can be overridden by ARC_SAGE_VM / ARC_SAGE_COORD env vars.
+_REPO = Path(__file__).resolve().parent.parent.parent
+VM = Path(os.getenv("ARC_SAGE_VM", _REPO / "knowledge" / "visual-memory"))
+COORD = Path(os.getenv("ARC_SAGE_COORD", _REPO / "knowledge" / "game_coordination.json"))
 
 # run.json action string → GameAction
 ACTION_MAP = {

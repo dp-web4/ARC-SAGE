@@ -39,8 +39,9 @@ from arcengine import GameAction
 from arc_perception import get_all_frames
 from arc_session_writer import SessionWriter
 
-VM = Path("/mnt/c/exe/projects/ai-agents/shared-context/arc-agi-3/visual-memory")
-COORD = Path("/mnt/c/exe/projects/ai-agents/shared-context/arc-agi-3/game_coordination.json")
+_REPO = Path(__file__).resolve().parent.parent.parent
+VM = Path(os.getenv("ARC_SAGE_VM", _REPO / "knowledge" / "visual-memory"))
+COORD = Path(os.getenv("ARC_SAGE_COORD", _REPO / "knowledge" / "game_coordination.json"))
 EXPERIMENTS = Path(os.path.dirname(__file__))
 
 
