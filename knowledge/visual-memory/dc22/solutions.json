@@ -651,5 +651,507 @@
     {
       "action": 4
     }
+  ],
+  [
+    {
+      "action": 6,
+      "data": {
+        "x": 52,
+        "y": 41
+      }
+    },
+    {
+      "action": 3
+    },
+    {
+      "action": 3
+    },
+    {
+      "action": 1
+    },
+    {
+      "action": 1
+    },
+    {
+      "action": 3
+    },
+    {
+      "action": 6,
+      "data": {
+        "x": 50,
+        "y": 30
+      }
+    },
+    {
+      "action": 6,
+      "data": {
+        "x": 50,
+        "y": 30
+      }
+    },
+    {
+      "action": 6,
+      "data": {
+        "x": 50,
+        "y": 30
+      }
+    },
+    {
+      "action": 6,
+      "data": {
+        "x": 55,
+        "y": 30
+      }
+    },
+    {
+      "action": 6,
+      "data": {
+        "x": 55,
+        "y": 30
+      }
+    },
+    {
+      "action": 6,
+      "data": {
+        "x": 55,
+        "y": 30
+      }
+    },
+    {
+      "action": 6,
+      "data": {
+        "x": 52,
+        "y": 35
+      }
+    },
+    {
+      "action": 6,
+      "data": {
+        "x": 45,
+        "y": 30
+      }
+    },
+    {
+      "action": 6,
+      "data": {
+        "x": 45,
+        "y": 30
+      }
+    },
+    {
+      "action": 6,
+      "data": {
+        "x": 45,
+        "y": 30
+      }
+    },
+    {
+      "action": 6,
+      "data": {
+        "x": 60,
+        "y": 30
+      }
+    },
+    {
+      "action": 6,
+      "data": {
+        "x": 60,
+        "y": 30
+      }
+    },
+    {
+      "action": 6,
+      "data": {
+        "x": 60,
+        "y": 30
+      }
+    },
+    {
+      "action": 6,
+      "data": {
+        "x": 55,
+        "y": 30
+      }
+    },
+    {
+      "action": 6,
+      "data": {
+        "x": 55,
+        "y": 30
+      }
+    },
+    {
+      "action": 6,
+      "data": {
+        "x": 55,
+        "y": 30
+      }
+    },
+    {
+      "action": 3
+    },
+    {
+      "action": 1
+    },
+    {
+      "action": 1
+    },
+    {
+      "action": 1
+    },
+    {
+      "action": 1
+    },
+    {
+      "action": 4
+    },
+    {
+      "action": 1
+    },
+    {
+      "action": 6,
+      "data": {
+        "x": 45,
+        "y": 30
+      }
+    },
+    {
+      "action": 6,
+      "data": {
+        "x": 45,
+        "y": 30
+      }
+    },
+    {
+      "action": 6,
+      "data": {
+        "x": 45,
+        "y": 30
+      }
+    },
+    {
+      "action": 6,
+      "data": {
+        "x": 50,
+        "y": 30
+      }
+    },
+    {
+      "action": 6,
+      "data": {
+        "x": 50,
+        "y": 30
+      }
+    },
+    {
+      "action": 6,
+      "data": {
+        "x": 50,
+        "y": 30
+      }
+    },
+    {
+      "action": 6,
+      "data": {
+        "x": 55,
+        "y": 30
+      }
+    },
+    {
+      "action": 6,
+      "data": {
+        "x": 55,
+        "y": 30
+      }
+    },
+    {
+      "action": 6,
+      "data": {
+        "x": 55,
+        "y": 30
+      }
+    },
+    {
+      "action": 3
+    },
+    {
+      "action": 1
+    },
+    {
+      "action": 1
+    },
+    {
+      "action": 1
+    },
+    {
+      "action": 1
+    },
+    {
+      "action": 1
+    },
+    {
+      "action": 1
+    },
+    {
+      "action": 1
+    },
+    {
+      "action": 6,
+      "data": {
+        "x": 52,
+        "y": 48
+      }
+    },
+    {
+      "action": 6,
+      "data": {
+        "x": 45,
+        "y": 30
+      }
+    },
+    {
+      "action": 6,
+      "data": {
+        "x": 45,
+        "y": 30
+      }
+    },
+    {
+      "action": 6,
+      "data": {
+        "x": 45,
+        "y": 30
+      }
+    },
+    {
+      "action": 6,
+      "data": {
+        "x": 60,
+        "y": 30
+      }
+    },
+    {
+      "action": 6,
+      "data": {
+        "x": 60,
+        "y": 30
+      }
+    },
+    {
+      "action": 6,
+      "data": {
+        "x": 60,
+        "y": 30
+      }
+    },
+    {
+      "action": 6,
+      "data": {
+        "x": 52,
+        "y": 41
+      }
+    },
+    {
+      "action": 1
+    },
+    {
+      "action": 1
+    },
+    {
+      "action": 1
+    },
+    {
+      "action": 1
+    },
+    {
+      "action": 1
+    },
+    {
+      "action": 1
+    },
+    {
+      "action": 1
+    },
+    {
+      "action": 1
+    },
+    {
+      "action": 6,
+      "data": {
+        "x": 52,
+        "y": 14
+      }
+    },
+    {
+      "action": 6,
+      "data": {
+        "x": 57,
+        "y": 23
+      }
+    },
+    {
+      "action": 6,
+      "data": {
+        "x": 57,
+        "y": 23
+      }
+    },
+    {
+      "action": 6,
+      "data": {
+        "x": 57,
+        "y": 23
+      }
+    },
+    {
+      "action": 6,
+      "data": {
+        "x": 57,
+        "y": 23
+      }
+    },
+    {
+      "action": 6,
+      "data": {
+        "x": 47,
+        "y": 22
+      }
+    },
+    {
+      "action": 6,
+      "data": {
+        "x": 47,
+        "y": 22
+      }
+    },
+    {
+      "action": 6,
+      "data": {
+        "x": 47,
+        "y": 22
+      }
+    },
+    {
+      "action": 6,
+      "data": {
+        "x": 47,
+        "y": 22
+      }
+    },
+    {
+      "action": 2
+    },
+    {
+      "action": 2
+    },
+    {
+      "action": 2
+    },
+    {
+      "action": 2
+    },
+    {
+      "action": 2
+    },
+    {
+      "action": 2
+    },
+    {
+      "action": 2
+    },
+    {
+      "action": 2
+    },
+    {
+      "action": 2
+    },
+    {
+      "action": 2
+    },
+    {
+      "action": 2
+    },
+    {
+      "action": 2
+    },
+    {
+      "action": 2
+    },
+    {
+      "action": 4
+    },
+    {
+      "action": 4
+    },
+    {
+      "action": 4
+    },
+    {
+      "action": 4
+    },
+    {
+      "action": 4
+    },
+    {
+      "action": 4
+    },
+    {
+      "action": 4
+    },
+    {
+      "action": 4
+    },
+    {
+      "action": 2
+    },
+    {
+      "action": 2
+    },
+    {
+      "action": 2
+    },
+    {
+      "action": 2
+    },
+    {
+      "action": 2
+    },
+    {
+      "action": 6,
+      "data": {
+        "x": 52,
+        "y": 14
+      }
+    },
+    {
+      "action": 3
+    },
+    {
+      "action": 3
+    },
+    {
+      "action": 1
+    },
+    {
+      "action": 1
+    },
+    {
+      "action": 3
+    },
+    {
+      "action": 3
+    },
+    {
+      "action": 3
+    },
+    {
+      "action": 3
+    },
+    {
+      "action": 3
+    },
+    {
+      "action": 3
+    }
   ]
 ]

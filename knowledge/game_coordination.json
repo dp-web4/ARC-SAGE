@@ -294,9 +294,9 @@
       "levels": 6,
       "status": "in_progress",
       "claimed_by": "cbp",
-      "best_level": 4,
+      "best_level": 5,
       "solved": false,
-      "notes": "L1-L4 solved via online A* with jpug/crane click targets. L5+ requires crane-based sprite-10 placement; brute A* not tractable at 14-action branching. See arc-agi-3/experiments/dc22_solve_final.py"
+      "notes": "L1-L5 solved. L5 required handcrafted plan: b-click (open wbze), u-shape crane grab at (3,3), place bridge at (3,0) to walk onto kbqq(26,20), move crane to (3,3) to bridge kbqq(22,6), teleport via itki1 (c-click), move crane to (0,0) for x=10..13 column bridge, b-click again (restore wbze2 at 10,38), walk to zbhi(10,18) to activate jpug-adnw, d-click + e\u00d74 (vckz-5) + f\u00d74 (qgdz-5), walk via vckz-5 \u2192 p-2 \u2192 qgdz-5, d-click again to revert vucz, walk through vucz_2 to goal (10,50). 108 moves total. Key insight: b/d toggles are NOT mutex \u2014 both cycled sprites become walkable simultaneously, but player reach limited by checkerboard pixel patterns on cycled variants. L6 in progress. See arc-agi-3/experiments/dc22_L5_solve.py"
     },
     {
       "id": "lf52-271a04aa",
