@@ -167,18 +167,30 @@ def collect_trace(game):
 
 def replay_one_game(arc, game_id, trace, label=""):
     """Play trace against a fresh env. Returns (state, levels_completed,
-    actions_played, elapsed_sec)."""
+    win_levels, actions_played, elapsed_sec). Raises on make/reset failure."""
     t0 = time.time()
     env = arc.make(game_id)
+    if env is None:
+        raise RuntimeError(f"make({game_id}) returned None")
     fd = env.reset()
+    if fd is None:
+        raise RuntimeError(f"reset({game_id}) returned None (likely 429)")
     played = 0
     for action, data in trace:
         fd = env.step(action, data=data)
+        if fd is None:
+            raise RuntimeError(f"step failed at action {played+1}")
         played += 1
         if fd.state in (GameState.WIN, GameState.GAME_OVER):
             break
     elapsed = time.time() - t0
     return fd.state, fd.levels_completed, fd.win_levels, played, elapsed
+
+
+def is_rate_limited(exc):
+    """Detect 429 rate limit from nested RequestException or string."""
+    s = str(exc)
+    return '429' in s or 'Too Many Requests' in s or 'rate limit' in s.lower()
 
 
 def main():
@@ -247,35 +259,74 @@ def main():
     else:
         card_id = None
 
-    # Step 3: replay each game
+    # Step 3: replay each game, with throttling + 429 backoff
     results = []
-    for short, full, trace, source, expected, win_levels in traces:
-        print(f"\n[{short}] replaying {len(trace)} actions …")
-        try:
-            state, lc, wl, played, elapsed = replay_one_game(arc, full, trace)
-            ok = (state == GameState.WIN) or (lc >= expected)
-            mark = '✓' if ok else '~'
-            print(f"  {mark} {short:6s}  state={state.name:12s}  "
-                  f"{lc}/{wl}L  played={played}/{len(trace)}  {elapsed:.1f}s")
-            results.append((short, state.name, lc, wl, played, elapsed, ok))
-        except Exception as e:
-            import traceback
-            print(f"  ! {short:6s}  ERROR: {e}")
-            traceback.print_exc()
-            results.append((short, 'ERROR', 0, 0, 0, 0, False))
+    interval = 3.0  # seconds between games
+    consecutive_429 = 0
+    aborted = False
+    for i, (short, full, trace, source, expected, win_levels) in enumerate(traces):
+        if i > 0:
+            time.sleep(interval)  # throttle between games
+        print(f"\n[{short}] replaying {len(trace)} actions (interval={interval:.1f}s) …")
+
+        # Retry with exponential backoff on 429
+        attempts = 0
+        while True:
+            attempts += 1
+            try:
+                state, lc, wl, played, elapsed = replay_one_game(arc, full, trace)
+                ok = (state == GameState.WIN) or (lc >= expected)
+                mark = '✓' if ok else '~'
+                print(f"  {mark} {short:6s}  state={state.name:12s}  "
+                      f"{lc}/{wl}L  played={played}/{len(trace)}  {elapsed:.1f}s")
+                results.append((short, state.name, lc, wl, played, elapsed, ok))
+                consecutive_429 = 0
+                break
+            except Exception as e:
+                if is_rate_limited(e) and attempts < 3:
+                    backoff = 15 * attempts
+                    print(f"  429 rate-limited; backing off {backoff}s (attempt {attempts}/3)")
+                    time.sleep(backoff)
+                    interval = min(interval * 1.5, 30.0)  # increase interval
+                    continue
+                import traceback
+                print(f"  ! {short:6s}  ERROR: {e}")
+                if args.compete:
+                    traceback.print_exc(limit=3)
+                results.append((short, 'ERROR', 0, 0, 0, 0, False))
+                if is_rate_limited(e):
+                    consecutive_429 += 1
+                    if consecutive_429 >= 2:
+                        print(f"\n✗ {consecutive_429} consecutive rate-limited games. Aborting remaining.")
+                        aborted = True
+                break
+        if aborted:
+            break
 
     # Step 4: close scorecard (compete) + summary
     if args.compete and card_id:
+        # Close with retry — important to get the final scorecard result
         print(f"\nClosing scorecard {card_id} …")
-        try:
-            sc = arc.close_scorecard(card_id)
-            print("Closed.")
-            out = Path(f"./submit_scorecard_{card_id}.json")
-            out.write_text(sc.model_dump_json(indent=2) if hasattr(sc, 'model_dump_json')
-                           else json.dumps(sc, indent=2, default=str))
-            print(f"Saved scorecard → {out}")
-        except Exception as e:
-            print(f"Close failed: {e}")
+        for attempt in range(5):
+            try:
+                sc = arc.close_scorecard(card_id)
+                print("Closed.")
+                out = Path(f"./submit_scorecard_{card_id}.json")
+                if sc is not None:
+                    out.write_text(sc.model_dump_json(indent=2) if hasattr(sc, 'model_dump_json')
+                                   else json.dumps(sc, indent=2, default=str))
+                    print(f"Saved scorecard → {out}")
+                else:
+                    print("(close returned None)")
+                break
+            except Exception as e:
+                if is_rate_limited(e) and attempt < 4:
+                    wait = 15 * (attempt + 1)
+                    print(f"  close 429, retry in {wait}s …")
+                    time.sleep(wait)
+                    continue
+                print(f"Close failed: {e}")
+                break
 
     print(f"\n{'='*70}\nSummary\n{'='*70}")
     total_ok = sum(1 for r in results if r[-1])
