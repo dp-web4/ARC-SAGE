@@ -21,14 +21,24 @@
 
 ## 3. Multi-agent convergence reliability
 
-**Claim**: when 7+ independent frame-questioning agents arrive at the same "structurally unsolvable" verdict, the verdict is trustworthy.
+**Updated claim (2026-04-13)**: N-pass convergence over a **shared action-space model** is necessary but not sufficient for "structurally unsolvable" to be true. bp35 L7 was declared structural by one pass; a second pass solved it via a game-state-modifying primitive (E-spread staircase) the first pass had overlooked. The first pass's action-space model was incomplete.
 
-**Unknowns**:
+**Revised framing**: structural verdicts carry two dimensions.
+- *n* — number of independent frame-questioning passes converging on the same verdict
+- *m* — number of distinct action-space models those passes reasoned within
+
+bp35 L7 (before re-investigation): n=1, m=1. Weak evidence → refuted.
+bp35 L5 (after re-investigation): n=2, m=2. Moderate evidence.
+lf52 L7 (session 9): n=8, m=2 (jump-graph + viewport-augmented). Stronger evidence.
+dc22 L6: n=7, m=1 (all passes within crane action-space). Should probe an alternative model.
+
+**Remaining unknowns**:
 - Do Opus-4.6-based agents share systematic blind spots that come from training distribution?
 - Is the convergence pattern robust to swapping models (Sonnet, Gemini, GPT-5)?
-- Are there levels marked "structural" where a human solve exists but all our agents miss it the same way?
+- How do we guarantee a new pass reasons within a *different* action-space model rather than silently sharing the previous one?
+- Are there specific action-space primitives (like E-spread) that agents tend to overlook unless explicitly prompted about them?
 
-**Would resolve by**: getting human (or non-Opus AI) solves on a disputed structurally-stuck level. If someone solves lf52 L7, our convergence verdict is refuted and we learn something specific about the blind spot.
+**Would resolve by**: (a) getting human solves on disputed structurally-stuck levels. If someone solves lf52 L7, our convergence verdict is refuted and we learn something about the blind spot. (b) Systematically swapping the prompting to force each new pass to enumerate and reason within each primitive the game-engine source exposes — not just the ones the prior solver used.
 
 ## 4. Gemma failure-mode taxonomy
 
