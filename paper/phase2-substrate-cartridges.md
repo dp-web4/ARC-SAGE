@@ -17,7 +17,14 @@ Based on the 25-game Phase 1 dataset, the following substrate primitives are can
 
 ### 1. Viewport-aware click
 
-**Trigger**: game has scrolling camera; ACTION6 is available; target object identified; AND clicking the target is expected to trigger a state-changing game action (not merely select it with no follow-on transition).
+**Trigger**: game has scrolling camera OR scrollable grid offset; ACTION6 is available; target object identified; AND clicking the target is expected to trigger a state-changing game action (not merely select it with no follow-on transition).
+
+**Scroll-model decomposition (from lf52 session 9, 2026-04-13)**: not one primitive — two. First check which model the game uses before applying.
+
+- **Camera-based** (bp35 et al.): game has a `camera` attribute with position. Player movement drives camera position via a game-specific formula. Solver can control scroll by choosing player moves.
+- **Grid-offset side-effect** (lf52 et al.): no camera object; `camera.position()` returns `(0, 0)` always. A specific action pattern (e.g., pushing a piece-riding-block configuration into a wall) triggers an offset shift on the grid container. Solver must FIND such sequences and REORDER clicks around them. The fix for lf52 L3 was pure reorder — zero action-count cost.
+
+The cartridge for this primitive carries both sub-rules and a dispatch based on detected scroll model.
 
 **Scope bracket (from lf52 session 8)**: this primitive applies when both (a) the target is in-world but outside viewport, AND (b) selecting it enables a new state transition. The condition (b) must be evaluated against the game-world cartridge. bp35 clicks satisfy both; lf52 L7 clicks satisfy only (a) — the selected peg has no legal jumps, so OOB clicks reach it but produce no progress. A naive "always scroll if OOB" heuristic would waste action budget on lf52-like games. The cartridge schema must carry this precondition explicitly.
 

@@ -163,6 +163,13 @@ The ARC-AGI-3 API validates that ACTION6 click coordinates `x, y ∈ [0, 63]` *b
 
 **Schema implication for Phase 2**: viewport-aware click reasoning should be a standalone retrievable primitive in the membot cartridge bundle, distinct from game-specific world models. A small model equipped with this primitive adapts any scrolling game without re-deriving interface rules.
 
+**Further decomposition (from lf52 session 9, 2026-04-13)**: The viewport primitive isn't one primitive — it's a family indexed by *scroll model*. Two models observed so far:
+
+- **Camera-based scroll (bp35)**: camera is a first-class game object with position. Player movement triggers camera moves via explicit formula (e.g., `cam_y = player_y*6 - 36`). Solver can insert scroll actions directly by choosing player moves, because movement is the scroll control.
+- **Grid-offset side-effect scroll (lf52)**: no controllable camera. `mepgityjcj()` returns `(0, 0)` always. What shifts click-to-world mapping is `grid.hncnfaqaddg.cdpcbbnfdp` (grid container pixel offset). Only a specific action pattern triggers a shift — on lf52 L3, pushing a `fozwvlovdui` piece riding a `hupkpseyuim2` block into a wall fires `nybfuxmyrv = (-dx*8, 0)`. Pristine pushes do nothing. Solver must FIND such scroll-triggering sequences within its legal action space, then reorder clicks around them.
+
+The diagnostic for a new game: "which scroll model?" before "does viewport matter?" If there is no camera object, look for side-effect scroll triggers in the click/move handlers' post-action code.
+
 **Scope refinement (from lf52 session 8, 2026-04-13)**: The viewport/world primitive has a *precondition* that must be checked before it yields score gains. It applies when **(a)** the target is in-world but outside the current viewport AND **(b)** selecting it enables a new state transition. bp35 satisfies both: off-viewport clicks select objects whose state transitions (gravity shifts, platform toggles) advance the solve. lf52 L7 satisfies only (a): off-viewport clicks do reach the intended pegs (the click handler adds camera offset exactly like bp35's), but the selected pegs have no legal jumps under the movement-graph constraints, so the interaction primitive is a no-op at the game-state level.
 
 The primitive is therefore not universally applicable — it must be retrieved together with a check on whether the target supports a state-changing action. In the Phase 2 cartridge schema this probably means the viewport primitive has a downstream dependency on the game-world cartridge's legal-action function: "scroll+click is cheaper than walk+click *iff* the click triggers progress."
