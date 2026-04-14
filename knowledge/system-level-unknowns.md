@@ -40,6 +40,12 @@ dc22 L6: n=7, m=1 (all passes within crane action-space). Should probe an altern
 
 **Would resolve by**: (a) getting human solves on disputed structurally-stuck levels. If someone solves lf52 L7, our convergence verdict is refuted and we learn something about the blind spot. (b) Systematically swapping the prompting to force each new pass to enumerate and reason within each primitive the game-engine source exposes — not just the ones the prior solver used.
 
+### Partial resolution (2026-04-13, dc22 session 8)
+
+The source-enumeration protocol was formalized and executed against dc22 L6. Agent enumerated all 16 engine primitives from ACTION handler source, cross-referenced against solver transition set, and confirmed no missed primitive exists. Converts (n=7, m=1) to (n=8, m=2) and provides positive proof of action-space completeness.
+
+Also surfaced: **engine architectural properties determine susceptibility to bp35-style refutation**. dc22 filters invisible/removed sprites before click dispatch (hit-test filtering); bp35 does not. Convergence verdicts on hit-test-filtered games are harder to refute than on permissive-hit-test games. This should be an explicit check when assessing a structural claim: does the engine filter click targets at the hit-test layer?
+
 ## 4. Gemma failure-mode taxonomy
 
 **Prior observation**: Gemma 3 12B scored 0 on every game attempted. Unknown which subsystem broke.
