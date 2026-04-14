@@ -1,0 +1,88 @@
+# System-Level Unknowns
+
+*Parked for after game-level questions are exhausted.*
+
+## 1. Client-server version drift
+
+**Observation**: `cn04-65d47d14` is the only game where local `environment_files/<game>/<version>/cn04.py` disagrees with the live evaluation server. Local says 5 levels; server says 6. The `metadata.json` baseline_actions list was updated to 6 entries at some point without the game source being refreshed.
+
+**Unknowns**:
+- What triggered the server-side addition of cn04 L6?
+- Is this a pattern (game designers add levels without bumping version suffix) or a one-off?
+- How do we detect future drift before it bites a submission?
+
+**Would resolve by**: mirroring scorecard results against local dry-run deltas after each submission. Any game where scorecard `level_count > local win_levels` is drift.
+
+## 2. Full action-budget accounting rules
+
+**Resolved (2026-04-13)**: budget is per-level, resets on level transition, consumed by all actions including failed moves (confirmed visually via the in-game progress bar).
+
+**Still unknown**: does RESET action consume from the per-level budget? Does UNDO refund consumed budget for the last action only, or for several? In competition mode where UNDO isn't available, do we ever need to know?
+
+## 3. Multi-agent convergence reliability
+
+**Claim**: when 7+ independent frame-questioning agents arrive at the same "structurally unsolvable" verdict, the verdict is trustworthy.
+
+**Unknowns**:
+- Do Opus-4.6-based agents share systematic blind spots that come from training distribution?
+- Is the convergence pattern robust to swapping models (Sonnet, Gemini, GPT-5)?
+- Are there levels marked "structural" where a human solve exists but all our agents miss it the same way?
+
+**Would resolve by**: getting human (or non-Opus AI) solves on a disputed structurally-stuck level. If someone solves lf52 L7, our convergence verdict is refuted and we learn something specific about the blind spot.
+
+## 4. Gemma failure-mode taxonomy
+
+**Prior observation**: Gemma 3 12B scored 0 on every game attempted. Unknown which subsystem broke.
+
+**Candidates**:
+- **Perception**: can't reliably parse 64×64 grids into object descriptions
+- **Reasoning**: parses correctly but gets lost in the space of plausible next actions
+- **Context management**: loses track of prior observations over multi-action sequences
+- **Action emission**: knows the answer but produces malformed output the harness can't parse
+- **Domain knowledge**: lacks priors for "this sprite is a wall, that sprite is a player" category judgments
+
+**Would resolve by**: instrumenting the autonomous harness with per-stage logging and running Gemma on one easy game (cd82 — 73-action solve). Observe at which stage behavior diverges from what the harness expected. Phase 2 cartridge shape depends on the answer.
+
+## 5. Visual-signature retrieval fidelity
+
+**Claim** (Phase 2 plan): a game frame can retrieve the correct world-model cartridge from the bundle via visual similarity.
+
+**Unknowns**:
+- Do similar-looking games (e.g. r11l and tu93, both with small colorful entities on a blank field) produce confusable signatures?
+- Do distinct levels of the same game (e.g. cd82 L1 vs L6, visually different layouts) retrieve the same cartridge?
+- What happens when NO cartridge matches closely — does retrieval degrade gracefully or fail?
+
+**Would resolve by**: building a preliminary cartridge bundle from 5 games, running grid-vision retrieval on held-out frames from each, measuring confusion matrix.
+
+## 6. Substrate primitive coverage
+
+**Current list** (7): viewport-aware click, action budget, animation timing, click classification, undo semantics, structural vs positional win, directional type.
+
+**Unknown**: are there more? The bp35 finding was incidental — we stumbled on the viewport primitive via a competition-mode failure, not by deliberate enumeration. There may be 5 more primitives waiting for us to hit their specific failure mode.
+
+**Would resolve by**: running a private-set environment through the Phase 2 harness and cataloging every "our solver does X but real mechanic is Y" gap as a potential new primitive.
+
+## 7. Kaggle sandbox resource budget
+
+**Unknown**: does Gemma 3 12B + cartridge bundle + game-step inference loop fit in 32GB VRAM alongside game state and perception? Does the full 8-hour time budget cover the public+semi-private+private environments at our target pace?
+
+**Would resolve by**: running a local simulation of the Kaggle sandbox with memory constraints and timing one full evaluation run on the 25 public games.
+
+## 8. Private-set generalization
+
+**Unknown**: our world models don't transfer. The Phase 2 cartridge-retrieval claim is that it will — or that it'll at least let the small model adapt faster than building from scratch. We have no evidence for this yet.
+
+**Would resolve by**: playing the semi-private set (if accessible) with the Phase 2 harness. Compare action efficiency vs human baselines on games our cartridge bundle was NOT trained on.
+
+## 9. Action-efficiency theoretical minimum
+
+**Unknown**: for games where we score 100% (beat human baseline), is there a shorter solution path than ours? The baseline is the 2nd-best human, not a proven lower bound.
+
+**Would resolve by**: exhaustive search over the solver's action space for each "100%" game, finding the true minimum. Interesting for the paper but not score-relevant.
+
+## Priority for after game-level work is done
+
+1. (4) Gemma failure-mode taxonomy — cheap to probe, highest Phase 2 leverage
+2. (5) Visual retrieval fidelity — directly tests a Phase 2 design assumption
+3. (3) Convergence reliability — epistemic check on our methodology
+4. (8) Private-set generalization — the competition-critical unknown, but requires Phase 2 artifacts to exist
