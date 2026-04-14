@@ -6,8 +6,8 @@ should know which is authoritative for what.
 ## Primary repos
 
 ### ARC-SAGE (this repo) — source of truth for games
-**License**: MIT
-**Public**: planned — pending pruning phase (see `PRUNE_NOTES.md`)
+**License**: MIT-0 (MIT No Attribution — public-domain-effective, required for ARC Prize 2026 Paper Track eligibility)
+**Public**: yes (flipped public 2026-04-13)
 **Authoritative for**:
 - Game solvers (`arc-agi-3/experiments/*.py`)
 - Visual memory (`knowledge/visual-memory/`)
@@ -83,10 +83,11 @@ ARC-SAGE is authoritative — if they diverge, ARC-SAGE wins.
 
 ## Why split like this?
 
-**Competition submission requires MIT.** SAGE is AGPL because it's part of the
-broader dp-web4 research ecosystem that's intentionally share-alike. Can't
-submit AGPL code to the ARC Prize. So we split: the submittable slice lives
-in ARC-SAGE under MIT; the broader research stays AGPL in SAGE.
+**Competition submission requires public-domain-permissive licensing** (ARC Prize 2026
+mandates CC0 or MIT-0 for paper-track-eligible code). SAGE is AGPL because it's part
+of the broader dp-web4 research ecosystem that's intentionally share-alike. Can't
+submit AGPL code to the ARC Prize. So we split: the submittable slice lives in
+ARC-SAGE under MIT-0; the broader research stays AGPL in SAGE.
 
 **Scoping keeps each repo focused.** ARC-SAGE is "here's a working ARC-AGI-3
 agent." SAGE is "here's the research framework that produced it." Different

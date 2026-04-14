@@ -99,6 +99,16 @@ Everything after is pruning, reorganization, or new development.
 
 ## Prune Log
 
+### 2026-04-14 — License switch MIT → MIT-0
+
+Switched top-level LICENSE from MIT to MIT-0 (MIT No Attribution) to meet
+ARC Prize 2026 Paper Track eligibility requirement (CC0 or MIT-0 — public
+domain). Dropped the "above copyright notice … shall be included" clause.
+Vendored dependencies retain their own upstream licenses: `membot/` stays
+MIT per Andy Grossberg's upstream; SDK-sourced `environment_files/` stay MIT
+per arc-agi SDK upstream. Submitter-authored code (everything else) is now
+effectively public domain.
+
 ### 2026-04-13 — AGPL removal for MIT compatibility
 
 Removed AGPL-licensed SAGE research code and every file that imported from

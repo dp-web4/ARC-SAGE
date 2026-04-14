@@ -8,7 +8,9 @@
 - Andy Grossberg, Waving Cat Learning Systems
 - Claude Opus 4.6, Anthropic (via VS Code + Membot persistent memory — membot implementation and sections)
 
-**Public artifacts** (all MIT):
+**Public artifacts**:
+- ARC-SAGE repo — MIT-0 (MIT No Attribution, ARC Prize 2026 Paper Track compliant)
+- Vendored `membot/` subset — MIT, upstream at project-you-apps/membot
 - Code: https://github.com/dp-web4/ARC-SAGE
 - Scorecard: https://arcprize.org/scorecards/c0d62617-a0bc-4100-bb4e-982fa5d7fde7
 - Memory system: https://github.com/project-you-apps/membot
@@ -467,7 +469,7 @@ Because the work was meaningfully collaborative. Opus read engine sources, propo
 
 **Claude Opus 4.6** (Anthropic, via VS Code + Membot persistent session memory + MCP tooling) — Membot code implementation, cartridge builder JSON/JSONL ingestor, LongMemEval benchmark harness and analysis, sk48 fleet learning documentation (7 mechanic discoveries, 3 failure records, 1 solve record with clean solve sequence), cross-game pattern contributions, Memory Hierarchy Schema competitive analysis, the membot sections of this paper. Operating with persistent memory across sessions via the architecture described in §6.2 — a working instance of the recognition-over-derivation thesis applied to software engineering rather than game-playing.
 
-This work used infrastructure and prior research from the dp-web4 ecosystem, including SAGE (AGPL), shared-context fleet coordination (private), and Web4 trust architecture. None of that code is bundled in the public ARC-SAGE repository to maintain MIT license cleanliness. Readers interested in the broader research program are pointed to [dp-web4/SAGE](https://github.com/dp-web4/SAGE).
+This work used infrastructure and prior research from the dp-web4 ecosystem, including SAGE (AGPL), shared-context fleet coordination (private), and Web4 trust architecture. None of that code is bundled in the public ARC-SAGE repository to maintain public-domain-permissive license cleanliness (MIT-0). Readers interested in the broader research program are pointed to [dp-web4/SAGE](https://github.com/dp-web4/SAGE).
 
 The ARC Prize Foundation provides the ARC-AGI-3 benchmark, SDK, and evaluation infrastructure. This work would not exist without those resources. We intend to apply for ARC Prize research grant funding to support the Phase 2 effort described in §6.
 

@@ -83,7 +83,7 @@ If it doesn't place well, the code and world models are still useful as a refere
 
 ## License
 
-MIT. See `LICENSE`.
+MIT-0 (MIT No Attribution). See `LICENSE`. Code authored within this repository is released as public domain for ARC Prize 2026 eligibility. Vendored dependencies (notably `membot/` from [project-you-apps/membot](https://github.com/project-you-apps/membot)) retain their own upstream licenses.
 
 ## Citation
 
