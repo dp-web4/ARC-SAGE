@@ -118,3 +118,66 @@ Consistent with the fleet-wide insight that "verifying the work inside the frame
 - `arc-agi-3/experiments/dc22_L6_walkmap.py` — full 64x64 walkability scan; shows all disconnected regions
 - `arc-agi-3/experiments/dc22_L6_explore.py` — walks each bottom-staircase cell to confirm no hidden mechanic
 - `arc-agi-3/experiments/dc22_L6_solve_only.py` — re-ran solve_macro to confirm 624-state exhaustion is reproducible
+
+---
+
+## Third agent pass (2026-04-12, m=2 primitive enumeration)
+
+**Mandate**: prior 7 passes all reasoned within the crane-mechanics action-space. Force a DIFFERENT action-space model; enumerate every engine primitive reachable via player action directly from source (`dc22.py` lines 2606-2931), not via solver vocabulary. Mirror the bp35 pattern where a missed primitive (E-spread) refuted a structural verdict in one pass.
+
+### Engine primitives (complete enumeration from ACTION handlers)
+
+From `step()` at line 2606, every player action can only invoke these engine primitives:
+
+| # | Obfuscated | English | Used by solver? | Reachable on L6? |
+|---|------------|---------|-----------------|------------------|
+| P1 | `try_move_sprite(fdvakicpimr, dx*2, dy*2)` | Move player 2px in dir; collision-check | YES (A/B/C macros) | Yes |
+| P2 | `bwxffbswqz(x,y,player,"zbhi")` then REMOVE zbhi + flip same-letter jpug to INTANGIBLE | Key pickup side-effect on walk | YES (Transition B) | Yes — 2 keys: (6,18) d, (34,48) g. (6,18) unreachable. |
+| P3 | `uxwpppoljm(x,y,player)` None → fall → `ycfbtkckze()` restore checkpoint, -20 steps | Fall + snapshot-restore | Implicit (solver avoids) | Yes (costs 20 steps) |
+| P4 | `uhqbwfdkff()` check: player.xy==bqxa.xy → `next_level()` | Win | Goal | Needs unreachable pos |
+| P5 | `step_counter_ui.rddadrvtot()` → lose | Step-budget timeout | Implicit | Limit=1024 |
+| P6 | `ozbgzuaoya(gx,gy,"jpug")` + variant-cycle (`uqbvwhliqb`) for same-letter sprites | Click jpug → swap all N↔N' of same letter-group | YES | c-click, f-click reachable |
+| P7 | `fnhzudfjhd()` — itki-color-cycle (only when clicked jpug has `itki-color-jpug` tag) | Cycles itki sprites through 4 names (upry→bgeg→zfrq→jbyz) | YES | Only gkrr-jpug has tag, REMOVED, unreachable (zbhi@(6,18)) |
+| P8 | Teleport: click jpug while player on same-letter itki → `npqswumrzz` finds partner itki → `set_position` player to partner | Teleport | YES (Transition C) | c-teleport (18,48)↔(32,52) works |
+| P9 | Click sys_click direction button (zmjbupyjfyb/jffakyxiury/vbdduyutyiw/ghqmfnmmgrz) → move crane by 4px, validated via `jrpmxofbar` path-grid | Crane move | YES | All 4 dir buttons start INVISIBLE, gated by plates a/b/e/h |
+| P10 | Click sys_click bynyvtuepbt → attach hhxv (via `fnonlfqqca` center-match) or bynyvtuepbt-object | Crane grab | YES | Grab button starts REMOVED, resurrectable via zbhi(g)@(34,48). Even when resurrected, `fnonlfqqca` fails: crane anchor (26,34) ≠ hhxv-dmxj center (10,34) |
+| P11 | Attached hhxv moves with crane via `lreqqfwsxn` (in-place rename/position) | Bridge carry | YES | Requires P10 success |
+| P12 | `mbszrqqnqm()` — re-evaluate pressure-plates: player-on-plate → same-letter jpug becomes INTANGIBLE/visible | Plate gating (position-dependent) | YES | 4 plates (a,b,e,h) on plate-cross island; island unreachable |
+| P13 | `oavrxgtjnl()` on level init: builds plate→jpug index | Setup only | N/A (init) | — |
+| P14 | `xcrifaqaiy()` on every click: saves checkpoint | Implicit undo on fall | Implicit | Yes — used by fall recovery |
+| P15 | `pbkvtprbnmx` sprites pushed to x=500 on any click | Off-screen cleanup (zgkdpiyghze) | N/A | Cosmetic |
+| P16 | ACTION5: `pass` (literal no-op at line 2703-2704) | No-op | N/A (solver skips, engine too: `available_actions=[1,2,3,4,6]`) | Not in available_actions |
+
+### Primitives missed by the solver's action space
+
+**None.** Every engine primitive reachable by player action is already modeled in the solver's transition set {walk-direction × walk-to-zbhi × walk-to-itki+click-letter × click-any-jpug × click-any-sys_click}. The solver's 624-state macro exhaustion covers the full Cartesian product of these transitions modulo position equivalence. The action-space alphabet is genuinely closed.
+
+### Fresh hypotheses considered and ruled out
+
+1. **"Click at coordinate not occupied by any sprite"**: Line 2717 `if wldbhnwqbn:` short-circuits; line 2751 same. Empty-grid clicks are pure no-ops, decrementing step counter only. Already confirmed by walk-click probes.
+2. **"Click on bqxa-ppew to trigger jpug-branch side-effect"**: bqxa-ppew has no single-letter tag; `ijdmcivcnf is None` branch is empty pass (line 2720). No-op.
+3. **"Invisible sprite click via coordinate-addressing"** (bp35 pattern): `ozbgzuaoya` filters `is_visible=False` AND `interaction in {REMOVED, INVISIBLE}`. All direction buttons are INVISIBLE at init. Unlike bp35, dc22 enforces visibility gate at the hit-test level — cannot bypass via coordinate. This is the fundamental structural difference.
+4. **"Player position mutation via variant-swap collision"**: After `uqbvwhliqb` in-place swap, line 2875 checks `uxwpppoljm(player.x, player.y, player) is not None` — if player no longer supported after swap, triggers fall. Fall restores checkpoint. Cannot displace player to new reachable region.
+5. **"itki-color-cycle sprite rename during fnhzudfjhd as a positional effect"**: fnhzudfjhd reinstantiates cycled sprite at same (x,y) preserving tags. Not a positional mutation. Position-changing effects: only teleport (P8), player-move (P1), crane-move-with-attached-bridge (P11). P8 and P11 are covered.
+6. **"Camera/display_to_grid offset"** (bp35 pattern): `camera.display_to_grid(x,y)` = identity in L6 (camera.width=64, height=64, no letterbox visible in L6). Display coords == grid coords. No off-viewport state-changer reachable.
+7. **"RESET action mid-level"**: Line 2607 — RESET is handled but only calls `complete_action()`. On level completion the outer Arcade loop calls `on_set_level` which re-initializes from `_clean_levels`. Within-level RESET has no effect we can leverage.
+8. **"Checkpoint abuse"**: `xcrifaqaiy()` saves before every click. `ycfbtkckze()` restores on fall. No way to selectively restore; no way to fork state. The checkpoint doesn't carry new reachability.
+9. **"Step counter underflow"**: Would trigger `lose()`. Not exploitable.
+10. **"Sprite layer / occlusion"**: `ozbgzuaoya` sorts by layer DESC, takes first visible. All visible jpug/sys_click already enumerated.
+
+### Primitive comparison: bp35 vs dc22
+
+bp35's E-spread was a primitive that **modified grid state as a side-effect of walking**, reachable without an explicit trigger button. dc22's analog would be a walk side-effect. dc22 has exactly ONE: P2 (zbhi key pickup). Both L6 zbhi tiles' walk-reachability are exhaustively covered: (6,18) unreachable through all 624 board states; (34,48) reachable but its resurrection target (grab button) cannot be successfully used due to P10's anchor-matching failure.
+
+**No m=2 analog of the bp35 E-spread exists in dc22's engine.**
+
+### Verdict strengthening
+
+After m=2 independent action-space enumeration (source-first, not solver-first), the structural-stuck verdict is **reinforced, not refuted**. The engine's primitive set is closed under the existing solver's exploration frontier. Unlike bp35, dc22's invisible-sprite gating is enforced at the hit-test level (`ozbgzuaoya` filters before coordinate dispatch), preventing the "click an invisible button at its coordinate" refutation that worked on bp35.
+
+**n=8, m=2. Convergence is robust across action-space models.** Further agent passes without engine modifications are definitively unproductive. The correct next investment if dc22 6/6 is a priority: **human-played reference trajectory** to show what mechanic (if any) is being missed — or acceptance that L6 as implemented has no player-reachable solution.
+
+### Productive failure recorded
+- Rules out the m=2 "missed primitive" class of explanations.
+- Strengthens the epistemic foundation for "structurally stuck" verdicts in other ARC-AGI-3 games with similar architectures (coordinate-dispatched click + visibility-gated sys_click): the verdict is not an artifact of solver blindspots.
+- Establishes a reusable enumeration protocol: read ACTION handlers line-by-line from engine source, table primitives against solver's action vocabulary, cross-reference reachability under current state set.
