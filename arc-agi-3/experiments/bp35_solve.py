@@ -266,10 +266,17 @@ L4_SOL = [
 
 
 # L5: player (3,23), gem (2,31), gravity UP
-# TODO: viewport-compliant solution blocked — only 2 of 3 G blocks reachable,
-# and after consuming both the player is stuck above a wall barrier that
-# cannot be bypassed without the third G(8,1), which is unreachable without
-# OOB clicks. Documented in run notes. Falling back to original (OOB).
+# STRUCTURAL DEAD END (confirmed 2026-04-13 second-pass investigation):
+# The gem at (2,31) lives in an isolated sub-chamber (cols 1-3 at y=30-31)
+# sealed by walls at y=29 (cols 0-8) and at y=32 (whole row). The only
+# access to the bottom chamber is col 8 (gap at y=27-31). From col 8
+# landing at (8,31), horizontal travel L is blocked by G(4,31). Clicking
+# G(4,31) flips gravity UP; fall-up from cols 5-8 at y=31 stops at y=30
+# because (X,29) is wall for X in 1-8. Wall at (4,30) then blocks L-walk
+# to the gem sub-chamber. G(8,1) is enclosed by walls, unreachable.
+# No E-seeds on this level (etlsaqqtjvn count = 0), no destroyable walls
+# (xcjjwqfzjfe is permanent). The only OOB click is C(4,31) — keeps flipping
+# gravity so level-advance logic eventually fires — live API will reject this.
 L5_SOL = [R, R, R, R, R, C(4,31), L, L, L, L, L, L]
 
 
@@ -315,30 +322,43 @@ L6_SOL = [
 
 
 # L7: player (3,32), gem (9,19), gravity UP
-# Viewport-aware rewrite:
-#  - Bottom E-spread (y=29) at cam_y=156 — in view (vy=18).
-#  - R x5 → player falls through y=28-30 E-staircase to (8,25), cam_y=114.
-#  - B-toggles C(7,25) and C(8,22) now in view (vy=36 and 18).
-#  - L L → player lands at (6,23) cam_y=102.
-#  - Top E-spread C(3,18)..C(6,18) now in view (vy=6). Must happen BEFORE
-#    the next left-wards fall that would otherwise land on spike at (6,6).
-#  - R R L L L → player falls up-and-across to (5,20) cam_y=84.
-#  - Climb cascade via C(5,19) C(5,18) C(5,17) + alternating C/R.
-#  - C(5,2): STRUCTURAL OOB. G block at y=2 is sealed behind a spike ring at
-#    y=6-10; player cannot reach y≤8 (spikes kill), so cam_y cannot reach ≤12
-#    required to put y=2 in viewport. This click stays OOB (1/1).
-#  - C(8,18), R — clear upper E, fall DN to gem (9,19).
+# Viewport-aware rewrite (2026-04-13 second pass — eliminates C(5,2) OOB).
+#
+# Previous verdict said G(5,2) was structurally OOB because player couldn't
+# reach y≤8 without dying. That was wrong. The spike ring at y=6-10 has a gap
+# at y=7 cols 4-6 (walls cols 0-3 and 7-10, spikes above at y=6 only at
+# cols 4-6). E-spread seeded at E(3,18) can reach this region via iterated
+# click-and-fall in col 6: each click of E(6,Y) spreads to (6,Y-1), (5,Y),
+# (7,Y), and re-creates E(6,Y+1) for a staircase. Player follows the staircase
+# up, landing at (6,8) with cam_y=12 — making G(5,2) viewport-reachable (vy=0).
+#
+# Full sequence:
+#  - Bottom E-spread + right walks → (8,25), cam_y=114 (same as before).
+#  - B-toggles + top E-spread + climb to (8,17) cam_y=66 (same as before).
+#  - NEW: L L to reach (6,17), then iterated C(6,16..8) climb to (6,8).
+#  - C(5,2) now in view — flip gravity UP→DN (vy=0, IN-VIEW).
+#  - Player falls DN col 6 (clear all the way) to (6,17).
+#  - R R to (8,17) grav DN.
+#  - C(8,18) B→O, fall through to (8,19).
+#  - R → gem (9,19). WIN.
+#
+# Action count: 48 (up from 35), but 0 OOB clicks (was 1).
 L7_SOL = [
     C(2,29), C(3,29), C(4,29), C(5,29), C(6,29),   # bottom E-spread
     R, R, R, R, R,                                 # → (8,25), cam_y=114
     C(7,25), C(8,22),                              # B→O toggles, in view
     L, L,                                          # → (6,23), cam_y=102
-    C(3,18), C(4,18), C(5,18), C(6,18),            # top E-spread, in view at cam=102
+    C(3,18), C(4,18), C(5,18), C(6,18),            # top E-spread
     R, R, L, L, L,                                 # → (5,20), cam_y=84
     C(5,19), C(5,18), C(5,17),                     # climb cascade
-    C(6,17), R, C(7,17), R, C(8,17), R,
-    C(5,2),                                        # G flip (STRUCTURAL OOB)
-    C(8,18), R,                                    # clear E, reach gem
+    C(6,17), R, C(7,17), R, C(8,17), R,            # → (8,17) cam=66
+    L, L,                                          # → (6,17) cam=66
+    C(6,16), C(6,15), C(6,14), C(6,13),            # col 6 E-climb
+    C(6,12), C(6,11), C(6,10), C(6,9), C(6,8),     # → (6,8) cam=12
+    C(5,2),                                        # G flip, now IN-VIEW (vy=0)
+    R, R,                                          # → (8,17) grav DN
+    C(8,18),                                       # B→O, fall to (8,19)
+    R,                                             # → gem, WIN
 ]
 
 
@@ -419,8 +439,9 @@ if __name__ == "__main__":
         ("L8", L8_SOL, 422),
     ]
     # Viewport-aware actual counts: L0=15, L1=44, L2=34, L3=19, L4=32, L5=12,
-    # L6=43, L7=35, L8=87. Total 321. Remaining OOB: 2 structural
-    # (L5 C(4,31), L7 C(5,2) — both behind sealed spike regions).
+    # L6=43, L7=48, L8=87. Total 334. Remaining OOB: 1 structural
+    # (L5 C(4,31) — gem sub-chamber sealed by walls, no path). L7 unblocked
+    # in 2026-04-13 second pass via col 6 E-climb to (6,8) cam=12.
 
     for name, sol, baseline in solutions:
         print(f"\n{'='*40}")
