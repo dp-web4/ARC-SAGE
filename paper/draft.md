@@ -20,7 +20,7 @@
 
 We report 84.9% on the ARC-AGI-3 public set (21/25 environments completed, 160/183 levels, 5,159 total actions), placing near the top of the community leaderboard at ~$250 total cost — roughly an order of magnitude cheaper per point than comparable entries. The result was produced by a harness we call ARC-SAGE: per-game canonical solvers encoding world models derived from engine-source analysis, a multi-agent frame-questioning protocol that deploys independent Claude Opus 4.6 instances from orthogonal frames to break through local minima, and a capture-replay pipeline that makes every solve fully reproducible.
 
-The score itself is instrumental. The research question motivating ARC-SAGE is whether *recognition and adaptation against structured external memory* can substitute for raw model capacity on genuinely novel problems. This paper establishes the capability ceiling using a frontier model (the Opus-4.6 result), baselines a small local model (Gemma 3 12B scored 0% on our preliminary game sweeps), and outlines a concrete Phase 2 plan to close the gap using Andy Grossberg's paired-lattice cartridge architecture (`membot`). The harness is model-agnostic; swapping Opus for a local model is a configuration change, not a rewrite.
+The score itself is instrumental. The research question motivating ARC-SAGE is whether *recognition and adaptation against structured external memory* can substitute for raw model capacity on genuinely novel problems. This paper establishes the capability ceiling using a frontier model (the Opus-4.6 result), baselines a small local model (Gemma 3 12B scored 0% on our preliminary game sweeps under a context-only harness — no cartridge retrieval), and outlines a concrete Phase 2 plan to close the gap using Andy Grossberg's paired-lattice cartridge architecture (`membot`) with Gemma 4 as the deployment target (`e4b` primary, `e2b` for small-device reference, `26b-a4b` aspirational). The harness is model-agnostic; swapping Opus for a local model is a configuration change, not a rewrite.
 
 We claim three contributions. (1) **A strong, reproducible public-set result** with full replay bundle. (2) **Multi-agent frame-questioning** as a methodological pattern: convergent independent passes separate "hard" problems from "structurally stuck" ones with higher confidence than any single pass. (3) **A concrete architecture** for transferring frontier-model capability into a small model via retrieval rather than fine-tuning, with the harness already built and tested.
 
@@ -150,9 +150,11 @@ The 14 perfect-efficiency games are those where our action count equaled or beat
 
 We treat these as evidence of mechanics not exposed by the public SDK, or alternatively as levels that require a human experimenter with domain priors (sound cues, hover states, visual pattern recognition at scales the SDK does not expose) that an engine-source-reading agent does not have. Both interpretations support the same conclusion: *the solver did all it could within the surface the SDK provides*.
 
-### 4.4 Local-model baseline (Gemma 3 12B)
+### 4.4 Local-model baseline (Gemma 3 12B) and the Gemma 4 deployment target
 
 In preliminary game sweeps conducted prior to this work, Gemma 3 12B running under our autonomous solver harness scored 0 on every game attempted. The harness provided the game frame, the available action set, and a rolling short-term context window; it did not provide pre-derived world models or cartridge retrieval. The model failed to identify action-response relationships within the per-game exploration budget and did not complete any levels.
+
+The Gemma 3 result is a context-only baseline against which the Phase 2 cartridge-retrieval architecture is measured. The deployment target itself, however, is the **Gemma 4** family: `e4b` as the primary workhorse (runs comfortably on 16GB+ machines — McNugget, Legion, Thor in our fleet), `e2b` as the small-device baseline (fits-test on 8GB machines — Sprout, CBP), and `26b-a4b` as an aspirational scale-up comparison on Thor. Gemma 4 introduces architectural improvements (MatFormer, sparsity) that make direct Gemma 3-versus-Gemma 4 comparisons uninformative; the 0% Gemma 3 baseline is retained only to establish that context-only prompting is insufficient.
 
 This result should not be read as "Gemma cannot solve ARC-AGI-3." It should be read as: *Gemma given the raw task from scratch, without pre-derived world models or retrieval, cannot solve ARC-AGI-3*. The ARC-SAGE Phase 2 plan is a direct test of the alternative: Gemma given the same raw task plus retrieval access to the world models this paper demonstrates building.
 
@@ -274,7 +276,7 @@ The Phase 2 objective is a Kaggle-sandbox-compatible local-model agent that scor
 │                                            │                 │
 │                                            ▼                 │
 │                                   ┌─────────────────────┐   │
-│                                   │  Gemma 3 12B        │   │
+│                                   │  Gemma 4 e4b        │   │
 │                                   │  (adaptation only)  │   │
 │                                   └─────────────────────┘   │
 │                                            │                 │
@@ -317,7 +319,7 @@ Grid-vision feature extraction must be fast, compressed, and retrieval-friendly.
 ### 6.4 Evaluation harness
 
 A Kaggle-sandbox-compatible evaluation harness that:
-- Loads Gemma 3 12B (or equivalent MIT-licensed model fitting in 32GB VRAM) locally
+- Loads Gemma 4 e4b (primary) or an equivalent sub-32GB-VRAM open-license model locally
 - Loads the cartridge bundle produced by §6.2
 - Runs the consciousness loop at game-step cadence (~100ms target)
 - Logs action efficiency relative to the Phase 1 Opus baseline
@@ -335,7 +337,7 @@ A Kaggle-sandbox-compatible evaluation harness that:
 
 ### 6.6 Falsification criteria
 
-Phase 2 is genuinely testable. We will consider the recognition-over-derivation thesis *falsified* (in this domain) if, given the full cartridge bundle from Phase 1 and a working retrieval pipeline, Gemma 3 12B scores less than 15% on the public set. That would indicate either that the cartridges do not transmit what the solvers encoded, or that adaptation-only reasoning is insufficient for this benchmark, or both. Either outcome is informative.
+Phase 2 is genuinely testable. We will consider the recognition-over-derivation thesis *falsified* (in this domain) if, given the full cartridge bundle from Phase 1 and a working retrieval pipeline, Gemma 4 e4b scores less than 15% on the public set. That would indicate either that the cartridges do not transmit what the solvers encoded, or that adaptation-only reasoning is insufficient for this benchmark, or both. Either outcome is informative.
 
 We will consider the thesis *substantially supported* if Gemma scores above 40% on the public set under these conditions — a ~2× lift over the current best pure-local submission and strong evidence that the cartridge mechanism is doing real work.
 
@@ -363,11 +365,11 @@ The ARC-AGI-2 post-mortem (from which SAGE emerged) documented this failure mode
 
 The Phase 2 thesis predicts that *within-game* level generalization (L1 solved via retrieved model → L4 uses same retrieved model) will work well, and *across-game* transfer will work to the extent that the new game shares structural features with games in the cartridge bundle.
 
-For genuinely novel games, neither the cartridge bundle nor any trained model has prior experience; performance will be driven by the small model's ability to build a new world model on the fly, which is where derivation is still required. Our current prediction is that Gemma 3 12B will struggle here, and that the realistic deployment plan against the full (~135 environment) evaluation set involves (a) strong performance on recognized-by-cartridge games, (b) moderate performance via on-the-fly building on adjacent-structure games, and (c) genuine failure on wholly novel games. That's a substantive prediction we plan to test, not marketing.
+For genuinely novel games, neither the cartridge bundle nor any trained model has prior experience; performance will be driven by the small model's ability to build a new world model on the fly, which is where derivation is still required. Our current prediction is that Gemma 4 e4b will struggle here, and that the realistic deployment plan against the full (~135 environment) evaluation set involves (a) strong performance on recognized-by-cartridge games, (b) moderate performance via on-the-fly building on adjacent-structure games, and (c) genuine failure on wholly novel games. That's a substantive prediction we plan to test, not marketing.
 
 ### 7.4 "The Kaggle sandbox constraints are severe. Is this actually feasible?"
 
-The relevant constraints are 32 GB VRAM, no internet, and 8-hour total runtime. These are sufficient for Gemma 3 12B, cartridge loading, and per-action inference at roughly 10 tokens/second, which is adequate for ARC-AGI-3's ~100ms-per-action target under reasonable reasoning budgets. The constraints are demanding but they are not prohibitive. The Phase 2 evaluation harness will be built and tested offline before submission.
+The relevant constraints are 32 GB VRAM, no internet, and 8-hour total runtime. These are sufficient for Gemma 4 e4b, cartridge loading, and per-action inference at roughly 10 tokens/second, which is adequate for ARC-AGI-3's ~100ms-per-action target under reasonable reasoning budgets. The constraints are demanding but they are not prohibitive. The Phase 2 evaluation harness will be built and tested offline before submission.
 
 ### 7.5 "Why is Claude Opus 4.6 listed as a co-author?"
 

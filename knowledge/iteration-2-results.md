@@ -63,6 +63,15 @@ Tier 3 (long shot):
 
 If we hit Tier 1 + 2 in iteration 3: ~93%.
 
+## Next: Phase 2 deployment engineering
+
+Further game-level work is at diminishing returns. The priorities pivot to deployment: getting a small Gemma 4 model to use the world models we cracked, under Kaggle constraints. Full plan in [`knowledge/phase2-plan.md`](phase2-plan.md) — key points:
+
+- **Model targets**: Gemma 4 `e4b` primary workhorse, `e2b` as small-device fits-test, `26b-a4b` aspirational on Thor
+- **Tier 1 this week**: (1) Gemma 4 failure-mode taxonomy, (2) visual retrieval fidelity, (3) end-to-end pipeclean on cd82
+- **Fleet delegation**: Legion / Thor / McNugget run e4b workloads; CBP / Sprout run e2b fits-tests
+- **Falsification**: Phase 2 thesis falsified if Gemma 4 e4b with full cartridge bundle scores <15% on public set
+
 ## Submission Decision
 
 Three options for the user:

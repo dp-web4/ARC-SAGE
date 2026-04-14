@@ -46,9 +46,11 @@ The source-enumeration protocol was formalized and executed against dc22 L6. Age
 
 Also surfaced: **engine architectural properties determine susceptibility to bp35-style refutation**. dc22 filters invisible/removed sprites before click dispatch (hit-test filtering); bp35 does not. Convergence verdicts on hit-test-filtered games are harder to refute than on permissive-hit-test games. This should be an explicit check when assessing a structural claim: does the engine filter click targets at the hit-test layer?
 
-## 4. Gemma failure-mode taxonomy
+## 4. Gemma failure-mode taxonomy (see `knowledge/phase2-plan.md` Tier 1.1 for current plan)
 
-**Prior observation**: Gemma 3 12B scored 0 on every game attempted. Unknown which subsystem broke.
+**Prior observation**: Gemma 3 12B scored 0 on every game attempted under a context-only harness. Unknown which subsystem broke.
+
+**Deployment target is Gemma 4**, not Gemma 3. The Gemma 3 baseline stands as evidence that context-only prompting is insufficient, but per-variant failure-mode taxonomy will be re-run against Gemma 4 (e4b primary, e2b on small machines, 26b-a4b on Thor for scale reference). Do not assume Gemma 3 failures translate directly to Gemma 4.
 
 **Candidates**:
 - **Perception**: can't reliably parse 64×64 grids into object descriptions
@@ -57,7 +59,7 @@ Also surfaced: **engine architectural properties determine susceptibility to bp3
 - **Action emission**: knows the answer but produces malformed output the harness can't parse
 - **Domain knowledge**: lacks priors for "this sprite is a wall, that sprite is a player" category judgments
 
-**Would resolve by**: instrumenting the autonomous harness with per-stage logging and running Gemma on one easy game (cd82 — 73-action solve). Observe at which stage behavior diverges from what the harness expected. Phase 2 cartridge shape depends on the answer.
+**Would resolve by**: instrumenting the autonomous harness with per-stage logging and running Gemma 4 e4b on one easy game (cd82 — 73-action solve) under three conditions: no-context baseline, cartridge simulation (pre-built world model in context), action-demonstration. Observe at which stage behavior diverges from what the harness expected. Phase 2 cartridge shape depends on the answer. Full protocol in `knowledge/phase2-plan.md` Tier 1.1.
 
 ## 5. Visual-signature retrieval fidelity
 
@@ -80,7 +82,7 @@ Also surfaced: **engine architectural properties determine susceptibility to bp3
 
 ## 7. Kaggle sandbox resource budget
 
-**Unknown**: does Gemma 3 12B + cartridge bundle + game-step inference loop fit in 32GB VRAM alongside game state and perception? Does the full 8-hour time budget cover the public+semi-private+private environments at our target pace?
+**Unknown**: does Gemma 4 e4b (deployment target) + cartridge bundle + game-step inference loop fit in 32GB VRAM alongside game state and perception? Does the full 8-hour time budget cover the public+semi-private+private environments at our target pace? The 26b-a4b variant (Thor-only) is aspirational and needs a quant not yet available for Kaggle.
 
 **Would resolve by**: running a local simulation of the Kaggle sandbox with memory constraints and timing one full evaluation run on the 25 public games.
 

@@ -8,7 +8,7 @@
 
 1. **Separability**: substrate primitives should not be bound to any specific game. A new game inherits them automatically via retrieval.
 2. **Composability**: multiple substrate primitives may apply simultaneously (e.g., viewport-aware + action-budget-aware + undo-aware). The schema must support concurrent retrieval.
-3. **Small-model tractable**: a Gemma-class model must be able to read the cartridge content and apply it within a typical context window. No deep nesting; statements should be directly actionable.
+3. **Small-model tractable**: a Gemma 4 e4b (deployment target) model must be able to read the cartridge content and apply it within a typical context window. No deep nesting; statements should be directly actionable.
 4. **Failure-transparent**: when a substrate primitive doesn't apply (e.g., a game has no scrolling), its retrieval should be cheap to no-op. Retrieval should not force the model to "fight" an irrelevant rule.
 
 ## Initial substrate primitive catalog
@@ -156,7 +156,7 @@ This example illustrates a side-issue worth flagging: substrate primitives must 
 
 ## Falsification
 
-The two-layer claim is falsifiable. If the Phase 2 Gemma deployment, equipped with the full substrate + game-world cartridge bundle, scores below 15% on the public set (same falsification threshold as the overall Phase 2 thesis in §6.6), we will have evidence that substrate primitives are insufficient to substitute for the frontier model's in-context substrate awareness. Possible explanations in that case:
+The two-layer claim is falsifiable. If the Phase 2 Gemma 4 e4b deployment, equipped with the full substrate + game-world cartridge bundle, scores below 15% on the public set (same falsification threshold as the overall Phase 2 thesis in §6.6), we will have evidence that substrate primitives are insufficient to substitute for the frontier model's in-context substrate awareness. Possible explanations in that case:
 - Substrate primitives were wrong or incomplete.
 - Small model cannot execute joint reasoning over substrate + game-world cartridges.
 - The substrate/game-world factoring itself is wrong.
