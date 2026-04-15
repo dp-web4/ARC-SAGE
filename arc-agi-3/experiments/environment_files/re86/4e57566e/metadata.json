@@ -1,20 +1,20 @@
 {
-  "game_id": "re86-4e57566e",
+  "game_id": "re86-8af5384d",
   "title": "RE86",
   "default_fps": 25,
   "tags": [
     "keyboard_click"
   ],
   "baseline_actions": [
-    28,
-    38,
-    198,
-    57,
-    84,
-    117,
-    328,
-    221
+    26,
+    42,
+    86,
+    108,
+    189,
+    139,
+    424,
+    241
   ],
   "local_dir": "environment_files/re86/4e57566e",
-  "date_downloaded": "2026-04-13T18:24:28.150900+00:00"
+  "date_downloaded": "2026-04-15T08:36:46.949306+00:00"
 }

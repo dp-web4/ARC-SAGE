@@ -3,14 +3,14 @@
   "title": "FT09",
   "default_fps": 8,
   "baseline_actions": [
-    17,
-    19,
-    15,
-    21,
+    43,
+    12,
+    23,
+    28,
     65,
-    26
+    37
   ],
   "tags": [],
   "local_dir": "environment_files/ft09/0d8bbf25",
-  "date_downloaded": "2026-04-10T16:13:36.528414+00:00"
+  "date_downloaded": "2026-04-15T06:37:27.607946+00:00"
 }
