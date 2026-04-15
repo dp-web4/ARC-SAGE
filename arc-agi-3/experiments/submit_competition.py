@@ -84,10 +84,31 @@ def load_game_ids():
 
 def best_run(game):
     """Return (run_dir, run_json_dict) for the best run in visual-memory/{game}/.
-    Prefer: highest levels_completed, then WIN state, then latest timestamp."""
+
+    Selection: the most RECENT run within 1 level of the best is preferred.
+    This protects against the 'old WIN on stale game version beats new
+    partial WIN on current version' pitfall we hit 2026-04-15 with re86.
+
+    A run can be pinned explicitly via a file `visual-memory/{game}/PIN`
+    that contains the run dir name (one line). Pinned runs override all
+    selection logic.
+    """
     gdir = VM / game
     if not gdir.is_dir():
         return None, None
+
+    # Explicit pin override
+    pin = gdir / 'PIN'
+    if pin.exists():
+        pin_name = pin.read_text().strip()
+        pinned = gdir / pin_name
+        if pinned.exists() and (pinned / 'run.json').exists():
+            try:
+                d = json.load(open(pinned / 'run.json'))
+                return pinned, d
+            except Exception:
+                pass
+
     candidates = []
     for run in sorted(gdir.iterdir()):
         if not run.name.startswith('run_'):
@@ -105,8 +126,16 @@ def best_run(game):
         candidates.append((lc, result == 'WIN', ts, run, d))
     if not candidates:
         return None, None
-    candidates.sort(reverse=True)
-    _, _, _, run_dir, run_d = candidates[0]
+
+    # Among candidates within 1 level of the best-local-level, prefer the newest.
+    # Rationale: local dry-run levels_completed can be misleading if the trace
+    # was built for an old game version that still "works" locally but fails
+    # remotely. A recent trace built against the current version is more
+    # trustworthy even if it shows fewer levels locally.
+    best_lc = max(c[0] for c in candidates)
+    within = [c for c in candidates if c[0] >= best_lc - 1]
+    within.sort(key=lambda c: c[2], reverse=True)   # newest first
+    _, _, _, run_dir, run_d = within[0]
     return run_dir, run_d
 
 
