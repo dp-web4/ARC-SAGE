@@ -47,17 +47,32 @@ See `PRUNE_NOTES.md` for what's been deliberately included, what was considered 
 
 ## Results
 
-**Community leaderboard submission: 84.9%** (scorecard [`c0d62617`](https://arcprize.org/scorecards/c0d62617-a0bc-4100-bb4e-982fa5d7fde7))
+**Latest scorecard: 92.82%** ([`c4e6442e`](https://arcprize.org/scorecards/c4e6442e-077d-4048-9eff-110c5a59ccfb), submitted 2026-04-15, against current human baselines)
 
 | Metric | Value |
 |--------|-------|
-| Overall score | **84.9%** |
+| Overall score | **92.82%** |
 | Environments completed | 21 / 25 |
-| Levels completed | 160 / 183 |
-| Total actions | 5,159 |
-| Games at 100% per-level efficiency | 14 |
+| Levels completed | 173 / 183 |
+| Total actions | 5,496 |
+| Games at ≥100% (incl. 115% bonus) | 20 |
 
-14 games hit perfect 100% (per-level action count at-or-below human baseline under RHAE-squared scoring): cd82, ft09, tn36, vc33, tr87, tu93, lp85, ls20, su15, s5i5, ka59, m0r0, re86, wa30. Four games partial due to structural blockers (dc22 L6, lf52 L7/L10, sb26 L4+) confirmed by multi-agent frame-questioning convergence. One game (lf52) had no captured replay trace at submission time.
+**20 games score 100% or above** under the new scoring system (see below): cd82, sb26, ft09, sc25, tn36, vc33, tr87, tu93, lp85, sp80, ls20, su15, g50t, ar25, s5i5, sk48, cn04, ka59, m0r0, wa30. One game (r11l) at 99.75% — one action over baseline on a single level. Four games partial due to structural blockers confirmed by multi-agent frame-questioning convergence: re86 L8 not attempted, dc22 L6, lf52 L7/L10, bp35 L5.
+
+### Scoring note (2026-04-15)
+
+ARC Prize updated the scoring system with new human baselines. Per-level scores now **cap at 115%, not 100%** — solutions faster than the 2nd-best human baseline earn a 15% efficiency bonus. Scorecards generated under the previous baselines are labeled "legacy" on the site.
+
+In theory a fully-solved 25-game run with every level beating baseline scores up to 115%. Our 92.82% is primarily bounded by the four structurally-blocked games, not by per-level efficiency.
+
+### Progression
+
+| Date | Scorecard | Score | Context |
+|---|---|---|---|
+| 2026-04-12 | [c0d62617](https://arcprize.org/scorecards/c0d62617-a0bc-4100-bb4e-982fa5d7fde7) | 84.9% | First submission (old scoring, legacy) |
+| 2026-04-13 | [68fce414](https://arcprize.org/scorecards/68fce414-3d5b-485c-a956-e78e6f1efc9d) | 90.53% | Iter 2 post-viewport fixes (legacy) |
+| 2026-04-15 | [dd3cebd3](https://arcprize.org/scorecards/dd3cebd3-53fd-4acc-a655-3203015df59d) | 82.37% | New baselines + game versions (3 games broke) |
+| 2026-04-15 | [c4e6442e](https://arcprize.org/scorecards/c4e6442e-077d-4048-9eff-110c5a59ccfb) | **92.82%** | **Current** — ar25/re86/cn04 re-solved with new algorithmic solvers |
 
 ## Phase 2: Gemma Integration
 
