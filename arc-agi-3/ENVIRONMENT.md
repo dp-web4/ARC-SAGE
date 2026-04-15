@@ -12,21 +12,26 @@ We misunderstood ARC-AGI-2 scoring (thought partial pixel matches earned partial
 
 ### RHAE (Relative Human Action Efficiency)
 
-**Per-level:**
+**New scoring (observed 2026-04-15 on scorecard `dd3cebd3`)**
+
+Level scores now **cap at 115%, not 100%**. Beating the human baseline earns a 15% efficiency bonus. 149 of 156 completed levels in our submission hit 115%.
+
 ```
-level_score = min(1.0, human_baseline / ai_actions) ^ 2
+If AI actions ≤ baseline:
+  level_score = 115  (or possibly 100 + 15 * (baseline - actions)/baseline clamped at 115)
+If AI actions > baseline:
+  level_score = some_decay(baseline, actions) — appears similar to prior squared formula
 ```
 
-- **SQUARED** — 50% efficiency = 25% score, NOT 50%
-- Capped at 1.0 — no bonus for beating humans
-- 2x human actions = 0.25 score
-- 3x = 0.11
-- 5x = 0.04
-- 10x = 0.01
-- Unsolved levels = 0 (no partial credit)
-- Hard cutoff at **5x human baseline actions per level** — terminated
+Observed values we can confirm:
+- ar25 L1: 16 actions, baseline 32 → score 115 (2× faster than baseline, capped)
+- ar25 L2: 32 actions, baseline 50 → score 115 (1.56× faster, capped)
+- sb26 L8: score 112.11 (just-beating baseline, under-cap)
+- su15 L7: score 79.01 (above baseline, degraded)
 
-**Human baseline**: 2nd-best human (fewest actions), not average. From 486 participants in 90-minute first-play sessions.
+The exact sub-baseline decay formula is not yet reverse-engineered. The above-baseline behavior is: "cap at 115."
+
+**Human baseline**: 2nd-best human (fewest actions), not average. **New baselines released April 2026** — scorecards generated under the previous baselines are labeled "legacy" on the site.
 
 **Per-game aggregation** — weighted by level index:
 ```
@@ -34,7 +39,17 @@ game_score = sum(level_score[i] * i) / sum(range(1, num_levels+1))
 ```
 Level 5 gets 5x the weight of level 1. Solving tutorials is nearly worthless. Hard levels are everything.
 
-**Final**: Average of all game scores. Range 0-100%.
+**Final**: Average of all game scores. **Can exceed 100%** in theory now — a perfect run with every level beating baseline scores 115%. Our current best submission is 82.37% but could exceed 100% with full coverage.
+
+**Prior (capped-at-1.0) scoring** — retained here for historical reference:
+
+```
+level_score = min(1.0, human_baseline / ai_actions) ^ 2
+```
+- SQUARED, capped at 1.0
+- 2x actions = 0.25 score; 3x = 0.11; 5x = 0.04; 10x = 0.01
+- Unsolved = 0
+- 5x baseline = hard cutoff (scorecards before the 2026-04 change used this)
 
 ### Implication for SAGE
 
