@@ -1,6 +1,6 @@
 {
   "_description": "Fleet game coordination \u2014 each machine claims one game and persists until solved",
-  "_updated": "2026-04-12",
+  "_updated": "2026-04-15",
   "_protocol": "Pull before claiming. Push after claiming. If your game is already claimed by another, pick the next unclaimed.",
   "games": [
     {
@@ -43,56 +43,98 @@
       "solved_actions": 75
     },
     {
-      "id": "r11l-aa269680",
+      "id": "r11l-495a7899",
       "family": "r11l",
       "type": "click",
-      "baseline": 167,
+      "baseline": 233,
       "levels": 6,
       "status": "solved",
       "claimed_by": "nomad",
       "best_level": 6,
       "solved": true,
       "solved_by": "cbp",
-      "solved_actions": 158
+      "solved_actions": 158,
+      "previous_id": "r11l-aa269680",
+      "level_baselines": [
+        22,
+        33,
+        51,
+        26,
+        52,
+        49
+      ],
+      "trace_status": "compatible_with_new_version"
     },
     {
-      "id": "sc25-f9b21a2f",
+      "id": "sc25-635fd71a",
       "family": "sc25",
       "type": "move+click",
-      "baseline": 216,
+      "baseline": 350,
       "levels": 6,
       "status": "solved",
       "claimed_by": null,
       "best_level": 6,
       "solved": true,
       "solved_by": "cbp",
-      "solved_actions": 171
+      "solved_actions": 171,
+      "previous_id": "sc25-f9b21a2f",
+      "level_baselines": [
+        36,
+        6,
+        32,
+        83,
+        143,
+        50
+      ],
+      "trace_status": "compatible_with_new_version"
     },
     {
-      "id": "tn36-ab4f63cc",
+      "id": "tn36-ef4dde99",
       "family": "tn36",
       "type": "click",
-      "baseline": 250,
+      "baseline": 317,
       "levels": 7,
       "status": "solved",
       "claimed_by": null,
       "best_level": 7,
       "solved": true,
       "solved_by": "cbp",
-      "solved_actions": 119
+      "solved_actions": 119,
+      "previous_id": "tn36-ab4f63cc",
+      "level_baselines": [
+        32,
+        72,
+        26,
+        40,
+        30,
+        55,
+        62
+      ],
+      "trace_status": "compatible_with_new_version"
     },
     {
-      "id": "vc33-9851e02b",
+      "id": "vc33-5430563c",
       "family": "vc33",
       "type": "click",
-      "baseline": 307,
+      "baseline": 447,
       "levels": 7,
       "status": "solved",
       "claimed_by": null,
       "best_level": 7,
       "solved": true,
       "solved_by": "cbp",
-      "solved_actions": 167
+      "solved_actions": 167,
+      "previous_id": "vc33-9851e02b",
+      "level_baselines": [
+        7,
+        18,
+        44,
+        61,
+        131,
+        34,
+        152
+      ],
+      "trace_status": "compatible_with_new_version"
     },
     {
       "id": "tr87-cd924810",
@@ -108,17 +150,30 @@
       "solved_actions": 137
     },
     {
-      "id": "tu93-2b534c15",
+      "id": "tu93-0768757b",
       "family": "tu93",
       "type": "move",
-      "baseline": 378,
+      "baseline": 462,
       "levels": 9,
       "status": "solved",
       "claimed_by": null,
       "best_level": 9,
       "solved": true,
       "solved_by": "cbp",
-      "solved_actions": 189
+      "solved_actions": 189,
+      "previous_id": "tu93-2b534c15",
+      "level_baselines": [
+        19,
+        16,
+        34,
+        42,
+        123,
+        80,
+        14,
+        23,
+        111
+      ],
+      "trace_status": "compatible_with_new_version"
     },
     {
       "id": "lp85-305b61c3",
@@ -134,17 +189,27 @@
       "solved_actions": 117
     },
     {
-      "id": "sp80-0ee2d095",
+      "id": "sp80-589a99af",
       "family": "sp80",
       "type": "move+click",
-      "baseline": 472,
+      "baseline": 518,
       "levels": 6,
       "status": "solved",
       "claimed_by": null,
       "best_level": 6,
       "solved": true,
       "solved_by": "thor",
-      "solved_actions": null
+      "solved_actions": null,
+      "previous_id": "sp80-0ee2d095",
+      "level_baselines": [
+        39,
+        58,
+        25,
+        148,
+        96,
+        152
+      ],
+      "trace_status": "compatible_with_new_version"
     },
     {
       "id": "ls20-9607627b",
@@ -160,16 +225,29 @@
       "solved_actions": 309
     },
     {
-      "id": "su15-4c352900",
+      "id": "su15-1944f8ab",
       "family": "su15",
       "type": "move+click",
-      "baseline": 566,
+      "baseline": 361,
       "levels": 9,
       "status": "solved",
       "claimed_by": null,
       "best_level": 9,
       "solved": true,
-      "solved_by": "cbp"
+      "solved_by": "cbp",
+      "previous_id": "su15-4c352900",
+      "level_baselines": [
+        22,
+        42,
+        26,
+        115,
+        36,
+        31,
+        8,
+        40,
+        41
+      ],
+      "trace_status": "compatible_with_new_version"
     },
     {
       "id": "g50t-5849a774",
@@ -185,29 +263,53 @@
       "solved_actions": 311
     },
     {
-      "id": "ar25-e3c63847",
+      "id": "ar25-0c556536",
       "family": "ar25",
       "type": "move+click",
-      "baseline": 577,
+      "baseline": 748,
       "levels": 8,
       "status": "solved",
       "claimed_by": "thor",
       "best_level": 8,
-      "solved": true,
-      "solved_by": "thor"
+      "solved": false,
+      "solved_by": "thor",
+      "previous_id": "ar25-e3c63847",
+      "level_baselines": [
+        32,
+        50,
+        75,
+        37,
+        89,
+        159,
+        233,
+        73
+      ],
+      "trace_status": "broken_on_new_version_pending_resolve"
     },
     {
-      "id": "s5i5-a48e4b1d",
+      "id": "s5i5-18d95033",
       "family": "s5i5",
       "type": "click",
-      "baseline": 608,
+      "baseline": 638,
       "levels": 8,
       "status": "solved",
       "claimed_by": "mcnugget",
       "best_level": 8,
       "solved": true,
       "solved_by": "mcnugget",
-      "solved_actions": 100
+      "solved_actions": 100,
+      "previous_id": "s5i5-a48e4b1d",
+      "level_baselines": [
+        20,
+        89,
+        106,
+        54,
+        162,
+        38,
+        86,
+        83
+      ],
+      "trace_status": "compatible_with_new_version"
     },
     {
       "id": "bp35-0a0ad940",
@@ -223,10 +325,10 @@
       "solved_actions": 304
     },
     {
-      "id": "sk48-41055498",
+      "id": "sk48-d8078629",
       "family": "sk48",
       "type": "move+click",
-      "baseline": 696,
+      "baseline": 1070,
       "levels": 8,
       "status": "solved",
       "claimed_by": "waving-cat",
@@ -234,71 +336,136 @@
       "solved": true,
       "notes": "All 8 levels solved 2026-04-12 via beam search (w=800) with CLICK support. Per-level moves: L0=14, L1=27, L2=33, L3=25, L4=77, L5=48, L6=38, L7=24 (total 286). Key fix: engine budget restoration during search. CLICK carried via action-data tuples with manual undo stack (click doesn't enter history). Multi-pair levels (L5-L7) use dual arranger rails; as rails extend, new segments become clickable sys_click sprites.",
       "solved_by": "cbp",
-      "solved_actions": 286
+      "solved_actions": 286,
+      "previous_id": "sk48-41055498",
+      "level_baselines": [
+        61,
+        177,
+        101,
+        103,
+        230,
+        181,
+        125,
+        92
+      ],
+      "trace_status": "compatible_with_new_version"
     },
     {
-      "id": "cn04-65d47d14",
+      "id": "cn04-2fe56bfb",
       "family": "cn04",
       "type": "move+click",
-      "baseline": 779,
+      "baseline": 789,
       "levels": 5,
       "status": "solved",
       "claimed_by": "thor",
       "best_level": 5,
-      "solved": true,
+      "solved": false,
       "solved_by": "thor",
-      "solved_actions": null
+      "solved_actions": null,
+      "previous_id": "cn04-65d47d14",
+      "level_baselines": [
+        29,
+        54,
+        85,
+        300,
+        208,
+        113
+      ],
+      "trace_status": "broken_on_new_version_pending_resolve"
     },
     {
-      "id": "ka59-9f096b4a",
+      "id": "ka59-38d34dbb",
       "family": "ka59",
       "type": "move+click",
-      "baseline": 826,
+      "baseline": 730,
       "levels": 7,
       "status": "solved",
       "claimed_by": "cbp",
       "best_level": 7,
       "solved": true,
       "solved_by": "cbp",
-      "solved_actions": 239
+      "solved_actions": 239,
+      "previous_id": "ka59-9f096b4a",
+      "level_baselines": [
+        28,
+        109,
+        51,
+        51,
+        33,
+        132,
+        326
+      ],
+      "trace_status": "compatible_with_new_version"
     },
     {
-      "id": "m0r0-dadda488",
+      "id": "m0r0-492f87ba",
       "family": "m0r0",
       "type": "move+click",
-      "baseline": 970,
+      "baseline": 1107,
       "levels": 6,
       "status": "solved",
       "claimed_by": "thor",
       "best_level": 6,
       "solved": true,
       "solved_by": "cbp",
-      "solved_actions": 181
+      "solved_actions": 181,
+      "previous_id": "m0r0-dadda488",
+      "level_baselines": [
+        30,
+        111,
+        203,
+        26,
+        500,
+        237
+      ],
+      "trace_status": "compatible_with_new_version"
     },
     {
-      "id": "re86-4e57566e",
+      "id": "re86-8af5384d",
       "family": "re86",
       "type": "move",
-      "baseline": 1071,
+      "baseline": 1255,
       "levels": 8,
       "status": "solved",
       "claimed_by": "cbp",
       "best_level": 8,
-      "solved": true,
+      "solved": false,
       "solved_by": "cbp",
-      "solved_actions": 606
+      "solved_actions": 606,
+      "previous_id": "re86-4e57566e",
+      "level_baselines": [
+        26,
+        42,
+        86,
+        108,
+        189,
+        139,
+        424,
+        241
+      ],
+      "trace_status": "broken_on_new_version_pending_resolve"
     },
     {
-      "id": "dc22-4c9bff3e",
+      "id": "dc22-fdcac232",
       "family": "dc22",
       "type": "move+click",
-      "baseline": 1192,
+      "baseline": 1228,
       "levels": 6,
       "status": "in_progress",
       "claimed_by": "cbp",
       "best_level": 5,
       "solved": false,
-      "notes": "L1-L5 solved (108 moves for L5 via handcrafted b/d toggle chain). L6 investigation stalled: mapped full mechanics (hhxv crane free-motion, 4 pressure plates gating a/b/e/h direction buttons, c/f variant cycling, zbhi-gated grab/color-cycle resurrection) and confirmed via solve_macro BFS + exhaustive probes that goal (46,6) is not reachable from initial (28,52) via any 624-state click+walk combination in my model. Core dead-end: plate cross (32..36, 56..60) is disconnected from plate-top (32..36, 48..52) by a 2px y=54..55 gap with no cycle-triggerable bridge, and crane move requires plate access. c-teleport via itkiupry1/2 oscillates between (18,48)\u2194(32,52) but cannot leave the upper band. Either a subtle engine mechanic is missed or L6 needs a fresh mental model. Full findings: shared-context/arc-agi-3/visual-memory/dc22/L6_findings.md + experiments dc22_L6_probe1..21.py. See arc-agi-3/experiments/dc22_L5_solve.py"
+      "notes": "L1-L5 solved (108 moves for L5 via handcrafted b/d toggle chain). L6 investigation stalled: mapped full mechanics (hhxv crane free-motion, 4 pressure plates gating a/b/e/h direction buttons, c/f variant cycling, zbhi-gated grab/color-cycle resurrection) and confirmed via solve_macro BFS + exhaustive probes that goal (46,6) is not reachable from initial (28,52) via any 624-state click+walk combination in my model. Core dead-end: plate cross (32..36, 56..60) is disconnected from plate-top (32..36, 48..52) by a 2px y=54..55 gap with no cycle-triggerable bridge, and crane move requires plate access. c-teleport via itkiupry1/2 oscillates between (18,48)\u2194(32,52) but cannot leave the upper band. Either a subtle engine mechanic is missed or L6 needs a fresh mental model. Full findings: shared-context/arc-agi-3/visual-memory/dc22/L6_findings.md + experiments dc22_L6_probe1..21.py. See arc-agi-3/experiments/dc22_L5_solve.py",
+      "previous_id": "dc22-4c9bff3e",
+      "level_baselines": [
+        59,
+        102,
+        67,
+        98,
+        324,
+        578
+      ],
+      "trace_status": "compatible_with_new_version"
     },
     {
       "id": "lf52-271a04aa",
@@ -327,5 +494,6 @@
       "solved_by": "cbp",
       "solved_actions": 637
     }
-  ]
+  ],
+  "_last_drift_check": "2026-04-15"
 }
