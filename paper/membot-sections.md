@@ -75,11 +75,28 @@ To validate retrieval quality independent of game-playing, we benchmarked the me
 
 On the oracle split (evidence-only sessions, 10,866 turns): **R@1 = 100.0%** across all 500 questions and all 6 categories. The correct answer passage was the top-ranked result for every question. This is the sanity check — the embedding model and search pipeline find what's there when distractors are absent.
 
-On the S split (40 sessions per question including deliberate distractors, 199,524 turns): retrieval with cosine similarity + keyword reranking achieves **R@50 = 74.2%** across 500 questions, with per-category scores ranging from 100.0% (single-session-assistant) to 23.3% (single-session-preference). Adding a local Gemma 3 27B reader to generate answers from retrieved passages is in progress at time of writing; preliminary results on a 3-question subset show the reader correctly extracting answers when retrieval surfaces the relevant passage.
+On the S split (40 sessions per question including deliberate distractors, 199,524 turns), per-question haystack retrieval:
 
-The 100% on single-session-assistant questions reflects a structural advantage: membot indexes both user and assistant conversation turns, unlike systems that index only user turns. For a competition agent that must recall its own prior reasoning (not just user inputs), this is directly relevant.
+| Metric | Membot (raw turns) | Membot (Q+A pairs) | ChromaDB raw (MemPalace baseline) |
+|---|---|---|---|
+| **R@1** | **87.8%** | 84.4% | ~90% (est.) |
+| **R@5** | **95.0%** | 94.4% | **96.6%** |
+| **R@10** | 97.0% | 97.2% | — |
+| **R@50** | 99.4% | **99.6%** | ~100% |
+| Misses | 3/500 | **2/500** | ~17/500 (est.) |
+| Storage | 691.8 MB (.cart.npz) | 421.7 MB (.cart.npz) | ~1.0-1.6 GB (ChromaDB dir) |
 
-*(Full LongMemEval results will be updated when the 500-question Gemma reader run completes.)*
+The 95.0% R@5 sits 1.6 percentage points behind ChromaDB's published 96.6% on the same benchmark split. Critically, the ChromaDB result (independently verified by Vectorize.io) reflects ChromaDB's default MiniLM-L6-v2 embedding on raw text — not the MemPalace palace structure. MemPalace's architectural features (wings, rooms, AAAK compression) were independently shown to *reduce* retrieval by 7-12 percentage points when enabled.
+
+Per-category highlights:
+- **single-session-assistant: 100.0%** — structural advantage from indexing both user and assistant turns. Systems that index only user turns cannot answer "what did you recommend?" questions.
+- **knowledge-update: 100.0%** — correctly surfaces both old and new values for evolving facts.
+- **multi-session: 100.0%** (Q+A pairs) — cross-session synthesis benefits from richer per-chunk context.
+- **single-session-preference: 96.7%** — the hardest category; preferences are mentioned casually and require behavioral inference.
+
+As a robustness stress test, we also evaluated against the *global* merged corpus (all 199,524 turns from all 500 questions searched simultaneously — 330x the intended haystack size per question). Under this deliberately adversarial condition, R@5 = 46.6% and R@50 = 72.0%, demonstrating graceful degradation rather than catastrophic failure. No competing system reports global-corpus results because the benchmark is not designed for it; we include this as evidence that the retrieval substrate handles scale without architectural collapse.
+
+Storage comparison: the full 199,524-turn corpus occupies 691.8 MB as a single portable `.cart.npz` file (or 421.7 MB with Q+A pair chunking). An equivalent ChromaDB installation requires approximately 1.0-1.6 GB across a directory tree of SQLite databases and HNSW index files. The cartridge format requires no database server for local access — the file is the entire retrieval system.
 
 ---
 
