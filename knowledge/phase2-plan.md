@@ -47,19 +47,20 @@ Each condition × each Gemma variant (e4b primary; e2b if fits; 26b-a4b on Thor 
 
 **Budget**: 1 day distributed across fleet machines.
 
-### 1.2 Visual-signature retrieval fidelity
+### 1.2 Visual-signature retrieval fidelity + vision encoder choice
 
-Build vision-feature encoding (grid-vision IRP or equivalent) for 5 diverse games: `cd82` (click-only), `r11l` (multi-entity), `tu93` (move-only), `sk48` (move+click), `lp85` (click-only).
+**Encoder decision** (Andy's open Q5, carried forward from `paper/membot-phase2-answers.md`): the cart format accepts 768-dim vectors from any encoder. Choice affects retrieval quality and whether cart format needs a second embedding column.
 
-Generate feature vectors for:
-- Start frame of each level of each game (5 games × ~6 levels = ~30 frames)
-- Hold out 1 level per game, retrieve against the rest
+Candidates:
+- **CLIP**: general-purpose, broadly studied, widely available
+- **SigLIP**: better retrieval benchmarks, likely higher R@1 on visually-distinct frames
+- **Gemma 4 built-in vision encoder**: consistency with reasoning model; may share embedding space with model's internal representations
 
-Measure: does the held-out frame retrieve the correct game's cartridge? What's the margin vs. nearest-neighbor alternative?
+Test: build feature encodings using each candidate for 5 diverse games (`cd82` click-only, `r11l` multi-entity, `tu93` move-only, `sk48` move+click, `lp85` click-only). Generate vectors for each level's start frame (~30 frames total). Hold out 1 level per game, retrieve against the rest. Measure: does held-out retrieve correct game? What's the margin vs. nearest-neighbor alternative?
 
-**Deliverable**: confusion matrix + quantitative retrieval quality measure. Gate check on the Phase 2 architecture — if retrieval is unreliable, the whole cartridge mechanism fails.
+**Deliverables**: (1) confusion matrix per encoder; (2) encoder choice with rationale; (3) quantitative retrieval quality measure. Gate check on the Phase 2 architecture — if retrieval is unreliable under every candidate, the whole cartridge mechanism fails.
 
-**Budget**: 1 day on one machine.
+**Budget**: 1-2 days on one machine.
 
 ### 1.3 End-to-end pipeclean on ONE game
 

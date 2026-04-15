@@ -381,6 +381,17 @@ On the S split (40 sessions per question including deliberate distractors, 199,5
 
 The 100% on single-session-assistant questions reflects a structural advantage: membot indexes both user and assistant conversation turns, unlike systems that index only user turns. For a competition agent that must recall its own prior reasoning (not just user inputs), this is directly relevant. *(Full LongMemEval results will be updated when the 500-question Gemma reader run completes.)*
 
+#### Deployment specifics
+
+Four deployment design questions were resolved during paper assembly (full writeup in `paper/membot-phase2-answers.md`):
+
+- **Always-retrieved substrate**: implemented as `multi_search(scope_mode=per_cart)` with `substrate-primitives` and `cross-game-patterns` carts mounted at agent startup and never unmounted. `cartridge_type` flag in hippocampus metadata byte 5 distinguishes substrate results (formatted as *constraints*) from game-world results (formatted as *knowledge*).
+- **Substrate retrieval mechanism**: rule-matching, not visual similarity. Substrate primitives are interaction-type abstractions, not visual patterns. Shipped as both a `substrate_primitives.json` sidecar for direct rule-loading and a `.cart.npz` for semantic NL query support.
+- **Retrieval ordering**: substrate first, as context priors. "Substrate primitives are gravity." The model reasons about game-specific actions with substrate constraints already loaded, not as an override layer.
+- **Composition**: substrate primitives compose as independent preconditions — no conflict-resolution engine needed. Joint constraint satisfaction over ~10 natural-language rules is what language models do well. Edge cases (e.g., budget pressure below 20% triggering exploitation-only mode) are primitive-internal threshold rules, not cross-primitive conflicts.
+
+One deployment question remains open: **vision encoder choice for game-world cartridge retrieval** — CLIP, SigLIP, or Gemma 4's built-in vision encoder. Decision affects embedding dimensionality and whether the cart format needs a second embedding column. Targeted for resolution during Phase 2 Tier 1.2 (§6.3 / `knowledge/phase2-plan.md`).
+
 ### 6.3 Vision IRP
 
 Grid-vision feature extraction must be fast, compressed, and retrieval-friendly. Tests to date have used preliminary encoders; Phase 2 requires a feature representation that produces stable retrieval across level variants within a game (so L4 retrieves the same world model as L1) while distinguishing different games.

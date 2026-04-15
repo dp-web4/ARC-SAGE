@@ -147,12 +147,71 @@ Example reasoning trace (hypothetical, `bp35`-like):
 
 This example illustrates a side-issue worth flagging: substrate primitives must be **unit-explicit**. The `bp35` bug was partly a unit-confusion bug — grid cells vs pixels, viewport vs world. Cartridges that leave units implicit will propagate the same confusion.
 
-## Open design questions for Andy
+## Resolved design questions (Andy / Claude Waving Cat, 2026-04-14)
 
-- **Is "always-retrieved" a first-class pattern in the paired-lattice format**, or do we simulate it by attaching substrate cartridge IDs to every game-world cartridge as a small appendix?
-- **Do substrate cartridges have visual signatures**, and if so, what do they look like? A "viewport-aware click" cartridge isn't tied to a specific frame — it's more an interaction-type tag.
-- **Retrieval ordering**: should substrate cartridges load first (as context priors) or last (as override rules)? The answer probably depends on whether the small model tends to derive primitives before consulting memory or vice versa.
-- **Cartridge composition**: when multiple substrate primitives apply simultaneously, how are potential conflicts resolved? (E.g., viewport-aware click says "scroll first"; action-budget says "minimize actions"; these are compatible but need joint reasoning.)
+Answers to the four open questions originally posed here. Full writeup in `paper/membot-phase2-answers.md`.
+
+### Q1: Is "always-retrieved" a first-class pattern in the paired-lattice format?
+
+**Yes — already built.** Membot's multi-cart architecture with `multi_search(scope_mode=per_cart)` handles it. Deployment pattern: mount `substrate-primitives` and `cross-game-patterns` carts at agent startup (never unmounted); swap `best_match_game_cart` per game based on visual signature. Substrate cart entries should carry a `cartridge_type` flag in hippocampus metadata byte 5 (currently unused) so the retrieval layer can distinguish substrate-result vs game-world-result without content inspection — the small model formats substrate as **constraints**, game-world as **knowledge**. Substrate cart size: ~50 entries = ~200 KB, sub-microsecond search. Invisible to the action budget.
+
+### Q2: Do substrate cartridges have visual signatures?
+
+**No — and they shouldn't.** Substrate primitives are interaction-type abstractions, not visual patterns. "Viewport-aware click" doesn't *look* like anything; it's a rule triggered by a condition (e.g., `ACTION6 in actions AND world_size > viewport_size`). Retrieval for substrate should be **rule-matching**, not similarity search — cheaper and more reliable for a fixed ~10-rule set.
+
+Recommended implementation: ship substrate primitives as a `substrate_primitives.json` sidecar for direct rule-loading (loads instantly, zero embedding cost, directly actionable as prompt text), AND in a `.cart.npz` for systems that want to retrieve them via semantic NL queries like *"how do I handle off-screen targets?"*. Belt and suspenders.
+
+### Q3: Retrieval ordering — substrate first or last?
+
+**Substrate first, as context priors.** Substrate primitives are *constraints on action* — they narrow what the model should consider doing before it reasons about what to do. The analogy: you learn physics before specific games; gravity applies to every game and isn't re-derived per game. Substrate primitives are gravity.
+
+Concrete prompt structure:
+
+```
+[SUBSTRATE CONTEXT — always present]
+General interaction rules that apply to this game:
+- Viewport: if target is off-screen, scroll before clicking.
+- Action budget: every action costs. Plan before acting.
+- Click classification: <10px change = selection; >100px = state transition.
+- Undo: ACTION7 reverts one step. Use for safe exploration.
+
+[GAME-WORLD CONTEXT — retrieved per game]
+This game appears to be "sk48 — Rail Weaver":
+- Mechanic: extend rail through colored targets…
+- Win condition: visit all targets.
+- Key insight: targets are non-solid; rail passes through.
+- Known trap: failed moves consume action budget.
+
+[CURRENT STATE]
+Frame: <embedded frame>
+Actions available: [1,2,3,4,6,7]
+Budget remaining: 142 / 196
+
+[REASONING]
+Given substrate rules and the world model, what is the best next action?
+```
+
+Each layer builds on the previous. The model never reasons about game-specific actions without substrate constraints already loaded. Exception handling via prompt: *"The following substrate rules apply UNLESS the game-world model explicitly states otherwise."*
+
+### Q4: Cartridge composition — how are simultaneous substrate primitives composed?
+
+**They don't conflict — they compose as independent preconditions.** Each primitive is a precondition check, not an action directive. Examples:
+
+| Primitive A | Primitive B | Composition |
+|---|---|---|
+| Scroll before clicking OOB | Minimize budget | Scroll efficiently; compute minimum scroll distance |
+| Wait for animation | Budget limited | Wait (anim frames don't cost), then act |
+| Selection classification | Undo available | Try selection-sized click (cheap), observe, undo if wrong |
+
+No conflict-resolution engine needed. Joint constraint satisfaction over ~10 natural-language rules is exactly what language models do well.
+
+**Edge case: budget pressure as a priority shift.** When `budget_remaining < 0.2 * budget_total`, shift from "explore safely with undo" to "execute known-good sequences only." This isn't cross-primitive conflict — it's a primitive-internal threshold rule owned by the budget-awareness primitive.
+
+**Design principle**: if two primitives *could* conflict, merge them into a single more-nuanced primitive. Keep the catalog as independent, composable constraints — not a rule-interaction web that requires a meta-reasoning arbitration layer. The small model's reasoning capacity is limited; don't spend it on meta-reasoning about rules.
+
+### New open question (carried forward)
+
+**Q5: Vision IRP encoder choice.** Game-world cartridge retrieval must match current frame against stored reference frames. Cart format already supports 768-dim vectors from any encoder. The open decision: CLIP (general-purpose), SigLIP (better for retrieval), or Gemma 4's built-in vision encoder (reasoning-model consistency)? Determines embedding dimensionality and whether cart format needs a second embedding column or can share the existing one. Assigned to Dennis / ARC-SAGE-Claude.
 
 ## Falsification
 
