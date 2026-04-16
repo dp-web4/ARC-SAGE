@@ -121,11 +121,13 @@ The small model receives *symbolic state* (object positions, grid contents, win 
 
 Each model turn emits a 1–3 action plan, executed against a forced state verification step. Between plans, the harness validates that the plan's predicted effect matches the observed frame. Misprediction triggers replanning. Cost: harness-level state comparison; model prompts become plan/verify pairs.
 
-### 4.3 Explicit action-diversity enforcement
+### 4.3 ~~Explicit action-diversity enforcement~~ (deprioritized)
 
-Decoder-side constraint: forbid consecutive same-action emissions on selected action classes (e.g., no two identical ACTION6 coordinates in a row). Cost: minor; works at the sampling layer. Risk: treats the symptom (uniform output) not the cause (perceptual mapping), may produce random noise instead of stereotyped noise.
+**2026-04-16 correction**: This approach treats the symptom (uniform output) not the cause (lack of game understanding). Forced diversity produces random noise instead of stereotyped noise — neither demonstrates world-model-informed reasoning. Deprioritized in favor of measuring *understanding* directly: does the model's action make the game state closer to the win state? Does the model change behavior when the state changes relevantly?
 
-The cleanest architecture would combine (4.1) and (4.2): the small model reasons over symbolic state extracted by the harness, emits short action plans, each plan is verified against outcome. The frontier model's role in Phase 1 was to *build* the state extractor. The small model's role in Phase 2 becomes *using* it — adaptation against retrieved ontology, not perception.
+Action diversity is a necessary-but-not-sufficient signal. Total fixation proves the model isn't responding to state at all. But diversity alone is not evidence of understanding — a model taking 4 different random actions knows the game no better than one repeating ACTION5. The right metric is state-responsive correctness, not histogram entropy.
+
+The cleanest architecture combines (4.1) and (4.2): the small model reasons over symbolic state extracted by the harness, emits short action plans, each plan is verified against outcome. The frontier model's role in Phase 1 was to *build* the state extractor. The small model's role in Phase 2 becomes *using* it — adaptation against retrieved ontology, not perception. The verification step in (4.2) is the mechanism that tests understanding: does the model's predicted outcome match the observed outcome?
 
 ---
 
