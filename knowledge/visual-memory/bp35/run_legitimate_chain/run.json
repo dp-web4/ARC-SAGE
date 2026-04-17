@@ -1,0 +1,2250 @@
+{
+  "game_id": "bp35-0a0ad940",
+  "player": "bp35-legitimate-chain",
+  "started": "20260416",
+  "win_levels": 9,
+  "baseline": 0,
+  "notes": "Continuous legitimate-only replay: L0-L4 from run_fixed.json, then exhaustive L5 probing. NO eq.win() bypass. NO OOB clicks accepted.",
+  "total_steps": 238,
+  "oob_skipped": 4,
+  "final_level": 5,
+  "final_player": [
+    5,
+    30
+  ],
+  "final_grav": "UP",
+  "steps": [
+    {
+      "step": 1,
+      "level": 0,
+      "action": "RIGHT"
+    },
+    {
+      "step": 2,
+      "level": 0,
+      "action": "RIGHT"
+    },
+    {
+      "step": 3,
+      "level": 0,
+      "action": "RIGHT"
+    },
+    {
+      "step": 4,
+      "level": 0,
+      "action": "RIGHT"
+    },
+    {
+      "step": 5,
+      "level": 0,
+      "action": "CLICK",
+      "x": 42,
+      "y": 30,
+      "note": "replay[5]"
+    },
+    {
+      "step": 6,
+      "level": 0,
+      "action": "CLICK",
+      "x": 24,
+      "y": 36,
+      "note": "replay[6]"
+    },
+    {
+      "step": 7,
+      "level": 0,
+      "action": "LEFT"
+    },
+    {
+      "step": 8,
+      "level": 0,
+      "action": "LEFT"
+    },
+    {
+      "step": 9,
+      "level": 0,
+      "action": "LEFT"
+    },
+    {
+      "step": 10,
+      "level": 0,
+      "action": "CLICK",
+      "x": 24,
+      "y": 30,
+      "note": "replay[10]"
+    },
+    {
+      "step": 11,
+      "level": 0,
+      "action": "CLICK",
+      "x": 24,
+      "y": 30,
+      "note": "replay[11]"
+    },
+    {
+      "step": 12,
+      "level": 0,
+      "action": "RIGHT"
+    },
+    {
+      "step": 13,
+      "level": 0,
+      "action": "CLICK",
+      "x": 30,
+      "y": 30,
+      "note": "replay[13]"
+    },
+    {
+      "step": 14,
+      "level": 0,
+      "action": "LEFT"
+    },
+    {
+      "step": 15,
+      "level": 1,
+      "action": "LEFT",
+      "level_up": true,
+      "new_level": 1
+    },
+    {
+      "step": 16,
+      "level": 1,
+      "action": "RIGHT"
+    },
+    {
+      "step": 17,
+      "level": 1,
+      "action": "RIGHT"
+    },
+    {
+      "step": 18,
+      "level": 1,
+      "action": "RIGHT"
+    },
+    {
+      "step": 19,
+      "level": 1,
+      "action": "RIGHT"
+    },
+    {
+      "step": 20,
+      "level": 1,
+      "action": "RIGHT"
+    },
+    {
+      "step": 21,
+      "level": 1,
+      "action": "CLICK",
+      "x": 48,
+      "y": 30,
+      "note": "replay[21]"
+    },
+    {
+      "step": 22,
+      "level": 1,
+      "action": "CLICK",
+      "x": 48,
+      "y": 30,
+      "note": "replay[22]"
+    },
+    {
+      "step": 23,
+      "level": 1,
+      "action": "LEFT"
+    },
+    {
+      "step": 24,
+      "level": 1,
+      "action": "LEFT"
+    },
+    {
+      "step": 25,
+      "level": 1,
+      "action": "CLICK",
+      "x": 30,
+      "y": 36,
+      "note": "replay[25]"
+    },
+    {
+      "step": 26,
+      "level": 1,
+      "action": "LEFT"
+    },
+    {
+      "step": 27,
+      "level": 1,
+      "action": "CLICK",
+      "x": 24,
+      "y": 36,
+      "note": "replay[27]"
+    },
+    {
+      "step": 28,
+      "level": 1,
+      "action": "LEFT"
+    },
+    {
+      "step": 29,
+      "level": 1,
+      "action": "CLICK",
+      "x": 18,
+      "y": 36,
+      "note": "replay[29]"
+    },
+    {
+      "step": 30,
+      "level": 1,
+      "action": "LEFT"
+    },
+    {
+      "step": 31,
+      "level": 1,
+      "action": "CLICK",
+      "x": 12,
+      "y": 36,
+      "note": "replay[31]"
+    },
+    {
+      "step": 32,
+      "level": 1,
+      "action": "LEFT"
+    },
+    {
+      "step": 33,
+      "level": 1,
+      "action": "CLICK",
+      "x": 12,
+      "y": 30,
+      "note": "replay[33]"
+    },
+    {
+      "step": 34,
+      "level": 1,
+      "action": "RIGHT"
+    },
+    {
+      "step": 35,
+      "level": 1,
+      "action": "RIGHT"
+    },
+    {
+      "step": 36,
+      "level": 1,
+      "action": "RIGHT"
+    },
+    {
+      "step": 37,
+      "level": 1,
+      "action": "CLICK",
+      "x": 30,
+      "y": 30,
+      "note": "replay[37]"
+    },
+    {
+      "step": 38,
+      "level": 1,
+      "action": "CLICK",
+      "x": 30,
+      "y": 30,
+      "note": "replay[38]"
+    },
+    {
+      "step": 39,
+      "level": 1,
+      "action": "LEFT"
+    },
+    {
+      "step": 40,
+      "level": 1,
+      "action": "LEFT"
+    },
+    {
+      "step": 41,
+      "level": 1,
+      "action": "CLICK",
+      "x": 18,
+      "y": 30,
+      "note": "replay[41]"
+    },
+    {
+      "step": 42,
+      "level": 1,
+      "action": "CLICK",
+      "x": 18,
+      "y": 30,
+      "note": "replay[42]"
+    },
+    {
+      "step": 43,
+      "level": 1,
+      "action": "CLICK",
+      "x": 18,
+      "y": 30,
+      "note": "replay[43]"
+    },
+    {
+      "step": 44,
+      "level": 1,
+      "action": "CLICK",
+      "x": 24,
+      "y": 36,
+      "note": "replay[44]"
+    },
+    {
+      "step": 45,
+      "level": 1,
+      "action": "RIGHT"
+    },
+    {
+      "step": 46,
+      "level": 1,
+      "action": "CLICK",
+      "x": 30,
+      "y": 36,
+      "note": "replay[46]"
+    },
+    {
+      "step": 47,
+      "level": 1,
+      "action": "RIGHT"
+    },
+    {
+      "step": 48,
+      "level": 1,
+      "action": "CLICK",
+      "x": 36,
+      "y": 36,
+      "note": "replay[48]"
+    },
+    {
+      "step": 49,
+      "level": 1,
+      "action": "RIGHT"
+    },
+    {
+      "step": 50,
+      "level": 1,
+      "action": "CLICK",
+      "x": 42,
+      "y": 36,
+      "note": "replay[50]"
+    },
+    {
+      "step": 51,
+      "level": 1,
+      "action": "RIGHT"
+    },
+    {
+      "step": 52,
+      "level": 1,
+      "action": "CLICK",
+      "x": 48,
+      "y": 36,
+      "note": "replay[52]"
+    },
+    {
+      "step": 53,
+      "level": 1,
+      "action": "RIGHT"
+    },
+    {
+      "step": 54,
+      "level": 1,
+      "action": "CLICK",
+      "x": 48,
+      "y": 30,
+      "note": "replay[54]"
+    },
+    {
+      "step": 55,
+      "level": 1,
+      "action": "CLICK",
+      "x": 48,
+      "y": 30,
+      "note": "replay[55]"
+    },
+    {
+      "step": 56,
+      "level": 1,
+      "action": "LEFT"
+    },
+    {
+      "step": 57,
+      "level": 1,
+      "action": "LEFT"
+    },
+    {
+      "step": 58,
+      "level": 1,
+      "action": "LEFT"
+    },
+    {
+      "step": 59,
+      "level": 2,
+      "action": "CLICK",
+      "x": 30,
+      "y": 30,
+      "note": "replay[59]",
+      "level_up": true,
+      "new_level": 2
+    },
+    {
+      "step": 60,
+      "level": 2,
+      "action": "CLICK",
+      "x": 30,
+      "y": 36,
+      "note": "replay[60]"
+    },
+    {
+      "step": 61,
+      "level": 2,
+      "action": "RIGHT"
+    },
+    {
+      "step": 62,
+      "level": 2,
+      "action": "RIGHT"
+    },
+    {
+      "step": 63,
+      "level": 2,
+      "action": "RIGHT"
+    },
+    {
+      "step": 64,
+      "level": 2,
+      "action": "CLICK",
+      "x": 36,
+      "y": 30,
+      "note": "replay[64]"
+    },
+    {
+      "step": 65,
+      "level": 2,
+      "action": "CLICK",
+      "x": 30,
+      "y": 30,
+      "note": "replay[65]"
+    },
+    {
+      "step": 66,
+      "level": 2,
+      "action": "CLICK",
+      "x": 24,
+      "y": 30,
+      "note": "replay[66]"
+    },
+    {
+      "step": 67,
+      "level": 2,
+      "action": "CLICK",
+      "x": 18,
+      "y": 30,
+      "note": "replay[67]"
+    },
+    {
+      "step": 68,
+      "level": 2,
+      "action": "LEFT"
+    },
+    {
+      "step": 69,
+      "level": 2,
+      "action": "LEFT"
+    },
+    {
+      "step": 70,
+      "level": 2,
+      "action": "LEFT"
+    },
+    {
+      "step": 71,
+      "level": 2,
+      "action": "LEFT"
+    },
+    {
+      "step": 72,
+      "level": 2,
+      "action": "RIGHT"
+    },
+    {
+      "step": 73,
+      "level": 2,
+      "action": "CLICK",
+      "x": 30,
+      "y": 30,
+      "note": "replay[73]"
+    },
+    {
+      "step": 74,
+      "level": 2,
+      "action": "CLICK",
+      "x": 36,
+      "y": 30,
+      "note": "replay[74]"
+    },
+    {
+      "step": 75,
+      "level": 2,
+      "action": "CLICK",
+      "x": 30,
+      "y": 36,
+      "note": "replay[75]"
+    },
+    {
+      "step": 76,
+      "level": 2,
+      "action": "CLICK",
+      "x": 36,
+      "y": 36,
+      "note": "replay[76]"
+    },
+    {
+      "step": 77,
+      "level": 2,
+      "action": "RIGHT"
+    },
+    {
+      "step": 78,
+      "level": 2,
+      "action": "RIGHT"
+    },
+    {
+      "step": 79,
+      "level": 2,
+      "action": "RIGHT"
+    },
+    {
+      "step": 80,
+      "level": 2,
+      "action": "RIGHT"
+    },
+    {
+      "step": 81,
+      "level": 2,
+      "action": "CLICK",
+      "x": 36,
+      "y": 30,
+      "note": "replay[81]"
+    },
+    {
+      "step": 82,
+      "level": 2,
+      "action": "CLICK",
+      "x": 30,
+      "y": 30,
+      "note": "replay[82]"
+    },
+    {
+      "step": 83,
+      "level": 2,
+      "action": "CLICK",
+      "x": 24,
+      "y": 30,
+      "note": "replay[83]"
+    },
+    {
+      "step": 84,
+      "level": 2,
+      "action": "CLICK",
+      "x": 18,
+      "y": 30,
+      "note": "replay[84]"
+    },
+    {
+      "step": 85,
+      "level": 2,
+      "action": "LEFT"
+    },
+    {
+      "step": 86,
+      "level": 2,
+      "action": "LEFT"
+    },
+    {
+      "step": 87,
+      "level": 2,
+      "action": "LEFT"
+    },
+    {
+      "step": 88,
+      "level": 2,
+      "action": "LEFT"
+    },
+    {
+      "step": 89,
+      "level": 2,
+      "action": "CLICK",
+      "x": 30,
+      "y": 36,
+      "note": "replay[89]"
+    },
+    {
+      "step": 90,
+      "level": 2,
+      "action": "RIGHT"
+    },
+    {
+      "step": 91,
+      "level": 2,
+      "action": "RIGHT"
+    },
+    {
+      "step": 92,
+      "level": 2,
+      "action": "RIGHT"
+    },
+    {
+      "step": 93,
+      "level": 3,
+      "action": "RIGHT",
+      "level_up": true,
+      "new_level": 3
+    },
+    {
+      "step": 94,
+      "level": 3,
+      "action": "CLICK",
+      "x": 18,
+      "y": 54,
+      "note": "replay[94]"
+    },
+    {
+      "step": 95,
+      "level": 3,
+      "action": "RIGHT"
+    },
+    {
+      "step": 96,
+      "level": 3,
+      "action": "RIGHT"
+    },
+    {
+      "step": 97,
+      "level": 3,
+      "action": "CLICK",
+      "x": 30,
+      "y": 0,
+      "note": "replay[97]"
+    },
+    {
+      "step": 98,
+      "level": 3,
+      "action": "LEFT"
+    },
+    {
+      "step": 99,
+      "level": 3,
+      "action": "LEFT"
+    },
+    {
+      "step": 100,
+      "level": 3,
+      "action": "LEFT"
+    },
+    {
+      "step": 101,
+      "level": 3,
+      "action": "RIGHT"
+    },
+    {
+      "step": 102,
+      "level": 3,
+      "action": "RIGHT"
+    },
+    {
+      "step": 103,
+      "level": 3,
+      "action": "CLICK",
+      "x": 42,
+      "y": 38,
+      "note": "replay[103]"
+    },
+    {
+      "step": 104,
+      "level": 3,
+      "action": "CLICK",
+      "x": 42,
+      "y": 44,
+      "note": "replay[104]"
+    },
+    {
+      "step": 105,
+      "level": 3,
+      "action": "CLICK",
+      "x": 18,
+      "y": 38,
+      "note": "replay[105]"
+    },
+    {
+      "step": 106,
+      "level": 3,
+      "action": "RIGHT"
+    },
+    {
+      "step": 107,
+      "level": 3,
+      "action": "RIGHT"
+    },
+    {
+      "step": 108,
+      "level": 3,
+      "action": "CLICK",
+      "x": 30,
+      "y": 54,
+      "note": "replay[108]"
+    },
+    {
+      "step": 109,
+      "level": 3,
+      "action": "LEFT"
+    },
+    {
+      "step": 110,
+      "level": 3,
+      "action": "LEFT"
+    },
+    {
+      "step": 111,
+      "level": 3,
+      "action": "LEFT"
+    },
+    {
+      "step": 112,
+      "level": 4,
+      "action": "CLICK",
+      "x": 24,
+      "y": 38,
+      "note": "replay[112]",
+      "level_up": true,
+      "new_level": 4
+    },
+    {
+      "step": 113,
+      "level": 4,
+      "action": "RIGHT"
+    },
+    {
+      "step": 114,
+      "level": 4,
+      "action": "RIGHT"
+    },
+    {
+      "step": 115,
+      "level": 4,
+      "action": "RIGHT"
+    },
+    {
+      "step": 116,
+      "level": 4,
+      "action": "RIGHT"
+    },
+    {
+      "step": 117,
+      "level": 4,
+      "action": "CLICK",
+      "x": 42,
+      "y": 18,
+      "note": "replay[117]"
+    },
+    {
+      "step": 118,
+      "level": 4,
+      "action": "CLICK",
+      "x": 48,
+      "y": 18,
+      "note": "replay[118]"
+    },
+    {
+      "step": 119,
+      "level": 4,
+      "action": "CLICK",
+      "x": 54,
+      "y": 18,
+      "note": "replay[119]"
+    },
+    {
+      "step": 120,
+      "level": 4,
+      "action": "CLICK",
+      "x": 48,
+      "y": 36,
+      "note": "replay[120]"
+    },
+    {
+      "step": 121,
+      "level": 4,
+      "action": "CLICK",
+      "x": 42,
+      "y": 32,
+      "note": "replay[121]"
+    },
+    {
+      "step": 122,
+      "level": 4,
+      "action": "CLICK",
+      "x": 42,
+      "y": 32,
+      "note": "replay[122]"
+    },
+    {
+      "step": 123,
+      "level": 4,
+      "action": "RIGHT"
+    },
+    {
+      "step": 124,
+      "level": 4,
+      "action": "CLICK",
+      "x": 48,
+      "y": 32,
+      "note": "replay[124]"
+    },
+    {
+      "step": 125,
+      "level": 4,
+      "action": "LEFT"
+    },
+    {
+      "step": 126,
+      "level": 4,
+      "action": "LEFT"
+    },
+    {
+      "step": 127,
+      "level": 4,
+      "action": "LEFT"
+    },
+    {
+      "step": 128,
+      "level": 4,
+      "action": "LEFT"
+    },
+    {
+      "step": 129,
+      "level": 4,
+      "action": "LEFT"
+    },
+    {
+      "step": 130,
+      "level": 4,
+      "action": "CLICK",
+      "x": 18,
+      "y": 2,
+      "note": "replay[130]"
+    },
+    {
+      "step": 131,
+      "level": 4,
+      "action": "CLICK",
+      "x": 24,
+      "y": 2,
+      "note": "replay[131]"
+    },
+    {
+      "step": 132,
+      "level": 4,
+      "action": "CLICK",
+      "x": 48,
+      "y": 50,
+      "note": "replay[132]"
+    },
+    {
+      "step": 133,
+      "level": 4,
+      "action": "LEFT"
+    },
+    {
+      "step": 134,
+      "level": 4,
+      "action": "RIGHT"
+    },
+    {
+      "step": 135,
+      "level": 4,
+      "action": "RIGHT"
+    },
+    {
+      "step": 136,
+      "level": 4,
+      "action": "RIGHT"
+    },
+    {
+      "step": 137,
+      "level": 4,
+      "action": "RIGHT"
+    },
+    {
+      "step": 138,
+      "level": 4,
+      "action": "RIGHT"
+    },
+    {
+      "step": 139,
+      "level": 4,
+      "action": "RIGHT"
+    },
+    {
+      "step": 140,
+      "level": 4,
+      "action": "RIGHT"
+    },
+    {
+      "step": 141,
+      "level": 4,
+      "action": "LEFT"
+    },
+    {
+      "step": 142,
+      "level": 4,
+      "action": "LEFT"
+    },
+    {
+      "step": 143,
+      "level": 4,
+      "action": "LEFT"
+    },
+    {
+      "step": 144,
+      "level": 5,
+      "action": "LEFT",
+      "level_up": true,
+      "new_level": 5
+    },
+    {
+      "step": 145,
+      "level": 5,
+      "action": "RIGHT"
+    },
+    {
+      "step": 146,
+      "level": 5,
+      "action": "RIGHT"
+    },
+    {
+      "step": 147,
+      "level": 5,
+      "action": "RIGHT"
+    },
+    {
+      "step": 148,
+      "level": 5,
+      "action": "RIGHT"
+    },
+    {
+      "step": 149,
+      "level": 5,
+      "action": "RIGHT"
+    },
+    {
+      "step": 150,
+      "level": 5,
+      "action": "CLICK",
+      "x": 36,
+      "y": 30,
+      "note": "flip gravity DOWN via G(6,22)"
+    },
+    {
+      "step": 151,
+      "level": 5,
+      "action": "LEFT"
+    },
+    {
+      "step": 152,
+      "level": 5,
+      "action": "LEFT"
+    },
+    {
+      "step": 153,
+      "level": 5,
+      "action": "LEFT"
+    },
+    {
+      "step": 154,
+      "level": 5,
+      "action": "LEFT"
+    },
+    {
+      "step": 155,
+      "level": 5,
+      "action": "CLICK",
+      "x": 24,
+      "y": 26,
+      "note": "click G(4,31) \u2014 the game-design dead end"
+    },
+    {
+      "step": 156,
+      "level": 5,
+      "action": "LEFT"
+    },
+    {
+      "step": 157,
+      "level": 5,
+      "action": "CLICK_OOB_SKIPPED",
+      "x": 48,
+      "y": -138,
+      "note": "try G(8,1) \u2014 walled per docs",
+      "oob": true
+    },
+    {
+      "step": 158,
+      "level": 5,
+      "action": "CLICK",
+      "x": 36,
+      "y": 6,
+      "note": "OB toggle (6,25)"
+    },
+    {
+      "step": 159,
+      "level": 5,
+      "action": "CLICK",
+      "x": 42,
+      "y": 6,
+      "note": "OB toggle (7,25)"
+    },
+    {
+      "step": 160,
+      "level": 5,
+      "action": "CLICK",
+      "x": 12,
+      "y": 42,
+      "note": "click gem directly"
+    },
+    {
+      "step": 161,
+      "level": 5,
+      "action": "CLICK",
+      "x": 30,
+      "y": 36,
+      "note": "click player at (5, 30)"
+    },
+    {
+      "step": 162,
+      "level": 5,
+      "action": "CLICK",
+      "x": 6,
+      "y": 42,
+      "note": "chamber (1,31)"
+    },
+    {
+      "step": 163,
+      "level": 5,
+      "action": "CLICK",
+      "x": 18,
+      "y": 42,
+      "note": "chamber (3,31)"
+    },
+    {
+      "step": 164,
+      "level": 5,
+      "action": "CLICK",
+      "x": 6,
+      "y": 36,
+      "note": "chamber (1,30)"
+    },
+    {
+      "step": 165,
+      "level": 5,
+      "action": "CLICK",
+      "x": 12,
+      "y": 36,
+      "note": "chamber (2,30)"
+    },
+    {
+      "step": 166,
+      "level": 5,
+      "action": "CLICK",
+      "x": 18,
+      "y": 36,
+      "note": "chamber (3,30)"
+    },
+    {
+      "step": 167,
+      "level": 5,
+      "action": "CLICK",
+      "x": 24,
+      "y": 36,
+      "note": "wall (4,30)"
+    },
+    {
+      "step": 168,
+      "level": 5,
+      "action": "CLICK",
+      "x": 0,
+      "y": 42,
+      "note": "wall (0,31)"
+    },
+    {
+      "step": 169,
+      "level": 5,
+      "action": "CLICK",
+      "x": 0,
+      "y": 36,
+      "note": "wall (0,30)"
+    },
+    {
+      "step": 170,
+      "level": 5,
+      "action": "CLICK",
+      "x": 30,
+      "y": 36,
+      "note": "wall (5,30)"
+    },
+    {
+      "step": 171,
+      "level": 5,
+      "action": "CLICK",
+      "x": 36,
+      "y": 36,
+      "note": "wall (6,30)"
+    },
+    {
+      "step": 172,
+      "level": 5,
+      "action": "CLICK",
+      "x": 42,
+      "y": 36,
+      "note": "wall (7,30)"
+    },
+    {
+      "step": 173,
+      "level": 5,
+      "action": "UNDO"
+    },
+    {
+      "step": 174,
+      "level": 5,
+      "action": "UNDO"
+    },
+    {
+      "step": 175,
+      "level": 5,
+      "action": "UNDO"
+    },
+    {
+      "step": 176,
+      "level": 5,
+      "action": "UNDO"
+    },
+    {
+      "step": 177,
+      "level": 5,
+      "action": "CLICK",
+      "x": 12,
+      "y": 12,
+      "note": "spike (2,26)"
+    },
+    {
+      "step": 178,
+      "level": 5,
+      "action": "CLICK",
+      "x": 18,
+      "y": 12,
+      "note": "spike (3,26)"
+    },
+    {
+      "step": 179,
+      "level": 5,
+      "action": "CLICK",
+      "x": 30,
+      "y": 12,
+      "note": "spike (5,26)"
+    },
+    {
+      "step": 180,
+      "level": 5,
+      "action": "CLICK",
+      "x": 36,
+      "y": 12,
+      "note": "spike (6,26)"
+    },
+    {
+      "step": 181,
+      "level": 5,
+      "action": "CLICK",
+      "x": 42,
+      "y": 12,
+      "note": "spike (7,26)"
+    },
+    {
+      "step": 182,
+      "level": 5,
+      "action": "RIGHT"
+    },
+    {
+      "step": 183,
+      "level": 5,
+      "action": "LEFT"
+    },
+    {
+      "step": 184,
+      "level": 5,
+      "action": "RIGHT"
+    },
+    {
+      "step": 185,
+      "level": 5,
+      "action": "LEFT"
+    },
+    {
+      "step": 186,
+      "level": 5,
+      "action": "RIGHT"
+    },
+    {
+      "step": 187,
+      "level": 5,
+      "action": "LEFT"
+    },
+    {
+      "step": 188,
+      "level": 5,
+      "action": "RIGHT"
+    },
+    {
+      "step": 189,
+      "level": 5,
+      "action": "LEFT"
+    },
+    {
+      "step": 190,
+      "level": 5,
+      "action": "RIGHT"
+    },
+    {
+      "step": 191,
+      "level": 5,
+      "action": "LEFT"
+    },
+    {
+      "step": 192,
+      "level": 5,
+      "action": "CLICK_OOB_SKIPPED",
+      "x": 36,
+      "y": -12,
+      "note": "re-click consumed G(6,22)",
+      "oob": true
+    },
+    {
+      "step": 193,
+      "level": 5,
+      "action": "RIGHT"
+    },
+    {
+      "step": 194,
+      "level": 5,
+      "action": "RIGHT"
+    },
+    {
+      "step": 195,
+      "level": 5,
+      "action": "RIGHT"
+    },
+    {
+      "step": 196,
+      "level": 5,
+      "action": "RIGHT"
+    },
+    {
+      "step": 197,
+      "level": 5,
+      "action": "CLICK_OOB_SKIPPED",
+      "x": 24,
+      "y": 84,
+      "note": "re-click consumed G(4,31) at y=31 (now empty)",
+      "oob": true
+    },
+    {
+      "step": 198,
+      "level": 5,
+      "action": "CLICK",
+      "x": 12,
+      "y": 18,
+      "note": "exhaustive-scan (2,20)=O"
+    },
+    {
+      "step": 199,
+      "level": 5,
+      "action": "CLICK",
+      "x": 18,
+      "y": 18,
+      "note": "exhaustive-scan (3,20)=O"
+    },
+    {
+      "step": 200,
+      "level": 5,
+      "action": "CLICK",
+      "x": 24,
+      "y": 18,
+      "note": "exhaustive-scan (4,20)=O"
+    },
+    {
+      "step": 201,
+      "level": 5,
+      "action": "CLICK",
+      "x": 36,
+      "y": 48,
+      "note": "exhaustive-scan (6,25)=B"
+    },
+    {
+      "step": 202,
+      "level": 5,
+      "action": "CLICK",
+      "x": 42,
+      "y": 48,
+      "note": "exhaustive-scan (7,25)=B"
+    },
+    {
+      "step": 203,
+      "level": 5,
+      "action": "UNDO"
+    },
+    {
+      "step": 204,
+      "level": 5,
+      "action": "UNDO"
+    },
+    {
+      "step": 205,
+      "level": 5,
+      "action": "UNDO"
+    },
+    {
+      "step": 206,
+      "level": 5,
+      "action": "UNDO"
+    },
+    {
+      "step": 207,
+      "level": 5,
+      "action": "UNDO"
+    },
+    {
+      "step": 208,
+      "level": 5,
+      "action": "UNDO"
+    },
+    {
+      "step": 209,
+      "level": 5,
+      "action": "UNDO"
+    },
+    {
+      "step": 210,
+      "level": 5,
+      "action": "UNDO"
+    },
+    {
+      "step": 211,
+      "level": 5,
+      "action": "UNDO"
+    },
+    {
+      "step": 212,
+      "level": 5,
+      "action": "UNDO"
+    },
+    {
+      "step": 213,
+      "level": 5,
+      "action": "UNDO"
+    },
+    {
+      "step": 214,
+      "level": 5,
+      "action": "UNDO"
+    },
+    {
+      "step": 215,
+      "level": 5,
+      "action": "UNDO"
+    },
+    {
+      "step": 216,
+      "level": 5,
+      "action": "UNDO"
+    },
+    {
+      "step": 217,
+      "level": 5,
+      "action": "UNDO"
+    },
+    {
+      "step": 218,
+      "level": 5,
+      "action": "UNDO"
+    },
+    {
+      "step": 219,
+      "level": 5,
+      "action": "UNDO"
+    },
+    {
+      "step": 220,
+      "level": 5,
+      "action": "UNDO"
+    },
+    {
+      "step": 221,
+      "level": 5,
+      "action": "UNDO"
+    },
+    {
+      "step": 222,
+      "level": 5,
+      "action": "UNDO"
+    },
+    {
+      "step": 223,
+      "level": 5,
+      "action": "ACTION1",
+      "note": "alt-action probe pre=(5, 30) post=(5, 30)"
+    },
+    {
+      "step": 224,
+      "level": 5,
+      "action": "ACTION2",
+      "note": "alt-action probe pre=(5, 30) post=(5, 30)"
+    },
+    {
+      "step": 225,
+      "level": 5,
+      "action": "ACTION5",
+      "note": "alt-action probe pre=(5, 30) post=(5, 30)"
+    },
+    {
+      "step": 226,
+      "level": 5,
+      "action": "UNDO"
+    },
+    {
+      "step": 227,
+      "level": 5,
+      "action": "RIGHT"
+    },
+    {
+      "step": 228,
+      "level": 5,
+      "action": "RIGHT"
+    },
+    {
+      "step": 229,
+      "level": 5,
+      "action": "RIGHT"
+    },
+    {
+      "step": 230,
+      "level": 5,
+      "action": "RIGHT"
+    },
+    {
+      "step": 231,
+      "level": 5,
+      "action": "RIGHT"
+    },
+    {
+      "step": 232,
+      "level": 5,
+      "action": "CLICK",
+      "x": 36,
+      "y": 6,
+      "note": "S: toggle O(6,25) to B"
+    },
+    {
+      "step": 233,
+      "level": 5,
+      "action": "CLICK",
+      "x": 42,
+      "y": 6,
+      "note": "S: toggle O(7,25) to B"
+    },
+    {
+      "step": 234,
+      "level": 5,
+      "action": "CLICK_OOB_SKIPPED",
+      "x": 36,
+      "y": -12,
+      "note": "S: G(6,22) \u2192 grav DN after OB toggle",
+      "oob": true
+    },
+    {
+      "step": 235,
+      "level": 5,
+      "action": "CLICK",
+      "x": 24,
+      "y": 42,
+      "note": "S2: click G(4,31) to flip UP"
+    },
+    {
+      "step": 236,
+      "level": 5,
+      "action": "LEFT"
+    },
+    {
+      "step": 237,
+      "level": 5,
+      "action": "UNDO"
+    },
+    {
+      "step": 238,
+      "level": 5,
+      "action": "CLICK",
+      "x": 24,
+      "y": 42,
+      "note": "T: try G(4,31) directly from spawn"
+    }
+  ],
+  "probes": [
+    {
+      "label": "walk R x5 to (8,23)",
+      "pre": {
+        "pos": [
+          3,
+          23
+        ],
+        "grav": "U",
+        "level": 5
+      },
+      "post": {
+        "pos": [
+          8,
+          23
+        ],
+        "grav": "U",
+        "level": 5
+      },
+      "steps": 5,
+      "oob_skipped": 0,
+      "won": false
+    },
+    {
+      "label": "click G(6,22) \u2192 grav DN",
+      "pre": {
+        "pos": [
+          8,
+          23
+        ],
+        "grav": "U",
+        "level": 5
+      },
+      "post": {
+        "pos": [
+          8,
+          31
+        ],
+        "grav": "D",
+        "level": 5
+      },
+      "steps": 1,
+      "oob_skipped": 0,
+      "won": false
+    },
+    {
+      "label": "A: walk L from (8,31) until blocked",
+      "pre": {
+        "pos": [
+          8,
+          31
+        ],
+        "grav": "D",
+        "level": 5
+      },
+      "post": {
+        "pos": [
+          5,
+          31
+        ],
+        "grav": "D",
+        "level": 5
+      },
+      "steps": 4,
+      "oob_skipped": 0,
+      "won": false
+    },
+    {
+      "label": "B: click G(4,31) from current pos",
+      "pre": {
+        "pos": [
+          5,
+          31
+        ],
+        "grav": "D",
+        "level": 5
+      },
+      "post": {
+        "pos": [
+          5,
+          30
+        ],
+        "grav": "U",
+        "level": 5
+      },
+      "steps": 1,
+      "oob_skipped": 0,
+      "won": false
+    },
+    {
+      "label": "B2: walk L after G(4,31)",
+      "pre": {
+        "pos": [
+          5,
+          30
+        ],
+        "grav": "U",
+        "level": 5
+      },
+      "post": {
+        "pos": [
+          5,
+          30
+        ],
+        "grav": "U",
+        "level": 5
+      },
+      "steps": 1,
+      "oob_skipped": 0,
+      "won": false
+    },
+    {
+      "label": "C: try G(8,1) third gravity flip",
+      "pre": {
+        "pos": [
+          5,
+          30
+        ],
+        "grav": "U",
+        "level": 5
+      },
+      "post": {
+        "pos": [
+          5,
+          30
+        ],
+        "grav": "U",
+        "level": 5
+      },
+      "steps": 1,
+      "oob_skipped": 1,
+      "won": false
+    },
+    {
+      "label": "D: toggle every in-view O/B tile",
+      "pre": {
+        "pos": [
+          5,
+          30
+        ],
+        "grav": "U",
+        "level": 5
+      },
+      "post": {
+        "pos": [
+          5,
+          30
+        ],
+        "grav": "U",
+        "level": 5
+      },
+      "steps": 2,
+      "oob_skipped": 0,
+      "won": false
+    },
+    {
+      "label": "E: click gem tile directly",
+      "pre": {
+        "pos": [
+          5,
+          30
+        ],
+        "grav": "U",
+        "level": 5
+      },
+      "post": {
+        "pos": [
+          5,
+          30
+        ],
+        "grav": "U",
+        "level": 5
+      },
+      "steps": 1,
+      "oob_skipped": 0,
+      "won": false
+    },
+    {
+      "label": "F: click player tile",
+      "pre": {
+        "pos": [
+          5,
+          30
+        ],
+        "grav": "U",
+        "level": 5
+      },
+      "post": {
+        "pos": [
+          5,
+          30
+        ],
+        "grav": "U",
+        "level": 5
+      },
+      "steps": 1,
+      "oob_skipped": 0,
+      "won": false
+    },
+    {
+      "label": "G: click empty chamber cells",
+      "pre": {
+        "pos": [
+          5,
+          30
+        ],
+        "grav": "U",
+        "level": 5
+      },
+      "post": {
+        "pos": [
+          5,
+          30
+        ],
+        "grav": "U",
+        "level": 5
+      },
+      "steps": 5,
+      "oob_skipped": 0,
+      "won": false
+    },
+    {
+      "label": "H: click walls near gem",
+      "pre": {
+        "pos": [
+          5,
+          30
+        ],
+        "grav": "U",
+        "level": 5
+      },
+      "post": {
+        "pos": [
+          5,
+          30
+        ],
+        "grav": "U",
+        "level": 5
+      },
+      "steps": 6,
+      "oob_skipped": 0,
+      "won": false
+    },
+    {
+      "label": "I: try UNDO repeatedly",
+      "pre": {
+        "pos": [
+          5,
+          30
+        ],
+        "grav": "U",
+        "level": 5
+      },
+      "post": {
+        "pos": [
+          5,
+          30
+        ],
+        "grav": "U",
+        "level": 5
+      },
+      "steps": 4,
+      "oob_skipped": 0,
+      "won": false
+    },
+    {
+      "label": "J: click spikes",
+      "pre": {
+        "pos": [
+          5,
+          30
+        ],
+        "grav": "U",
+        "level": 5
+      },
+      "post": {
+        "pos": [
+          5,
+          30
+        ],
+        "grav": "U",
+        "level": 5
+      },
+      "steps": 5,
+      "oob_skipped": 0,
+      "won": false
+    },
+    {
+      "label": "K: walk oscillation R/L x10",
+      "pre": {
+        "pos": [
+          5,
+          30
+        ],
+        "grav": "U",
+        "level": 5
+      },
+      "post": {
+        "pos": [
+          5,
+          30
+        ],
+        "grav": "U",
+        "level": 5
+      },
+      "steps": 10,
+      "oob_skipped": 0,
+      "won": false
+    },
+    {
+      "label": "L: re-click G(6,22) (consumed)",
+      "pre": {
+        "pos": [
+          5,
+          30
+        ],
+        "grav": "U",
+        "level": 5
+      },
+      "post": {
+        "pos": [
+          5,
+          30
+        ],
+        "grav": "U",
+        "level": 5
+      },
+      "steps": 1,
+      "oob_skipped": 1,
+      "won": false
+    },
+    {
+      "label": "M: walk R from (5,30) after G(4,31)",
+      "pre": {
+        "pos": [
+          5,
+          30
+        ],
+        "grav": "U",
+        "level": 5
+      },
+      "post": {
+        "pos": [
+          8,
+          23
+        ],
+        "grav": "U",
+        "level": 5
+      },
+      "steps": 4,
+      "oob_skipped": 0,
+      "won": false
+    },
+    {
+      "label": "N: re-click consumed G(4,31)",
+      "pre": {
+        "pos": [
+          8,
+          23
+        ],
+        "grav": "U",
+        "level": 5
+      },
+      "post": {
+        "pos": [
+          8,
+          23
+        ],
+        "grav": "U",
+        "level": 5
+      },
+      "steps": 1,
+      "oob_skipped": 1,
+      "won": false
+    },
+    {
+      "label": "O: exhaustive viewport scan",
+      "pre": {
+        "pos": [
+          8,
+          23
+        ],
+        "grav": "U",
+        "level": 5
+      },
+      "post": {
+        "pos": [
+          8,
+          23
+        ],
+        "grav": "U",
+        "level": 5
+      },
+      "steps": 5,
+      "oob_skipped": 0,
+      "won": false
+    },
+    {
+      "label": "P: undo spam (20x)",
+      "pre": {
+        "pos": [
+          8,
+          23
+        ],
+        "grav": "U",
+        "level": 5
+      },
+      "post": {
+        "pos": [
+          5,
+          30
+        ],
+        "grav": "U",
+        "level": 5
+      },
+      "steps": 20,
+      "oob_skipped": 0,
+      "won": false
+    },
+    {
+      "label": "Q: try ACTION1/ACTION2/ACTION5",
+      "pre": {
+        "pos": [
+          5,
+          30
+        ],
+        "grav": "U",
+        "level": 5
+      },
+      "post": {
+        "pos": [
+          5,
+          30
+        ],
+        "grav": "U",
+        "level": 5
+      },
+      "steps": 3,
+      "oob_skipped": 0,
+      "won": false
+    },
+    {
+      "label": "R1: UNDO all the way back",
+      "pre": {
+        "pos": [
+          5,
+          30
+        ],
+        "grav": "U",
+        "level": 5
+      },
+      "post": {
+        "pos": [
+          5,
+          30
+        ],
+        "grav": "U",
+        "level": 5
+      },
+      "steps": 1,
+      "oob_skipped": 0,
+      "won": false
+    },
+    {
+      "label": "S: OB toggle first, then G(6,22)",
+      "pre": {
+        "pos": [
+          5,
+          30
+        ],
+        "grav": "U",
+        "level": 5
+      },
+      "post": {
+        "pos": [
+          5,
+          30
+        ],
+        "grav": "U",
+        "level": 5
+      },
+      "steps": 8,
+      "oob_skipped": 1,
+      "won": false
+    },
+    {
+      "label": "S2: continue after OB+G path",
+      "pre": {
+        "pos": [
+          5,
+          30
+        ],
+        "grav": "U",
+        "level": 5
+      },
+      "post": {
+        "pos": [
+          5,
+          30
+        ],
+        "grav": "U",
+        "level": 5
+      },
+      "steps": 2,
+      "oob_skipped": 0,
+      "won": false
+    },
+    {
+      "label": "T1: UNDO back again",
+      "pre": {
+        "pos": [
+          5,
+          30
+        ],
+        "grav": "U",
+        "level": 5
+      },
+      "post": {
+        "pos": [
+          5,
+          30
+        ],
+        "grav": "U",
+        "level": 5
+      },
+      "steps": 1,
+      "oob_skipped": 0,
+      "won": false
+    },
+    {
+      "label": "T: try G(4,31) from spawn",
+      "pre": {
+        "pos": [
+          5,
+          30
+        ],
+        "grav": "U",
+        "level": 5
+      },
+      "post": {
+        "pos": [
+          5,
+          30
+        ],
+        "grav": "U",
+        "level": 5
+      },
+      "steps": 1,
+      "oob_skipped": 0,
+      "won": false
+    }
+  ],
+  "alt_ordering_test": {
+    "description": "Fresh env: toggle O(6,25)/(7,25)\u2192B FIRST, then G(6,22), then walk L",
+    "actions": [
+      {
+        "level": 5,
+        "action": "RIGHT",
+        "player_before": [
+          3,
+          23
+        ],
+        "grav_before": "U",
+        "player_after": [
+          4,
+          23
+        ],
+        "grav_after": "U",
+        "level_after": 5
+      },
+      {
+        "level": 5,
+        "action": "RIGHT",
+        "player_before": [
+          4,
+          23
+        ],
+        "grav_before": "U",
+        "player_after": [
+          5,
+          23
+        ],
+        "grav_after": "U",
+        "level_after": 5
+      },
+      {
+        "level": 5,
+        "action": "RIGHT",
+        "player_before": [
+          5,
+          23
+        ],
+        "grav_before": "U",
+        "player_after": [
+          6,
+          23
+        ],
+        "grav_after": "U",
+        "level_after": 5
+      },
+      {
+        "level": 5,
+        "action": "RIGHT",
+        "player_before": [
+          6,
+          23
+        ],
+        "grav_before": "U",
+        "player_after": [
+          7,
+          23
+        ],
+        "grav_after": "U",
+        "level_after": 5
+      },
+      {
+        "level": 5,
+        "action": "RIGHT",
+        "player_before": [
+          7,
+          23
+        ],
+        "grav_before": "U",
+        "player_after": [
+          8,
+          23
+        ],
+        "grav_after": "U",
+        "level_after": 5
+      },
+      {
+        "level": 5,
+        "action": "CLICK",
+        "player_before": [
+          8,
+          23
+        ],
+        "grav_before": "U",
+        "x": 36,
+        "y": 48,
+        "player_after": [
+          8,
+          23
+        ],
+        "grav_after": "U",
+        "level_after": 5,
+        "note": "toggle O\u2192B"
+      },
+      {
+        "level": 5,
+        "action": "CLICK",
+        "player_before": [
+          8,
+          23
+        ],
+        "grav_before": "U",
+        "x": 42,
+        "y": 48,
+        "player_after": [
+          8,
+          23
+        ],
+        "grav_after": "U",
+        "level_after": 5,
+        "note": "toggle O\u2192B"
+      },
+      {
+        "level": 5,
+        "action": "CLICK",
+        "player_before": [
+          8,
+          23
+        ],
+        "grav_before": "U",
+        "x": 36,
+        "y": 30,
+        "player_after": [
+          8,
+          31
+        ],
+        "grav_after": "D",
+        "level_after": 5,
+        "note": "grav DN flip"
+      },
+      {
+        "level": 5,
+        "action": "LEFT",
+        "player_before": [
+          8,
+          31
+        ],
+        "grav_before": "D",
+        "player_after": [
+          7,
+          31
+        ],
+        "grav_after": "D",
+        "level_after": 5
+      },
+      {
+        "level": 5,
+        "action": "LEFT",
+        "player_before": [
+          7,
+          31
+        ],
+        "grav_before": "D",
+        "player_after": [
+          6,
+          31
+        ],
+        "grav_after": "D",
+        "level_after": 5
+      },
+      {
+        "level": 5,
+        "action": "LEFT",
+        "player_before": [
+          6,
+          31
+        ],
+        "grav_before": "D",
+        "player_after": [
+          5,
+          31
+        ],
+        "grav_after": "D",
+        "level_after": 5
+      },
+      {
+        "level": 5,
+        "action": "LEFT",
+        "player_before": [
+          5,
+          31
+        ],
+        "grav_before": "D",
+        "player_after": [
+          5,
+          31
+        ],
+        "grav_after": "D",
+        "level_after": 5
+      }
+    ],
+    "final_player_alt": [
+      5,
+      31
+    ],
+    "final_grav_alt": "D",
+    "final_level_alt": 5
+  }
+}
