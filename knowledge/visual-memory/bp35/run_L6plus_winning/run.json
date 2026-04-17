@@ -1,0 +1,1654 @@
+{
+  "game_id": "bp35-0a0ad940",
+  "player": "bp35-L7-winning-L8-partial",
+  "win_levels_proved": 7,
+  "total_steps": 218,
+  "final_level_index": 8,
+  "final_player": [
+    3,
+    32
+  ],
+  "phase_breakdown": {
+    "L1-L4": "143 steps replayed from prior chain",
+    "L5": "1 step (LEFT) \u2014 gem (5,7) immediately left of player",
+    "L6": "14 steps \u2014 destroy 3 g gravity gems then walk through cleared chamber",
+    "L7": "45 steps \u2014 multi-stage 1/2 tile conversion puzzle, 8 g flips",
+    "L8": "9 steps (y-spread setup), partial \u2014 not yet winning"
+  },
+  "notes": [
+    "Walking grav UP into (3,23) then click any g (flip to DOWN) triggers fsvnqdbzrp grav DOWN starting (3,24)\u2192(3,25)+ \u2192 win() called via fall path.",
+    "L8 gem at (9,19) walled off; only access via converting (8,18) `1`->`2` and falling from (8, y<18) grav DOWN. Reaching col 8 upper requires y-spread chain to bypass spike row at y=27. Single (5,2)g limits options.",
+    "All deferred file targets are absolute paths under SAGE/arc-agi-3/experiments."
+  ],
+  "steps": [
+    {
+      "step": 1,
+      "level": 1,
+      "action": "RIGHT",
+      "note": "L1-L4 replay[1]"
+    },
+    {
+      "step": 2,
+      "level": 1,
+      "action": "RIGHT",
+      "note": "L1-L4 replay[2]"
+    },
+    {
+      "step": 3,
+      "level": 1,
+      "action": "RIGHT",
+      "note": "L1-L4 replay[3]"
+    },
+    {
+      "step": 4,
+      "level": 1,
+      "action": "RIGHT",
+      "note": "L1-L4 replay[4]"
+    },
+    {
+      "step": 5,
+      "level": 1,
+      "action": "CLICK",
+      "x": 42,
+      "y": 30,
+      "note": "L1-L4 replay[5]"
+    },
+    {
+      "step": 6,
+      "level": 1,
+      "action": "CLICK",
+      "x": 24,
+      "y": 36,
+      "note": "L1-L4 replay[6]"
+    },
+    {
+      "step": 7,
+      "level": 1,
+      "action": "LEFT",
+      "note": "L1-L4 replay[7]"
+    },
+    {
+      "step": 8,
+      "level": 1,
+      "action": "LEFT",
+      "note": "L1-L4 replay[8]"
+    },
+    {
+      "step": 9,
+      "level": 1,
+      "action": "LEFT",
+      "note": "L1-L4 replay[9]"
+    },
+    {
+      "step": 10,
+      "level": 1,
+      "action": "CLICK",
+      "x": 24,
+      "y": 30,
+      "note": "L1-L4 replay[10]"
+    },
+    {
+      "step": 11,
+      "level": 1,
+      "action": "CLICK",
+      "x": 24,
+      "y": 30,
+      "note": "L1-L4 replay[11]"
+    },
+    {
+      "step": 12,
+      "level": 1,
+      "action": "RIGHT",
+      "note": "L1-L4 replay[12]"
+    },
+    {
+      "step": 13,
+      "level": 1,
+      "action": "CLICK",
+      "x": 30,
+      "y": 30,
+      "note": "L1-L4 replay[13]"
+    },
+    {
+      "step": 14,
+      "level": 1,
+      "action": "LEFT",
+      "note": "L1-L4 replay[14]"
+    },
+    {
+      "step": 15,
+      "level": 1,
+      "action": "LEFT",
+      "note": "L1-L4 replay[15]"
+    },
+    {
+      "step": 16,
+      "level": 2,
+      "action": "RIGHT",
+      "note": "L1-L4 replay[16]"
+    },
+    {
+      "step": 17,
+      "level": 2,
+      "action": "RIGHT",
+      "note": "L1-L4 replay[17]"
+    },
+    {
+      "step": 18,
+      "level": 2,
+      "action": "RIGHT",
+      "note": "L1-L4 replay[18]"
+    },
+    {
+      "step": 19,
+      "level": 2,
+      "action": "RIGHT",
+      "note": "L1-L4 replay[19]"
+    },
+    {
+      "step": 20,
+      "level": 2,
+      "action": "RIGHT",
+      "note": "L1-L4 replay[20]"
+    },
+    {
+      "step": 21,
+      "level": 2,
+      "action": "CLICK",
+      "x": 48,
+      "y": 30,
+      "note": "L1-L4 replay[21]"
+    },
+    {
+      "step": 22,
+      "level": 2,
+      "action": "CLICK",
+      "x": 48,
+      "y": 30,
+      "note": "L1-L4 replay[22]"
+    },
+    {
+      "step": 23,
+      "level": 2,
+      "action": "LEFT",
+      "note": "L1-L4 replay[23]"
+    },
+    {
+      "step": 24,
+      "level": 2,
+      "action": "LEFT",
+      "note": "L1-L4 replay[24]"
+    },
+    {
+      "step": 25,
+      "level": 2,
+      "action": "CLICK",
+      "x": 30,
+      "y": 36,
+      "note": "L1-L4 replay[25]"
+    },
+    {
+      "step": 26,
+      "level": 2,
+      "action": "LEFT",
+      "note": "L1-L4 replay[26]"
+    },
+    {
+      "step": 27,
+      "level": 2,
+      "action": "CLICK",
+      "x": 24,
+      "y": 36,
+      "note": "L1-L4 replay[27]"
+    },
+    {
+      "step": 28,
+      "level": 2,
+      "action": "LEFT",
+      "note": "L1-L4 replay[28]"
+    },
+    {
+      "step": 29,
+      "level": 2,
+      "action": "CLICK",
+      "x": 18,
+      "y": 36,
+      "note": "L1-L4 replay[29]"
+    },
+    {
+      "step": 30,
+      "level": 2,
+      "action": "LEFT",
+      "note": "L1-L4 replay[30]"
+    },
+    {
+      "step": 31,
+      "level": 2,
+      "action": "CLICK",
+      "x": 12,
+      "y": 36,
+      "note": "L1-L4 replay[31]"
+    },
+    {
+      "step": 32,
+      "level": 2,
+      "action": "LEFT",
+      "note": "L1-L4 replay[32]"
+    },
+    {
+      "step": 33,
+      "level": 2,
+      "action": "CLICK",
+      "x": 12,
+      "y": 30,
+      "note": "L1-L4 replay[33]"
+    },
+    {
+      "step": 34,
+      "level": 2,
+      "action": "RIGHT",
+      "note": "L1-L4 replay[34]"
+    },
+    {
+      "step": 35,
+      "level": 2,
+      "action": "RIGHT",
+      "note": "L1-L4 replay[35]"
+    },
+    {
+      "step": 36,
+      "level": 2,
+      "action": "RIGHT",
+      "note": "L1-L4 replay[36]"
+    },
+    {
+      "step": 37,
+      "level": 2,
+      "action": "CLICK",
+      "x": 30,
+      "y": 30,
+      "note": "L1-L4 replay[37]"
+    },
+    {
+      "step": 38,
+      "level": 2,
+      "action": "CLICK",
+      "x": 30,
+      "y": 30,
+      "note": "L1-L4 replay[38]"
+    },
+    {
+      "step": 39,
+      "level": 2,
+      "action": "LEFT",
+      "note": "L1-L4 replay[39]"
+    },
+    {
+      "step": 40,
+      "level": 2,
+      "action": "LEFT",
+      "note": "L1-L4 replay[40]"
+    },
+    {
+      "step": 41,
+      "level": 2,
+      "action": "CLICK",
+      "x": 18,
+      "y": 30,
+      "note": "L1-L4 replay[41]"
+    },
+    {
+      "step": 42,
+      "level": 2,
+      "action": "CLICK",
+      "x": 18,
+      "y": 30,
+      "note": "L1-L4 replay[42]"
+    },
+    {
+      "step": 43,
+      "level": 2,
+      "action": "CLICK",
+      "x": 18,
+      "y": 30,
+      "note": "L1-L4 replay[43]"
+    },
+    {
+      "step": 44,
+      "level": 2,
+      "action": "CLICK",
+      "x": 24,
+      "y": 36,
+      "note": "L1-L4 replay[44]"
+    },
+    {
+      "step": 45,
+      "level": 2,
+      "action": "RIGHT",
+      "note": "L1-L4 replay[45]"
+    },
+    {
+      "step": 46,
+      "level": 2,
+      "action": "CLICK",
+      "x": 30,
+      "y": 36,
+      "note": "L1-L4 replay[46]"
+    },
+    {
+      "step": 47,
+      "level": 2,
+      "action": "RIGHT",
+      "note": "L1-L4 replay[47]"
+    },
+    {
+      "step": 48,
+      "level": 2,
+      "action": "CLICK",
+      "x": 36,
+      "y": 36,
+      "note": "L1-L4 replay[48]"
+    },
+    {
+      "step": 49,
+      "level": 2,
+      "action": "RIGHT",
+      "note": "L1-L4 replay[49]"
+    },
+    {
+      "step": 50,
+      "level": 2,
+      "action": "CLICK",
+      "x": 42,
+      "y": 36,
+      "note": "L1-L4 replay[50]"
+    },
+    {
+      "step": 51,
+      "level": 2,
+      "action": "RIGHT",
+      "note": "L1-L4 replay[51]"
+    },
+    {
+      "step": 52,
+      "level": 2,
+      "action": "CLICK",
+      "x": 48,
+      "y": 36,
+      "note": "L1-L4 replay[52]"
+    },
+    {
+      "step": 53,
+      "level": 2,
+      "action": "RIGHT",
+      "note": "L1-L4 replay[53]"
+    },
+    {
+      "step": 54,
+      "level": 2,
+      "action": "CLICK",
+      "x": 48,
+      "y": 30,
+      "note": "L1-L4 replay[54]"
+    },
+    {
+      "step": 55,
+      "level": 2,
+      "action": "CLICK",
+      "x": 48,
+      "y": 30,
+      "note": "L1-L4 replay[55]"
+    },
+    {
+      "step": 56,
+      "level": 2,
+      "action": "LEFT",
+      "note": "L1-L4 replay[56]"
+    },
+    {
+      "step": 57,
+      "level": 2,
+      "action": "LEFT",
+      "note": "L1-L4 replay[57]"
+    },
+    {
+      "step": 58,
+      "level": 2,
+      "action": "LEFT",
+      "note": "L1-L4 replay[58]"
+    },
+    {
+      "step": 59,
+      "level": 2,
+      "action": "CLICK",
+      "x": 30,
+      "y": 30,
+      "note": "L1-L4 replay[59]"
+    },
+    {
+      "step": 60,
+      "level": 3,
+      "action": "CLICK",
+      "x": 30,
+      "y": 36,
+      "note": "L1-L4 replay[60]"
+    },
+    {
+      "step": 61,
+      "level": 3,
+      "action": "RIGHT",
+      "note": "L1-L4 replay[61]"
+    },
+    {
+      "step": 62,
+      "level": 3,
+      "action": "RIGHT",
+      "note": "L1-L4 replay[62]"
+    },
+    {
+      "step": 63,
+      "level": 3,
+      "action": "RIGHT",
+      "note": "L1-L4 replay[63]"
+    },
+    {
+      "step": 64,
+      "level": 3,
+      "action": "CLICK",
+      "x": 36,
+      "y": 30,
+      "note": "L1-L4 replay[64]"
+    },
+    {
+      "step": 65,
+      "level": 3,
+      "action": "CLICK",
+      "x": 30,
+      "y": 30,
+      "note": "L1-L4 replay[65]"
+    },
+    {
+      "step": 66,
+      "level": 3,
+      "action": "CLICK",
+      "x": 24,
+      "y": 30,
+      "note": "L1-L4 replay[66]"
+    },
+    {
+      "step": 67,
+      "level": 3,
+      "action": "CLICK",
+      "x": 18,
+      "y": 30,
+      "note": "L1-L4 replay[67]"
+    },
+    {
+      "step": 68,
+      "level": 3,
+      "action": "LEFT",
+      "note": "L1-L4 replay[68]"
+    },
+    {
+      "step": 69,
+      "level": 3,
+      "action": "LEFT",
+      "note": "L1-L4 replay[69]"
+    },
+    {
+      "step": 70,
+      "level": 3,
+      "action": "LEFT",
+      "note": "L1-L4 replay[70]"
+    },
+    {
+      "step": 71,
+      "level": 3,
+      "action": "LEFT",
+      "note": "L1-L4 replay[71]"
+    },
+    {
+      "step": 72,
+      "level": 3,
+      "action": "RIGHT",
+      "note": "L1-L4 replay[72]"
+    },
+    {
+      "step": 73,
+      "level": 3,
+      "action": "CLICK",
+      "x": 30,
+      "y": 30,
+      "note": "L1-L4 replay[73]"
+    },
+    {
+      "step": 74,
+      "level": 3,
+      "action": "CLICK",
+      "x": 36,
+      "y": 30,
+      "note": "L1-L4 replay[74]"
+    },
+    {
+      "step": 75,
+      "level": 3,
+      "action": "CLICK",
+      "x": 30,
+      "y": 36,
+      "note": "L1-L4 replay[75]"
+    },
+    {
+      "step": 76,
+      "level": 3,
+      "action": "CLICK",
+      "x": 36,
+      "y": 36,
+      "note": "L1-L4 replay[76]"
+    },
+    {
+      "step": 77,
+      "level": 3,
+      "action": "RIGHT",
+      "note": "L1-L4 replay[77]"
+    },
+    {
+      "step": 78,
+      "level": 3,
+      "action": "RIGHT",
+      "note": "L1-L4 replay[78]"
+    },
+    {
+      "step": 79,
+      "level": 3,
+      "action": "RIGHT",
+      "note": "L1-L4 replay[79]"
+    },
+    {
+      "step": 80,
+      "level": 3,
+      "action": "RIGHT",
+      "note": "L1-L4 replay[80]"
+    },
+    {
+      "step": 81,
+      "level": 3,
+      "action": "CLICK",
+      "x": 36,
+      "y": 30,
+      "note": "L1-L4 replay[81]"
+    },
+    {
+      "step": 82,
+      "level": 3,
+      "action": "CLICK",
+      "x": 30,
+      "y": 30,
+      "note": "L1-L4 replay[82]"
+    },
+    {
+      "step": 83,
+      "level": 3,
+      "action": "CLICK",
+      "x": 24,
+      "y": 30,
+      "note": "L1-L4 replay[83]"
+    },
+    {
+      "step": 84,
+      "level": 3,
+      "action": "CLICK",
+      "x": 18,
+      "y": 30,
+      "note": "L1-L4 replay[84]"
+    },
+    {
+      "step": 85,
+      "level": 3,
+      "action": "LEFT",
+      "note": "L1-L4 replay[85]"
+    },
+    {
+      "step": 86,
+      "level": 3,
+      "action": "LEFT",
+      "note": "L1-L4 replay[86]"
+    },
+    {
+      "step": 87,
+      "level": 3,
+      "action": "LEFT",
+      "note": "L1-L4 replay[87]"
+    },
+    {
+      "step": 88,
+      "level": 3,
+      "action": "LEFT",
+      "note": "L1-L4 replay[88]"
+    },
+    {
+      "step": 89,
+      "level": 3,
+      "action": "CLICK",
+      "x": 30,
+      "y": 36,
+      "note": "L1-L4 replay[89]"
+    },
+    {
+      "step": 90,
+      "level": 3,
+      "action": "RIGHT",
+      "note": "L1-L4 replay[90]"
+    },
+    {
+      "step": 91,
+      "level": 3,
+      "action": "RIGHT",
+      "note": "L1-L4 replay[91]"
+    },
+    {
+      "step": 92,
+      "level": 3,
+      "action": "RIGHT",
+      "note": "L1-L4 replay[92]"
+    },
+    {
+      "step": 93,
+      "level": 3,
+      "action": "RIGHT",
+      "note": "L1-L4 replay[93]"
+    },
+    {
+      "step": 94,
+      "level": 4,
+      "action": "CLICK",
+      "x": 18,
+      "y": 54,
+      "note": "L1-L4 replay[94]"
+    },
+    {
+      "step": 95,
+      "level": 4,
+      "action": "RIGHT",
+      "note": "L1-L4 replay[95]"
+    },
+    {
+      "step": 96,
+      "level": 4,
+      "action": "RIGHT",
+      "note": "L1-L4 replay[96]"
+    },
+    {
+      "step": 97,
+      "level": 4,
+      "action": "CLICK",
+      "x": 30,
+      "y": 0,
+      "note": "L1-L4 replay[97]"
+    },
+    {
+      "step": 98,
+      "level": 4,
+      "action": "LEFT",
+      "note": "L1-L4 replay[98]"
+    },
+    {
+      "step": 99,
+      "level": 4,
+      "action": "LEFT",
+      "note": "L1-L4 replay[99]"
+    },
+    {
+      "step": 100,
+      "level": 4,
+      "action": "LEFT",
+      "note": "L1-L4 replay[100]"
+    },
+    {
+      "step": 101,
+      "level": 4,
+      "action": "RIGHT",
+      "note": "L1-L4 replay[101]"
+    },
+    {
+      "step": 102,
+      "level": 4,
+      "action": "RIGHT",
+      "note": "L1-L4 replay[102]"
+    },
+    {
+      "step": 103,
+      "level": 4,
+      "action": "CLICK",
+      "x": 42,
+      "y": 38,
+      "note": "L1-L4 replay[103]"
+    },
+    {
+      "step": 104,
+      "level": 4,
+      "action": "CLICK",
+      "x": 42,
+      "y": 44,
+      "note": "L1-L4 replay[104]"
+    },
+    {
+      "step": 105,
+      "level": 4,
+      "action": "CLICK",
+      "x": 18,
+      "y": 38,
+      "note": "L1-L4 replay[105]"
+    },
+    {
+      "step": 106,
+      "level": 4,
+      "action": "RIGHT",
+      "note": "L1-L4 replay[106]"
+    },
+    {
+      "step": 107,
+      "level": 4,
+      "action": "RIGHT",
+      "note": "L1-L4 replay[107]"
+    },
+    {
+      "step": 108,
+      "level": 4,
+      "action": "CLICK",
+      "x": 30,
+      "y": 54,
+      "note": "L1-L4 replay[108]"
+    },
+    {
+      "step": 109,
+      "level": 4,
+      "action": "LEFT",
+      "note": "L1-L4 replay[109]"
+    },
+    {
+      "step": 110,
+      "level": 4,
+      "action": "LEFT",
+      "note": "L1-L4 replay[110]"
+    },
+    {
+      "step": 111,
+      "level": 4,
+      "action": "LEFT",
+      "note": "L1-L4 replay[111]"
+    },
+    {
+      "step": 112,
+      "level": 4,
+      "action": "CLICK",
+      "x": 24,
+      "y": 38,
+      "note": "L1-L4 replay[112]"
+    },
+    {
+      "step": 113,
+      "level": 5,
+      "action": "RIGHT",
+      "note": "L1-L4 replay[113]"
+    },
+    {
+      "step": 114,
+      "level": 5,
+      "action": "RIGHT",
+      "note": "L1-L4 replay[114]"
+    },
+    {
+      "step": 115,
+      "level": 5,
+      "action": "RIGHT",
+      "note": "L1-L4 replay[115]"
+    },
+    {
+      "step": 116,
+      "level": 5,
+      "action": "RIGHT",
+      "note": "L1-L4 replay[116]"
+    },
+    {
+      "step": 117,
+      "level": 5,
+      "action": "CLICK",
+      "x": 42,
+      "y": 18,
+      "note": "L1-L4 replay[117]"
+    },
+    {
+      "step": 118,
+      "level": 5,
+      "action": "CLICK",
+      "x": 48,
+      "y": 18,
+      "note": "L1-L4 replay[118]"
+    },
+    {
+      "step": 119,
+      "level": 5,
+      "action": "CLICK",
+      "x": 54,
+      "y": 18,
+      "note": "L1-L4 replay[119]"
+    },
+    {
+      "step": 120,
+      "level": 5,
+      "action": "CLICK",
+      "x": 48,
+      "y": 36,
+      "note": "L1-L4 replay[120]"
+    },
+    {
+      "step": 121,
+      "level": 5,
+      "action": "CLICK",
+      "x": 42,
+      "y": 32,
+      "note": "L1-L4 replay[121]"
+    },
+    {
+      "step": 122,
+      "level": 5,
+      "action": "CLICK",
+      "x": 42,
+      "y": 32,
+      "note": "L1-L4 replay[122]"
+    },
+    {
+      "step": 123,
+      "level": 5,
+      "action": "RIGHT",
+      "note": "L1-L4 replay[123]"
+    },
+    {
+      "step": 124,
+      "level": 5,
+      "action": "CLICK",
+      "x": 48,
+      "y": 32,
+      "note": "L1-L4 replay[124]"
+    },
+    {
+      "step": 125,
+      "level": 5,
+      "action": "LEFT",
+      "note": "L1-L4 replay[125]"
+    },
+    {
+      "step": 126,
+      "level": 5,
+      "action": "LEFT",
+      "note": "L1-L4 replay[126]"
+    },
+    {
+      "step": 127,
+      "level": 5,
+      "action": "LEFT",
+      "note": "L1-L4 replay[127]"
+    },
+    {
+      "step": 128,
+      "level": 5,
+      "action": "LEFT",
+      "note": "L1-L4 replay[128]"
+    },
+    {
+      "step": 129,
+      "level": 5,
+      "action": "LEFT",
+      "note": "L1-L4 replay[129]"
+    },
+    {
+      "step": 130,
+      "level": 5,
+      "action": "CLICK",
+      "x": 18,
+      "y": 2,
+      "note": "L1-L4 replay[130]"
+    },
+    {
+      "step": 131,
+      "level": 5,
+      "action": "CLICK",
+      "x": 24,
+      "y": 2,
+      "note": "L1-L4 replay[131]"
+    },
+    {
+      "step": 132,
+      "level": 5,
+      "action": "CLICK",
+      "x": 48,
+      "y": 50,
+      "note": "L1-L4 replay[132]"
+    },
+    {
+      "step": 133,
+      "level": 5,
+      "action": "LEFT",
+      "note": "L1-L4 replay[133]"
+    },
+    {
+      "step": 134,
+      "level": 5,
+      "action": "RIGHT",
+      "note": "L1-L4 replay[134]"
+    },
+    {
+      "step": 135,
+      "level": 5,
+      "action": "RIGHT",
+      "note": "L1-L4 replay[135]"
+    },
+    {
+      "step": 136,
+      "level": 5,
+      "action": "RIGHT",
+      "note": "L1-L4 replay[136]"
+    },
+    {
+      "step": 137,
+      "level": 5,
+      "action": "RIGHT",
+      "note": "L1-L4 replay[137]"
+    },
+    {
+      "step": 138,
+      "level": 5,
+      "action": "RIGHT",
+      "note": "L1-L4 replay[138]"
+    },
+    {
+      "step": 139,
+      "level": 5,
+      "action": "RIGHT",
+      "note": "L1-L4 replay[139]"
+    },
+    {
+      "step": 140,
+      "level": 5,
+      "action": "RIGHT",
+      "note": "L1-L4 replay[140]"
+    },
+    {
+      "step": 141,
+      "level": 5,
+      "action": "LEFT",
+      "note": "L1-L4 replay[141]"
+    },
+    {
+      "step": 142,
+      "level": 5,
+      "action": "LEFT",
+      "note": "L1-L4 replay[142]"
+    },
+    {
+      "step": 143,
+      "level": 5,
+      "action": "LEFT",
+      "note": "L1-L4 replay[143]"
+    },
+    {
+      "step": 144,
+      "level": 5,
+      "action": "LEFT",
+      "note": "L5 win: step onto gem at (5,7)"
+    },
+    {
+      "step": 145,
+      "level": 6,
+      "action": "RIGHT",
+      "note": "L6 traverse to (8,23)"
+    },
+    {
+      "step": 146,
+      "level": 6,
+      "action": "RIGHT",
+      "note": "L6 traverse to (8,23)"
+    },
+    {
+      "step": 147,
+      "level": 6,
+      "action": "RIGHT",
+      "note": "L6 traverse to (8,23)"
+    },
+    {
+      "step": 148,
+      "level": 6,
+      "action": "RIGHT",
+      "note": "L6 traverse to (8,23)"
+    },
+    {
+      "step": 149,
+      "level": 6,
+      "action": "RIGHT",
+      "note": "L6 traverse to (8,23)"
+    },
+    {
+      "step": 150,
+      "level": 6,
+      "action": "CLICK",
+      "x": 36,
+      "y": 30,
+      "grid_target": [
+        6,
+        22
+      ],
+      "note": "L6 click g(6,22): flip grav & destroy & fall to (8,31)"
+    },
+    {
+      "step": 151,
+      "level": 6,
+      "action": "CLICK",
+      "x": 24,
+      "y": 26,
+      "grid_target": [
+        4,
+        31
+      ],
+      "note": "L6 click g(4,31): flip & destroy & fall back to (8,23)"
+    },
+    {
+      "step": 152,
+      "level": 6,
+      "action": "CLICK",
+      "x": 48,
+      "y": -96,
+      "grid_target": [
+        8,
+        1
+      ],
+      "note": "L6 click g(8,1): flip & destroy & fall to (8,31)"
+    },
+    {
+      "step": 153,
+      "level": 6,
+      "action": "LEFT",
+      "note": "L6 walk LEFT to (2,31) gem (g's destroyed, path clear)"
+    },
+    {
+      "step": 154,
+      "level": 6,
+      "action": "LEFT",
+      "note": "L6 walk LEFT to (2,31) gem (g's destroyed, path clear)"
+    },
+    {
+      "step": 155,
+      "level": 6,
+      "action": "LEFT",
+      "note": "L6 walk LEFT to (2,31) gem (g's destroyed, path clear)"
+    },
+    {
+      "step": 156,
+      "level": 6,
+      "action": "LEFT",
+      "note": "L6 walk LEFT to (2,31) gem (g's destroyed, path clear)"
+    },
+    {
+      "step": 157,
+      "level": 6,
+      "action": "LEFT",
+      "note": "L6 walk LEFT to (2,31) gem (g's destroyed, path clear)"
+    },
+    {
+      "step": 158,
+      "level": 6,
+      "action": "LEFT",
+      "note": "L6 walk LEFT to (2,31) gem (g's destroyed, path clear)"
+    },
+    {
+      "step": 159,
+      "level": 7,
+      "action": "CLICK",
+      "x": 24,
+      "y": 6,
+      "grid_target": [
+        4,
+        14
+      ],
+      "note": "L7 setup: (4,14) 2->1 (col4 floor)"
+    },
+    {
+      "step": 160,
+      "level": 7,
+      "action": "CLICK",
+      "x": 30,
+      "y": 6,
+      "grid_target": [
+        5,
+        14
+      ],
+      "note": "L7 setup: (5,14) 2->1 (col5 floor)"
+    },
+    {
+      "step": 161,
+      "level": 7,
+      "action": "CLICK",
+      "x": 24,
+      "y": 18,
+      "grid_target": [
+        4,
+        16
+      ],
+      "note": "L7 setup: (4,16) 2->1"
+    },
+    {
+      "step": 162,
+      "level": 7,
+      "action": "CLICK",
+      "x": 30,
+      "y": 18,
+      "grid_target": [
+        5,
+        16
+      ],
+      "note": "L7 setup: (5,16) 2->1"
+    },
+    {
+      "step": 163,
+      "level": 7,
+      "action": "CLICK",
+      "x": 36,
+      "y": 18,
+      "grid_target": [
+        6,
+        16
+      ],
+      "note": "L7 setup: (6,16) 2->1 (col6 fall stop)"
+    },
+    {
+      "step": 164,
+      "level": 7,
+      "action": "CLICK",
+      "x": 36,
+      "y": 36,
+      "grid_target": [
+        6,
+        19
+      ],
+      "note": "L7 setup: (6,19) 2->1 (so (6,20) standable)"
+    },
+    {
+      "step": 165,
+      "level": 7,
+      "action": "CLICK",
+      "x": 24,
+      "y": -24,
+      "grid_target": [
+        4,
+        9
+      ],
+      "note": "L7 setup: (4,9) 2->1 (col4 upper)"
+    },
+    {
+      "step": 166,
+      "level": 7,
+      "action": "CLICK",
+      "x": 0,
+      "y": 36,
+      "grid_target": [
+        0,
+        19
+      ],
+      "note": "L7 flip g(0,19) UP->DOWN -> (3,21)"
+    },
+    {
+      "step": 167,
+      "level": 7,
+      "action": "RIGHT",
+      "note": "L7 traverse y=21 to (6,21)"
+    },
+    {
+      "step": 168,
+      "level": 7,
+      "action": "RIGHT",
+      "note": "L7 traverse y=21 to (6,21)"
+    },
+    {
+      "step": 169,
+      "level": 7,
+      "action": "RIGHT",
+      "note": "L7 traverse y=21 to (6,21)"
+    },
+    {
+      "step": 170,
+      "level": 7,
+      "action": "CLICK",
+      "x": 0,
+      "y": 26,
+      "grid_target": [
+        0,
+        21
+      ],
+      "note": "L7 flip g(0,21) DOWN->UP -> (6,20)"
+    },
+    {
+      "step": 171,
+      "level": 7,
+      "action": "RIGHT",
+      "note": "L7 -> (7,20)"
+    },
+    {
+      "step": 172,
+      "level": 7,
+      "action": "RIGHT",
+      "note": "L7 -> (8,15) via col 8 fall up"
+    },
+    {
+      "step": 173,
+      "level": 7,
+      "action": "LEFT",
+      "note": "L7 traverse y=13 chain"
+    },
+    {
+      "step": 174,
+      "level": 7,
+      "action": "LEFT",
+      "note": "L7 traverse y=13 chain"
+    },
+    {
+      "step": 175,
+      "level": 7,
+      "action": "LEFT",
+      "note": "L7 traverse y=13 chain"
+    },
+    {
+      "step": 176,
+      "level": 7,
+      "action": "LEFT",
+      "note": "L7 traverse y=13 chain"
+    },
+    {
+      "step": 177,
+      "level": 7,
+      "action": "CLICK",
+      "x": 0,
+      "y": 66,
+      "grid_target": [
+        0,
+        18
+      ],
+      "note": "L7 flip g(0,18) UP->DOWN @ (4,13)"
+    },
+    {
+      "step": 178,
+      "level": 7,
+      "action": "RIGHT"
+    },
+    {
+      "step": 179,
+      "level": 7,
+      "action": "RIGHT",
+      "note": "L7 -> (6,15)"
+    },
+    {
+      "step": 180,
+      "level": 7,
+      "action": "LEFT",
+      "note": "L7 -> (5,15)"
+    },
+    {
+      "step": 181,
+      "level": 7,
+      "action": "LEFT",
+      "note": "L7 -> (4,15)"
+    },
+    {
+      "step": 182,
+      "level": 7,
+      "action": "CLICK",
+      "x": 0,
+      "y": 38,
+      "grid_target": [
+        0,
+        17
+      ],
+      "note": "L7 flip g(0,17) DOWN->UP @ (4,15)"
+    },
+    {
+      "step": 183,
+      "level": 7,
+      "action": "LEFT",
+      "note": "L7 -> (3,15)"
+    },
+    {
+      "step": 184,
+      "level": 7,
+      "action": "LEFT",
+      "note": "L7 -> (2,8) via col2 fall up"
+    },
+    {
+      "step": 185,
+      "level": 7,
+      "action": "RIGHT",
+      "note": "L7 -> (3,8)"
+    },
+    {
+      "step": 186,
+      "level": 7,
+      "action": "CLICK",
+      "x": 0,
+      "y": 84,
+      "grid_target": [
+        0,
+        16
+      ],
+      "note": "L7 flip g(0,16) UP->DOWN @ (3,8) -> (3,11)"
+    },
+    {
+      "step": 187,
+      "level": 7,
+      "action": "RIGHT",
+      "note": "L7 -> (4,11)"
+    },
+    {
+      "step": 188,
+      "level": 7,
+      "action": "CLICK",
+      "x": 0,
+      "y": 50,
+      "grid_target": [
+        0,
+        15
+      ],
+      "note": "L7 flip g(0,15) DOWN->UP @ (4,11) -> (4,10)"
+    },
+    {
+      "step": 189,
+      "level": 7,
+      "action": "CLICK",
+      "x": 30,
+      "y": 36,
+      "grid_target": [
+        5,
+        10
+      ],
+      "note": "L7 (5,10) 1->2 (allow col5 fall)"
+    },
+    {
+      "step": 190,
+      "level": 7,
+      "action": "RIGHT",
+      "note": "L7 -> (5,8)"
+    },
+    {
+      "step": 191,
+      "level": 7,
+      "action": "CLICK",
+      "x": 30,
+      "y": 48,
+      "grid_target": [
+        5,
+        10
+      ],
+      "note": "L7 (5,10) 2->1 (revert)"
+    },
+    {
+      "step": 192,
+      "level": 7,
+      "action": "CLICK",
+      "x": 0,
+      "y": 72,
+      "grid_target": [
+        0,
+        14
+      ],
+      "note": "L7 flip g(0,14) UP->DOWN @ (5,8) -> (5,9)"
+    },
+    {
+      "step": 193,
+      "level": 7,
+      "action": "CLICK",
+      "x": 36,
+      "y": 26,
+      "grid_target": [
+        6,
+        9
+      ],
+      "note": "L7 (6,9) 1->2 (walk thru)"
+    },
+    {
+      "step": 194,
+      "level": 7,
+      "action": "RIGHT",
+      "note": "L7 -> (6,11)"
+    },
+    {
+      "step": 195,
+      "level": 7,
+      "action": "CLICK",
+      "x": 36,
+      "y": 14,
+      "grid_target": [
+        6,
+        9
+      ],
+      "note": "L7 (6,9) 2->1 (stop col6 fall up)"
+    },
+    {
+      "step": 196,
+      "level": 7,
+      "action": "CLICK",
+      "x": 0,
+      "y": 38,
+      "grid_target": [
+        0,
+        13
+      ],
+      "note": "L7 flip g(0,13) DOWN->UP @ (6,11) -> (6,10)"
+    },
+    {
+      "step": 197,
+      "level": 7,
+      "action": "RIGHT",
+      "note": "L7 -> (7,4) via col7 fall up"
+    },
+    {
+      "step": 198,
+      "level": 7,
+      "action": "CLICK",
+      "x": 42,
+      "y": 60,
+      "grid_target": [
+        7,
+        8
+      ],
+      "note": "L7 (7,8) 2->1 (col7 fall stop at (7,7))"
+    },
+    {
+      "step": 199,
+      "level": 7,
+      "action": "CLICK",
+      "x": 0,
+      "y": 84,
+      "grid_target": [
+        0,
+        12
+      ],
+      "note": "L7 flip g(0,12) UP->DOWN @ (7,4) -> (7,7)"
+    },
+    {
+      "step": 200,
+      "level": 7,
+      "action": "RIGHT",
+      "note": "L7 -> (8,7)"
+    },
+    {
+      "step": 201,
+      "level": 7,
+      "action": "RIGHT",
+      "note": "L7 -> (9,26) via col 9 fall down"
+    },
+    {
+      "step": 202,
+      "level": 7,
+      "action": "LEFT",
+      "note": "L7 -> (8,26)"
+    },
+    {
+      "step": 203,
+      "level": 7,
+      "action": "LEFT",
+      "note": "L7 -> (7,26)"
+    },
+    {
+      "step": 204,
+      "level": 7,
+      "action": "CLICK",
+      "x": 0,
+      "y": -64,
+      "grid_target": [
+        0,
+        11
+      ],
+      "note": "L7 flip g(0,11) DOWN->UP @ (7,26) -> (7,23)"
+    },
+    {
+      "step": 205,
+      "level": 7,
+      "action": "LEFT",
+      "note": "L7 -> (6,23)"
+    },
+    {
+      "step": 206,
+      "level": 7,
+      "action": "LEFT",
+      "note": "L7 -> (5,23)"
+    },
+    {
+      "step": 207,
+      "level": 7,
+      "action": "LEFT",
+      "note": "L7 -> (4,23)"
+    },
+    {
+      "step": 208,
+      "level": 7,
+      "action": "LEFT",
+      "note": "L7 -> (3,23)"
+    },
+    {
+      "step": 209,
+      "level": 7,
+      "action": "CLICK",
+      "x": 0,
+      "y": -42,
+      "grid_target": [
+        0,
+        10
+      ],
+      "note": "L7 WIN! flip g(0,10) UP->DOWN @ (3,23) -> fall to + at (3,25)"
+    },
+    {
+      "step": 210,
+      "level": 8,
+      "action": "CLICK",
+      "x": 18,
+      "y": -48,
+      "grid_target": [
+        3,
+        18
+      ],
+      "note": "L8 y-spread: (3,18) -> (3,17),(3,19),(2,18),(4,18)"
+    },
+    {
+      "step": 211,
+      "level": 8,
+      "action": "CLICK",
+      "x": 18,
+      "y": -54,
+      "grid_target": [
+        3,
+        17
+      ],
+      "note": "L8 y-spread: (3,17) -> (3,16) etc"
+    },
+    {
+      "step": 212,
+      "level": 8,
+      "action": "CLICK",
+      "x": 18,
+      "y": -60,
+      "grid_target": [
+        3,
+        16
+      ],
+      "note": "L8 y-spread: (3,16) -> (3,15)"
+    },
+    {
+      "step": 213,
+      "level": 8,
+      "action": "CLICK",
+      "x": 18,
+      "y": -66,
+      "grid_target": [
+        3,
+        15
+      ],
+      "note": "L8 y-spread: (3,15) -> (4,15)"
+    },
+    {
+      "step": 214,
+      "level": 8,
+      "action": "CLICK",
+      "x": 24,
+      "y": -66,
+      "grid_target": [
+        4,
+        15
+      ],
+      "note": "L8 y-spread: (4,15) -> (5,15)"
+    },
+    {
+      "step": 215,
+      "level": 8,
+      "action": "CLICK",
+      "x": 30,
+      "y": -66,
+      "grid_target": [
+        5,
+        15
+      ],
+      "note": "L8 y-spread: (5,15) -> (6,15)"
+    },
+    {
+      "step": 216,
+      "level": 8,
+      "action": "CLICK",
+      "x": 36,
+      "y": -66,
+      "grid_target": [
+        6,
+        15
+      ],
+      "note": "L8 y-spread: (6,15) -> (7,15)"
+    },
+    {
+      "step": 217,
+      "level": 8,
+      "action": "CLICK",
+      "x": 42,
+      "y": -66,
+      "grid_target": [
+        7,
+        15
+      ],
+      "note": "L8 y-spread: (7,15) -> (8,15) and (7,16)"
+    },
+    {
+      "step": 218,
+      "level": 8,
+      "action": "CLICK",
+      "x": 48,
+      "y": -66,
+      "grid_target": [
+        8,
+        15
+      ],
+      "note": "L8 y-spread: (8,15) -> (8,16)y"
+    }
+  ]
+}
