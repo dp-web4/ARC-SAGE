@@ -1,0 +1,32 @@
+{
+  "game": "bp35-0a0ad940",
+  "level": 6,
+  "method": "individual_capture_via_set_level",
+  "won": false,
+  "actions": 6,
+  "final_state": "GAME_OVER",
+  "final_levels_completed": 0,
+  "source": "run_fixed.json",
+  "trace": [
+    {
+      "action": "ACTION4"
+    },
+    {
+      "action": "ACTION4"
+    },
+    {
+      "action": "ACTION4"
+    },
+    {
+      "action": "ACTION4"
+    },
+    {
+      "action": "ACTION4"
+    },
+    {
+      "action": "ACTION6",
+      "x": 36,
+      "y": 30
+    }
+  ]
+}

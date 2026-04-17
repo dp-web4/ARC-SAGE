@@ -1,0 +1,212 @@
+{
+  "game": "bp35-0a0ad940",
+  "level": 8,
+  "method": "individual_capture_via_set_level",
+  "won": false,
+  "actions": 48,
+  "final_state": "NOT_FINISHED",
+  "final_levels_completed": 0,
+  "source": "run_fixed.json",
+  "trace": [
+    {
+      "action": "ACTION6",
+      "x": 12,
+      "y": 18
+    },
+    {
+      "action": "ACTION6",
+      "x": 18,
+      "y": 18
+    },
+    {
+      "action": "ACTION6",
+      "x": 24,
+      "y": 18
+    },
+    {
+      "action": "ACTION6",
+      "x": 30,
+      "y": 18
+    },
+    {
+      "action": "ACTION6",
+      "x": 36,
+      "y": 18
+    },
+    {
+      "action": "ACTION4"
+    },
+    {
+      "action": "ACTION4"
+    },
+    {
+      "action": "ACTION4"
+    },
+    {
+      "action": "ACTION4"
+    },
+    {
+      "action": "ACTION4"
+    },
+    {
+      "action": "ACTION6",
+      "x": 42,
+      "y": 36
+    },
+    {
+      "action": "ACTION6",
+      "x": 48,
+      "y": 18
+    },
+    {
+      "action": "ACTION3"
+    },
+    {
+      "action": "ACTION3"
+    },
+    {
+      "action": "ACTION6",
+      "x": 18,
+      "y": 6
+    },
+    {
+      "action": "ACTION6",
+      "x": 24,
+      "y": 6
+    },
+    {
+      "action": "ACTION6",
+      "x": 30,
+      "y": 6
+    },
+    {
+      "action": "ACTION6",
+      "x": 36,
+      "y": 6
+    },
+    {
+      "action": "ACTION4"
+    },
+    {
+      "action": "ACTION4"
+    },
+    {
+      "action": "ACTION3"
+    },
+    {
+      "action": "ACTION3"
+    },
+    {
+      "action": "ACTION3"
+    },
+    {
+      "action": "ACTION6",
+      "x": 30,
+      "y": 30
+    },
+    {
+      "action": "ACTION6",
+      "x": 30,
+      "y": 30
+    },
+    {
+      "action": "ACTION6",
+      "x": 30,
+      "y": 30
+    },
+    {
+      "action": "ACTION6",
+      "x": 36,
+      "y": 36
+    },
+    {
+      "action": "ACTION4"
+    },
+    {
+      "action": "ACTION6",
+      "x": 42,
+      "y": 36
+    },
+    {
+      "action": "ACTION4"
+    },
+    {
+      "action": "ACTION6",
+      "x": 48,
+      "y": 36
+    },
+    {
+      "action": "ACTION4"
+    },
+    {
+      "action": "ACTION3"
+    },
+    {
+      "action": "ACTION3"
+    },
+    {
+      "action": "ACTION6",
+      "x": 36,
+      "y": 30
+    },
+    {
+      "action": "ACTION6",
+      "x": 36,
+      "y": 30
+    },
+    {
+      "action": "ACTION6",
+      "x": 36,
+      "y": 30
+    },
+    {
+      "action": "ACTION6",
+      "x": 36,
+      "y": 30
+    },
+    {
+      "action": "ACTION6",
+      "x": 36,
+      "y": 30
+    },
+    {
+      "action": "ACTION6",
+      "x": 36,
+      "y": 30
+    },
+    {
+      "action": "ACTION6",
+      "x": 36,
+      "y": 30
+    },
+    {
+      "action": "ACTION6",
+      "x": 36,
+      "y": 30
+    },
+    {
+      "action": "ACTION6",
+      "x": 36,
+      "y": 30
+    },
+    {
+      "action": "ACTION6",
+      "x": 30,
+      "y": 0
+    },
+    {
+      "action": "ACTION4"
+    },
+    {
+      "action": "ACTION4"
+    },
+    {
+      "action": "ACTION6",
+      "x": 48,
+      "y": 32
+    },
+    {
+      "action": "ACTION4"
+    }
+  ]
+}
