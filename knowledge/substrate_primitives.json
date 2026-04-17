@@ -1,0 +1,174 @@
+{
+  "_meta": {
+    "version": "0.1.0",
+    "description": "Substrate primitives for ARC-SAGE Phase 2. Interface and interaction constraints that transfer across all games. Loaded at agent startup, never unmounted.",
+    "source": "paper/phase2-substrate-cartridges.md + cross-game-patterns.md",
+    "date": "2026-04-16",
+    "authors": ["Andy Grossberg", "Claude (Waving Cat)"]
+  },
+  "primitives": [
+    {
+      "id": "viewport_aware_click",
+      "name": "Viewport-Aware Click",
+      "category": "interface",
+      "trigger_conditions": [
+        "ACTION6 in available_actions",
+        "world_size > viewport_size OR camera_position changes after movement"
+      ],
+      "preconditions": [
+        "Target is in-world but outside current viewport bounds [0, 63]",
+        "Selecting the target enables a new state transition (not a no-op selection)"
+      ],
+      "scroll_models": {
+        "camera_based": {
+          "detection": "Game has a camera attribute with position. camera.position() returns non-zero values that change with player movement.",
+          "action": "Insert scroll actions (movement toward target) before clicking. Compute minimum scroll distance to bring target into viewport.",
+          "applies_to": ["bp35", "dc22", "re86", "ar25"]
+        },
+        "grid_offset_side_effect": {
+          "detection": "No camera object, or camera.position() always returns (0,0). Grid container offset changes only as side effect of specific action patterns.",
+          "action": "Find and reorder existing action sequences so that the offset-triggering pattern executes before clicks that depend on the shifted offset. May cost zero extra actions.",
+          "applies_to": ["lf52"]
+        }
+      },
+      "rule_text": "If the intended target's world position is outside the current viewport, scroll first. Choose scroll direction and magnitude to bring target into [0, 63] with minimum action cost. Then click with the viewport-relative coordinate. IMPORTANT: coordinates sent to env.step() must be valid viewport positions — the remote API rejects out-of-bounds coordinates even if the local engine accepts them.",
+      "failure_mode": "bp35 scored 13% instead of ~100% because 28 click actions had y-coordinates outside [0, 63]. Local engine accepted them; competition API rejected with HTTP 400.",
+      "unit_warning": "Be explicit about units: grid cells vs pixels, viewport-relative vs world-absolute. The bp35 bug was partly a unit confusion."
+    },
+    {
+      "id": "action_budget",
+      "name": "Action Budget Awareness",
+      "category": "resource_management",
+      "trigger_conditions": [
+        "Visible progress/step counter that decreases with actions",
+        "OR: orange/progress bar at screen edge"
+      ],
+      "preconditions": [],
+      "rule_text": "Every action — including failed or rejected ones — may decrement a resource counter. Monitor the budget. Avoid speculative search that depletes it. When budget_remaining < 20% of budget_total, switch from exploration to exploitation: execute only known-good sequences, no speculative actions.",
+      "sub_rules": {
+        "exploration_mode": "budget > 20%: safe to try speculative actions if undo is available",
+        "exploitation_mode": "budget <= 20%: execute cached winning sequences only, no exploration",
+        "failed_actions_cost": "In some games (sk48), failed moves still consume budget. Test whether invalid actions decrement the counter before assuming they're free."
+      },
+      "applies_to_games": ["sc25", "tn36", "tu93", "sk48", "most games with level timers"]
+    },
+    {
+      "id": "animation_timing",
+      "name": "Animation Timing",
+      "category": "observation",
+      "trigger_conditions": [
+        "Actions produce multi-frame responses before game state stabilizes"
+      ],
+      "preconditions": [],
+      "rule_text": "After env.step(), if the response contains multiple frames, wait for the animation to complete before reading game state. Do not base the next action on an intermediate frame. Animation frames do NOT cost action budget — waiting is free.",
+      "frame_count_semantics": {
+        "2_frames": "Normal action — standard state transition",
+        "3_plus_frames": "Object interaction — pass-through, embed, crush, or special mechanic. The extra frames encode WHAT HAPPENED, not just that something happened."
+      },
+      "applies_to_games": ["sk48 (3-frame pass-through)", "tu93 (activation animations)", "most click games"]
+    },
+    {
+      "id": "click_classification",
+      "name": "Click Classification by Pixel Change",
+      "category": "observation",
+      "trigger_conditions": [
+        "ACTION6 in available_actions",
+        "Can compare frames before and after action"
+      ],
+      "preconditions": [],
+      "rule_text": "After clicking, count changed pixels between the before and after frames. This classifies what the click DID.",
+      "thresholds": {
+        "under_10px": "Selection or toggle — cheap, usually reversible. Safe for exploration.",
+        "10_to_100px": "Significant but contained state change. Verify intent.",
+        "over_100px": "Major state transition — costly, may be irreversible. Plan before clicking."
+      },
+      "applies_to_games": ["ft09", "tn36", "vc33", "lp85", "sb26", "sc25"]
+    },
+    {
+      "id": "undo_semantics",
+      "name": "Undo Semantics",
+      "category": "recovery",
+      "trigger_conditions": [
+        "ACTION7 (UNDO) in available_actions"
+      ],
+      "preconditions": [],
+      "rule_text": "When ACTION7 is available, it reverts the most recent state change. Use it for safe exploration: take a speculative action, observe the result, undo if it wasn't productive. When ACTION7 is NOT available, dead-end recovery requires RESET (costly). CAVEAT: undo may not be available in competition mode for scored games — confirm per game via ENVIRONMENT.md.",
+      "interaction_with_budget": "Undo itself may or may not cost an action. Test once: take action, undo, check if budget decreased by 1 or 2.",
+      "applies_to_games": ["games where available_actions includes ACTION7"]
+    },
+    {
+      "id": "structural_alignment",
+      "name": "Structural Alignment != Positional Match",
+      "category": "win_condition",
+      "trigger_conditions": [
+        "Win condition involves spatial arrangement of multiple elements",
+        "Moving a piece to the apparent target position does NOT trigger a win"
+      ],
+      "preconditions": [
+        "At least one attempt at positional matching has failed to clear the level"
+      ],
+      "rule_text": "If moving a piece to what looks like the target position does not win, the win condition is STRUCTURAL, not positional. Re-examine relationships: what do the colors, borders, shapes, or orientations of OTHER elements signify? The game may be checking relative arrangement, hierarchy, grouping, or connectivity — not absolute coordinates.",
+      "examples": {
+        "vc33": "Position alone != win. The game checks structural relationships between elements.",
+        "sb26": "Hierarchical placement — parent-child relationships matter, not just which slot an item is in."
+      },
+      "applies_to_games": ["vc33", "sb26", "any game where positional placement fails to trigger level completion"]
+    },
+    {
+      "id": "directional_ambiguity",
+      "name": "Directional Ambiguity Resolution",
+      "category": "exploration",
+      "trigger_conditions": [
+        "Game uses UP/DOWN/LEFT/RIGHT actions",
+        "Game type is unclear from initial observation"
+      ],
+      "preconditions": [
+        "First encounter with this game, or new mechanic introduced at a level boundary"
+      ],
+      "rule_text": "Try ONE directional action and observe the result to classify the game type before committing to a strategy.",
+      "classification_outcomes": {
+        "character_moves": "MOVEMENT game — directions control a character or cursor on a grid",
+        "values_cycle": "VALUE-CYCLE game — UP/DOWN increment/decrement values at the current position (e.g., tr87)",
+        "tiles_shift": "BULK-MOVE game — all tiles shift simultaneously in the pressed direction (e.g., lf52)",
+        "nothing_visible": "Possible hidden state change — try a different direction, or click to see if movement had a non-visual effect"
+      },
+      "cost": "1 action to classify. Cheap investment vs. building wrong mental model.",
+      "applies_to_games": ["all directional-input games during initial exploration"]
+    },
+    {
+      "id": "non_solid_objects",
+      "name": "Non-Solid Object Interaction",
+      "category": "mechanics",
+      "trigger_conditions": [
+        "A tool or entity appears to overlap with or pass through another object",
+        "Extension/movement produces fewer changed pixels than expected",
+        "3+ frame animation on what should be a simple extension"
+      ],
+      "preconditions": [],
+      "rule_text": "Objects may not be solid to tools or entities. In sk48, the rail passes THROUGH target blocks instead of pushing them. The visual signature is a 3-frame animation (vs 2-frame normal) and reduced pixel change. Don't assume collision — test it. If an extension produces fewer pixels changed than expected, the tool may have passed through an object.",
+      "related_primitive": "animation_timing (frame count encodes interaction type)",
+      "applies_to_games": ["sk48", "any game with tool-object interactions"]
+    },
+    {
+      "id": "retract_as_pull",
+      "name": "Retraction Can Pull",
+      "category": "mechanics",
+      "trigger_conditions": [
+        "Game has an extend/retract mechanic (rail, rope, arm, etc.)",
+        "An object has been embedded in or attached to the extending tool"
+      ],
+      "preconditions": [
+        "Tool has previously passed through or embedded an object"
+      ],
+      "rule_text": "In rail/track games, retracting the tool may pull embedded objects toward the head. This is a second use of the same action — the tool doubles as both a pusher (extend) and a puller (retract). Test by extending through an object, then retracting — observe whether the object moves with the tool.",
+      "applies_to_games": ["sk48", "any game with extend/retract mechanics"]
+    }
+  ],
+  "composition_rules": {
+    "loading": "All primitives are loaded into context at agent startup. They are constraints, not actions.",
+    "ordering": "Substrate primitives are presented BEFORE game-world context. They are gravity — learned before specific games.",
+    "override": "Game-world model can override a substrate primitive for a specific game. Prompt includes: 'The following substrate rules apply UNLESS the game-world model explicitly states otherwise.'",
+    "no_conflict_engine": "Primitives compose as independent preconditions. No arbitration layer needed. If two primitives could conflict, they should be merged into one more-nuanced primitive."
+  },
+  "prompt_template": "[SUBSTRATE CONTEXT — always present]\nYou are playing an interactive game. The following general interaction rules apply:\n{{for each applicable primitive, insert rule_text}}\n\n[GAME-WORLD CONTEXT — retrieved per game]\nThis game appears to be similar to \"{{game_id}} — {{game_name}}\":\n{{retrieved world model text}}\n\n[CURRENT STATE]\nFrame: {{current game frame}}\nActions available: {{available_actions}}\nBudget remaining: {{budget_current}} / {{budget_total}}\n\n[REASONING]\nGiven the substrate rules and the retrieved world model, what is the best next action?"
+}

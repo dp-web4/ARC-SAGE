@@ -170,3 +170,31 @@ This puts the three-mode framework fully operational in Phase 1 form on the same
 Dennis's fleet now has access to the full substrate. The convergence work (mounting raising_kb + game_kb + federated together for cross-cart cognitive search) is unblocked from the substrate side — it's purely a "when does Dennis build the raising carts" question now.
 
 Details in `membot/docs/DEVLOG.md` 2026-04-08 entry and `docs/RFC/membox-phase1-implementation.md`.
+
+---
+
+## 2026-04-13 — 23/25 games solved, 84.9% on ARC-AGI-3 public leaderboard
+
+Dennis submitted PR #20 on the ARC-SAGE repo. Fleet now at 23/25 games solved (up from 5 a week ago), 160/183 levels completed, 5,159 total actions. Cost: ~$250 total. Paper draft at `paper/ARC-SAGE-AGI-84-9.md` with four contributions: strong reproducible result, multi-agent frame-questioning methodology, concrete recognition-over-derivation architecture, and the membot cartridge system.
+
+Our sk48 game scored 96.09% — all 8 levels solved. Fleet learning from sk48 contributed 7 mechanic discoveries (non-solid targets, pass-through rail, retract-as-pull, slide-push chains) and 3 cross-game patterns.
+
+Dennis's next-phase statement: *"World model building, storage, retrieval, and evolution — that's the next phase."* Our lane = memory infrastructure for Gemma 4.
+
+Paper sections from our side (§2.3 recognition mechanism, §6.2 cartridge construction + LongMemEval, §9 contributions) at `paper/membot-sections.md`. Phase 2 design answers (Q1-Q4) at `paper/membot-phase2-answers.md`.
+
+---
+
+## 2026-04-16 — Phase 2 substrate primitives shipped
+
+First concrete Phase 2 artifact: the substrate primitives layer described in `paper/phase2-substrate-cartridges.md`, now implemented as deliverable files.
+
+**`knowledge/substrate_primitives.json`** — 9 primitives with trigger conditions, preconditions, rule text, failure mode notes, and per-game applicability. Directly loadable by the Phase 2 harness at agent startup. Includes composition rules and a prompt template.
+
+**`knowledge/substrate_primitives.jsonl`** — Same content formatted for cart builder ingestion. 10 entries (9 primitives + 1 composition rules passage).
+
+The 9 primitives: viewport-aware click (two scroll models), action budget awareness, animation timing (frame count classifier), click classification (pixel change thresholds), undo semantics, structural alignment ≠ positional match, directional ambiguity resolution, non-solid object interaction (new from sk48), retraction can pull (new from sk48).
+
+Open questions sent to Dennis: Q5 (vision encoder), Q6 (game-world cart format), Q7 (fleet learning data), Q8 (Gemma 4 timeline). See `paper/dennis-phase2-update-2026-04-16.md`.
+
+75 days to Milestone 1 (June 30).
