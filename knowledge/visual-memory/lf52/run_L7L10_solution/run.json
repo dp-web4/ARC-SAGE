@@ -1,0 +1,1956 @@
+{
+  "game_id": "lf52-271a04aa",
+  "player": "lf52-full-solver-cbp",
+  "started": "20260416_214904",
+  "win_levels": 10,
+  "levels_solved": 6,
+  "results": {
+    "1": {
+      "status": "SOLVED",
+      "time": 0.013545989990234375
+    },
+    "2": {
+      "status": "SOLVED",
+      "time": 0.041744232177734375
+    },
+    "3": {
+      "status": "SOLVED",
+      "time": 0.2053205966949463
+    },
+    "4": {
+      "status": "SOLVED",
+      "time": 0.18802332878112793
+    },
+    "5": {
+      "status": "SOLVED",
+      "time": 0.5807843208312988
+    },
+    "6": {
+      "status": "SOLVED",
+      "time": 0.5378484725952148
+    },
+    "7": {
+      "status": "UNSOLVABLE",
+      "time": 0.0002980232238769531
+    }
+  },
+  "steps": [
+    {
+      "step": 1,
+      "level": 0,
+      "action": "CLICK",
+      "x": 19,
+      "y": 20
+    },
+    {
+      "step": 2,
+      "level": 0,
+      "action": "CLICK",
+      "x": 31,
+      "y": 20
+    },
+    {
+      "step": 3,
+      "level": 0,
+      "action": "CLICK",
+      "x": 31,
+      "y": 20
+    },
+    {
+      "step": 4,
+      "level": 0,
+      "action": "CLICK",
+      "x": 43,
+      "y": 20
+    },
+    {
+      "step": 5,
+      "level": 0,
+      "action": "CLICK",
+      "x": 43,
+      "y": 20
+    },
+    {
+      "step": 6,
+      "level": 0,
+      "action": "CLICK",
+      "x": 43,
+      "y": 32
+    },
+    {
+      "step": 7,
+      "level": 0,
+      "action": "CLICK",
+      "x": 43,
+      "y": 32
+    },
+    {
+      "step": 8,
+      "level": 0,
+      "action": "CLICK",
+      "x": 43,
+      "y": 44
+    },
+    {
+      "step": 9,
+      "level": 1,
+      "action": "CLICK",
+      "x": 15,
+      "y": 17
+    },
+    {
+      "step": 10,
+      "level": 1,
+      "action": "CLICK",
+      "x": 27,
+      "y": 17
+    },
+    {
+      "step": 11,
+      "level": 1,
+      "action": "CLICK",
+      "x": 27,
+      "y": 17
+    },
+    {
+      "step": 12,
+      "level": 1,
+      "action": "CLICK",
+      "x": 39,
+      "y": 17
+    },
+    {
+      "step": 13,
+      "level": 1,
+      "action": "RIGHT"
+    },
+    {
+      "step": 14,
+      "level": 1,
+      "action": "RIGHT"
+    },
+    {
+      "step": 15,
+      "level": 1,
+      "action": "RIGHT"
+    },
+    {
+      "step": 16,
+      "level": 1,
+      "action": "RIGHT"
+    },
+    {
+      "step": 17,
+      "level": 1,
+      "action": "UP"
+    },
+    {
+      "step": 18,
+      "level": 1,
+      "action": "UP"
+    },
+    {
+      "step": 19,
+      "level": 1,
+      "action": "UP"
+    },
+    {
+      "step": 20,
+      "level": 1,
+      "action": "LEFT"
+    },
+    {
+      "step": 21,
+      "level": 1,
+      "action": "CLICK",
+      "x": 39,
+      "y": 17
+    },
+    {
+      "step": 22,
+      "level": 1,
+      "action": "CLICK",
+      "x": 51,
+      "y": 17
+    },
+    {
+      "step": 23,
+      "level": 1,
+      "action": "RIGHT"
+    },
+    {
+      "step": 24,
+      "level": 1,
+      "action": "DOWN"
+    },
+    {
+      "step": 25,
+      "level": 1,
+      "action": "DOWN"
+    },
+    {
+      "step": 26,
+      "level": 1,
+      "action": "DOWN"
+    },
+    {
+      "step": 27,
+      "level": 1,
+      "action": "LEFT"
+    },
+    {
+      "step": 28,
+      "level": 1,
+      "action": "LEFT"
+    },
+    {
+      "step": 29,
+      "level": 1,
+      "action": "LEFT"
+    },
+    {
+      "step": 30,
+      "level": 1,
+      "action": "LEFT"
+    },
+    {
+      "step": 31,
+      "level": 1,
+      "action": "LEFT"
+    },
+    {
+      "step": 32,
+      "level": 1,
+      "action": "LEFT"
+    },
+    {
+      "step": 33,
+      "level": 1,
+      "action": "LEFT"
+    },
+    {
+      "step": 34,
+      "level": 1,
+      "action": "DOWN"
+    },
+    {
+      "step": 35,
+      "level": 1,
+      "action": "DOWN"
+    },
+    {
+      "step": 36,
+      "level": 1,
+      "action": "DOWN"
+    },
+    {
+      "step": 37,
+      "level": 1,
+      "action": "RIGHT"
+    },
+    {
+      "step": 38,
+      "level": 1,
+      "action": "RIGHT"
+    },
+    {
+      "step": 39,
+      "level": 1,
+      "action": "RIGHT"
+    },
+    {
+      "step": 40,
+      "level": 1,
+      "action": "RIGHT"
+    },
+    {
+      "step": 41,
+      "level": 1,
+      "action": "CLICK",
+      "x": 39,
+      "y": 53
+    },
+    {
+      "step": 42,
+      "level": 1,
+      "action": "CLICK",
+      "x": 51,
+      "y": 53
+    },
+    {
+      "step": 43,
+      "level": 2,
+      "action": "CLICK",
+      "x": 80,
+      "y": 32
+    },
+    {
+      "step": 44,
+      "level": 2,
+      "action": "CLICK",
+      "x": 68,
+      "y": 32
+    },
+    {
+      "step": 45,
+      "level": 2,
+      "action": "CLICK",
+      "x": 14,
+      "y": 14
+    },
+    {
+      "step": 46,
+      "level": 2,
+      "action": "CLICK",
+      "x": 14,
+      "y": 26
+    },
+    {
+      "step": 47,
+      "level": 2,
+      "action": "CLICK",
+      "x": 14,
+      "y": 26
+    },
+    {
+      "step": 48,
+      "level": 2,
+      "action": "CLICK",
+      "x": 26,
+      "y": 26
+    },
+    {
+      "step": 49,
+      "level": 2,
+      "action": "CLICK",
+      "x": 26,
+      "y": 26
+    },
+    {
+      "step": 50,
+      "level": 2,
+      "action": "CLICK",
+      "x": 26,
+      "y": 14
+    },
+    {
+      "step": 51,
+      "level": 2,
+      "action": "CLICK",
+      "x": 80,
+      "y": 20
+    },
+    {
+      "step": 52,
+      "level": 2,
+      "action": "CLICK",
+      "x": 68,
+      "y": 20
+    },
+    {
+      "step": 53,
+      "level": 2,
+      "action": "LEFT"
+    },
+    {
+      "step": 54,
+      "level": 2,
+      "action": "CLICK",
+      "x": 26,
+      "y": 14
+    },
+    {
+      "step": 55,
+      "level": 2,
+      "action": "CLICK",
+      "x": 38,
+      "y": 14
+    },
+    {
+      "step": 56,
+      "level": 2,
+      "action": "RIGHT"
+    },
+    {
+      "step": 57,
+      "level": 2,
+      "action": "RIGHT"
+    },
+    {
+      "step": 58,
+      "level": 2,
+      "action": "RIGHT"
+    },
+    {
+      "step": 59,
+      "level": 2,
+      "action": "CLICK",
+      "x": 32,
+      "y": 14
+    },
+    {
+      "step": 60,
+      "level": 2,
+      "action": "CLICK",
+      "x": 44,
+      "y": 14
+    },
+    {
+      "step": 61,
+      "level": 2,
+      "action": "CLICK",
+      "x": 44,
+      "y": 14
+    },
+    {
+      "step": 62,
+      "level": 2,
+      "action": "CLICK",
+      "x": 44,
+      "y": 26
+    },
+    {
+      "step": 63,
+      "level": 2,
+      "action": "CLICK",
+      "x": 44,
+      "y": 26
+    },
+    {
+      "step": 64,
+      "level": 2,
+      "action": "CLICK",
+      "x": 44,
+      "y": 38
+    },
+    {
+      "step": 65,
+      "level": 2,
+      "action": "CLICK",
+      "x": 44,
+      "y": 38
+    },
+    {
+      "step": 66,
+      "level": 2,
+      "action": "CLICK",
+      "x": 44,
+      "y": 50
+    },
+    {
+      "step": 67,
+      "level": 2,
+      "action": "UP"
+    },
+    {
+      "step": 68,
+      "level": 2,
+      "action": "UP"
+    },
+    {
+      "step": 69,
+      "level": 2,
+      "action": "RIGHT"
+    },
+    {
+      "step": 70,
+      "level": 2,
+      "action": "RIGHT"
+    },
+    {
+      "step": 71,
+      "level": 2,
+      "action": "DOWN"
+    },
+    {
+      "step": 72,
+      "level": 2,
+      "action": "DOWN"
+    },
+    {
+      "step": 73,
+      "level": 2,
+      "action": "RIGHT"
+    },
+    {
+      "step": 74,
+      "level": 2,
+      "action": "CLICK",
+      "x": 50,
+      "y": 50
+    },
+    {
+      "step": 75,
+      "level": 2,
+      "action": "CLICK",
+      "x": 38,
+      "y": 50
+    },
+    {
+      "step": 76,
+      "level": 2,
+      "action": "LEFT"
+    },
+    {
+      "step": 77,
+      "level": 2,
+      "action": "UP"
+    },
+    {
+      "step": 78,
+      "level": 2,
+      "action": "UP"
+    },
+    {
+      "step": 79,
+      "level": 2,
+      "action": "LEFT"
+    },
+    {
+      "step": 80,
+      "level": 2,
+      "action": "LEFT"
+    },
+    {
+      "step": 81,
+      "level": 2,
+      "action": "DOWN"
+    },
+    {
+      "step": 82,
+      "level": 2,
+      "action": "DOWN"
+    },
+    {
+      "step": 83,
+      "level": 2,
+      "action": "LEFT"
+    },
+    {
+      "step": 84,
+      "level": 2,
+      "action": "LEFT"
+    },
+    {
+      "step": 85,
+      "level": 2,
+      "action": "CLICK",
+      "x": 32,
+      "y": 50
+    },
+    {
+      "step": 86,
+      "level": 2,
+      "action": "CLICK",
+      "x": 20,
+      "y": 50
+    },
+    {
+      "step": 87,
+      "level": 2,
+      "action": "CLICK",
+      "x": 20,
+      "y": 50
+    },
+    {
+      "step": 88,
+      "level": 2,
+      "action": "CLICK",
+      "x": 8,
+      "y": 50
+    },
+    {
+      "step": 89,
+      "level": 3,
+      "action": "CLICK",
+      "x": 14,
+      "y": 26
+    },
+    {
+      "step": 90,
+      "level": 3,
+      "action": "CLICK",
+      "x": 26,
+      "y": 26
+    },
+    {
+      "step": 91,
+      "level": 3,
+      "action": "CLICK",
+      "x": 26,
+      "y": 26
+    },
+    {
+      "step": 92,
+      "level": 3,
+      "action": "CLICK",
+      "x": 38,
+      "y": 26
+    },
+    {
+      "step": 93,
+      "level": 3,
+      "action": "LEFT"
+    },
+    {
+      "step": 94,
+      "level": 3,
+      "action": "CLICK",
+      "x": 38,
+      "y": 26
+    },
+    {
+      "step": 95,
+      "level": 3,
+      "action": "CLICK",
+      "x": 50,
+      "y": 26
+    },
+    {
+      "step": 96,
+      "level": 3,
+      "action": "RIGHT"
+    },
+    {
+      "step": 97,
+      "level": 3,
+      "action": "RIGHT"
+    },
+    {
+      "step": 98,
+      "level": 3,
+      "action": "RIGHT"
+    },
+    {
+      "step": 99,
+      "level": 3,
+      "action": "RIGHT"
+    },
+    {
+      "step": 100,
+      "level": 3,
+      "action": "CLICK",
+      "x": 20,
+      "y": 26
+    },
+    {
+      "step": 101,
+      "level": 3,
+      "action": "CLICK",
+      "x": 32,
+      "y": 26
+    },
+    {
+      "step": 102,
+      "level": 3,
+      "action": "CLICK",
+      "x": 32,
+      "y": 26
+    },
+    {
+      "step": 103,
+      "level": 3,
+      "action": "CLICK",
+      "x": 32,
+      "y": 38
+    },
+    {
+      "step": 104,
+      "level": 3,
+      "action": "CLICK",
+      "x": 50,
+      "y": 26
+    },
+    {
+      "step": 105,
+      "level": 3,
+      "action": "CLICK",
+      "x": 50,
+      "y": 38
+    },
+    {
+      "step": 106,
+      "level": 3,
+      "action": "CLICK",
+      "x": 50,
+      "y": 38
+    },
+    {
+      "step": 107,
+      "level": 3,
+      "action": "CLICK",
+      "x": 50,
+      "y": 50
+    },
+    {
+      "step": 108,
+      "level": 3,
+      "action": "CLICK",
+      "x": 50,
+      "y": 50
+    },
+    {
+      "step": 109,
+      "level": 3,
+      "action": "CLICK",
+      "x": 38,
+      "y": 50
+    },
+    {
+      "step": 110,
+      "level": 3,
+      "action": "CLICK",
+      "x": 32,
+      "y": 38
+    },
+    {
+      "step": 111,
+      "level": 3,
+      "action": "CLICK",
+      "x": 32,
+      "y": 50
+    },
+    {
+      "step": 112,
+      "level": 3,
+      "action": "CLICK",
+      "x": 38,
+      "y": 50
+    },
+    {
+      "step": 113,
+      "level": 3,
+      "action": "CLICK",
+      "x": 26,
+      "y": 50
+    },
+    {
+      "step": 114,
+      "level": 3,
+      "action": "LEFT"
+    },
+    {
+      "step": 115,
+      "level": 3,
+      "action": "LEFT"
+    },
+    {
+      "step": 116,
+      "level": 3,
+      "action": "LEFT"
+    },
+    {
+      "step": 117,
+      "level": 3,
+      "action": "LEFT"
+    },
+    {
+      "step": 118,
+      "level": 3,
+      "action": "DOWN"
+    },
+    {
+      "step": 119,
+      "level": 3,
+      "action": "DOWN"
+    },
+    {
+      "step": 120,
+      "level": 3,
+      "action": "RIGHT"
+    },
+    {
+      "step": 121,
+      "level": 3,
+      "action": "RIGHT"
+    },
+    {
+      "step": 122,
+      "level": 3,
+      "action": "RIGHT"
+    },
+    {
+      "step": 123,
+      "level": 3,
+      "action": "CLICK",
+      "x": 41,
+      "y": 20
+    },
+    {
+      "step": 124,
+      "level": 3,
+      "action": "CLICK",
+      "x": 41,
+      "y": 32
+    },
+    {
+      "step": 125,
+      "level": 3,
+      "action": "LEFT"
+    },
+    {
+      "step": 126,
+      "level": 3,
+      "action": "LEFT"
+    },
+    {
+      "step": 127,
+      "level": 3,
+      "action": "CLICK",
+      "x": 29,
+      "y": 32
+    },
+    {
+      "step": 128,
+      "level": 3,
+      "action": "CLICK",
+      "x": 29,
+      "y": 20
+    },
+    {
+      "step": 129,
+      "level": 3,
+      "action": "CLICK",
+      "x": 29,
+      "y": 20
+    },
+    {
+      "step": 130,
+      "level": 3,
+      "action": "CLICK",
+      "x": 17,
+      "y": 20
+    },
+    {
+      "step": 131,
+      "level": 3,
+      "action": "LEFT"
+    },
+    {
+      "step": 132,
+      "level": 3,
+      "action": "LEFT"
+    },
+    {
+      "step": 133,
+      "level": 3,
+      "action": "CLICK",
+      "x": 17,
+      "y": 20
+    },
+    {
+      "step": 134,
+      "level": 3,
+      "action": "CLICK",
+      "x": 17,
+      "y": 32
+    },
+    {
+      "step": 135,
+      "level": 3,
+      "action": "CLICK",
+      "x": 17,
+      "y": 32
+    },
+    {
+      "step": 136,
+      "level": 3,
+      "action": "CLICK",
+      "x": 17,
+      "y": 44
+    },
+    {
+      "step": 137,
+      "level": 3,
+      "action": "CLICK",
+      "x": 17,
+      "y": 44
+    },
+    {
+      "step": 138,
+      "level": 3,
+      "action": "CLICK",
+      "x": 29,
+      "y": 44
+    },
+    {
+      "step": 139,
+      "level": 4,
+      "action": "CLICK",
+      "x": 14,
+      "y": 26
+    },
+    {
+      "step": 140,
+      "level": 4,
+      "action": "CLICK",
+      "x": 26,
+      "y": 26
+    },
+    {
+      "step": 141,
+      "level": 4,
+      "action": "LEFT"
+    },
+    {
+      "step": 142,
+      "level": 4,
+      "action": "LEFT"
+    },
+    {
+      "step": 143,
+      "level": 4,
+      "action": "DOWN"
+    },
+    {
+      "step": 144,
+      "level": 4,
+      "action": "DOWN"
+    },
+    {
+      "step": 145,
+      "level": 4,
+      "action": "DOWN"
+    },
+    {
+      "step": 146,
+      "level": 4,
+      "action": "CLICK",
+      "x": 26,
+      "y": 26
+    },
+    {
+      "step": 147,
+      "level": 4,
+      "action": "CLICK",
+      "x": 38,
+      "y": 26
+    },
+    {
+      "step": 148,
+      "level": 4,
+      "action": "RIGHT"
+    },
+    {
+      "step": 149,
+      "level": 4,
+      "action": "RIGHT"
+    },
+    {
+      "step": 150,
+      "level": 4,
+      "action": "RIGHT"
+    },
+    {
+      "step": 151,
+      "level": 4,
+      "action": "DOWN"
+    },
+    {
+      "step": 152,
+      "level": 4,
+      "action": "DOWN"
+    },
+    {
+      "step": 153,
+      "level": 4,
+      "action": "DOWN"
+    },
+    {
+      "step": 154,
+      "level": 4,
+      "action": "CLICK",
+      "x": 44,
+      "y": 26
+    },
+    {
+      "step": 155,
+      "level": 4,
+      "action": "CLICK",
+      "x": 32,
+      "y": 26
+    },
+    {
+      "step": 156,
+      "level": 4,
+      "action": "DOWN"
+    },
+    {
+      "step": 157,
+      "level": 4,
+      "action": "DOWN"
+    },
+    {
+      "step": 158,
+      "level": 4,
+      "action": "LEFT"
+    },
+    {
+      "step": 159,
+      "level": 4,
+      "action": "DOWN"
+    },
+    {
+      "step": 160,
+      "level": 4,
+      "action": "RIGHT"
+    },
+    {
+      "step": 161,
+      "level": 4,
+      "action": "RIGHT"
+    },
+    {
+      "step": 162,
+      "level": 4,
+      "action": "RIGHT"
+    },
+    {
+      "step": 163,
+      "level": 4,
+      "action": "UP"
+    },
+    {
+      "step": 164,
+      "level": 4,
+      "action": "UP"
+    },
+    {
+      "step": 165,
+      "level": 4,
+      "action": "UP"
+    },
+    {
+      "step": 166,
+      "level": 4,
+      "action": "UP"
+    },
+    {
+      "step": 167,
+      "level": 4,
+      "action": "RIGHT"
+    },
+    {
+      "step": 168,
+      "level": 4,
+      "action": "RIGHT"
+    },
+    {
+      "step": 169,
+      "level": 4,
+      "action": "RIGHT"
+    },
+    {
+      "step": 170,
+      "level": 4,
+      "action": "DOWN"
+    },
+    {
+      "step": 171,
+      "level": 4,
+      "action": "CLICK",
+      "x": 32,
+      "y": 26
+    },
+    {
+      "step": 172,
+      "level": 4,
+      "action": "CLICK",
+      "x": 44,
+      "y": 26
+    },
+    {
+      "step": 173,
+      "level": 4,
+      "action": "LEFT"
+    },
+    {
+      "step": 174,
+      "level": 4,
+      "action": "LEFT"
+    },
+    {
+      "step": 175,
+      "level": 4,
+      "action": "LEFT"
+    },
+    {
+      "step": 176,
+      "level": 4,
+      "action": "LEFT"
+    },
+    {
+      "step": 177,
+      "level": 4,
+      "action": "LEFT"
+    },
+    {
+      "step": 178,
+      "level": 4,
+      "action": "LEFT"
+    },
+    {
+      "step": 179,
+      "level": 4,
+      "action": "LEFT"
+    },
+    {
+      "step": 180,
+      "level": 4,
+      "action": "UP"
+    },
+    {
+      "step": 181,
+      "level": 4,
+      "action": "UP"
+    },
+    {
+      "step": 182,
+      "level": 4,
+      "action": "CLICK",
+      "x": 11,
+      "y": 26
+    },
+    {
+      "step": 183,
+      "level": 4,
+      "action": "CLICK",
+      "x": 23,
+      "y": 26
+    },
+    {
+      "step": 184,
+      "level": 4,
+      "action": "CLICK",
+      "x": 23,
+      "y": 26
+    },
+    {
+      "step": 185,
+      "level": 4,
+      "action": "CLICK",
+      "x": 35,
+      "y": 26
+    },
+    {
+      "step": 186,
+      "level": 4,
+      "action": "UP"
+    },
+    {
+      "step": 187,
+      "level": 4,
+      "action": "UP"
+    },
+    {
+      "step": 188,
+      "level": 4,
+      "action": "RIGHT"
+    },
+    {
+      "step": 189,
+      "level": 4,
+      "action": "RIGHT"
+    },
+    {
+      "step": 190,
+      "level": 4,
+      "action": "RIGHT"
+    },
+    {
+      "step": 191,
+      "level": 4,
+      "action": "RIGHT"
+    },
+    {
+      "step": 192,
+      "level": 4,
+      "action": "DOWN"
+    },
+    {
+      "step": 193,
+      "level": 4,
+      "action": "DOWN"
+    },
+    {
+      "step": 194,
+      "level": 4,
+      "action": "CLICK",
+      "x": 35,
+      "y": 26
+    },
+    {
+      "step": 195,
+      "level": 4,
+      "action": "CLICK",
+      "x": 47,
+      "y": 26
+    },
+    {
+      "step": 196,
+      "level": 4,
+      "action": "CLICK",
+      "x": 47,
+      "y": 32
+    },
+    {
+      "step": 197,
+      "level": 4,
+      "action": "CLICK",
+      "x": 47,
+      "y": 20
+    },
+    {
+      "step": 198,
+      "level": 4,
+      "action": "UP"
+    },
+    {
+      "step": 199,
+      "level": 4,
+      "action": "UP"
+    },
+    {
+      "step": 200,
+      "level": 4,
+      "action": "RIGHT"
+    },
+    {
+      "step": 201,
+      "level": 4,
+      "action": "CLICK",
+      "x": 47,
+      "y": 20
+    },
+    {
+      "step": 202,
+      "level": 4,
+      "action": "CLICK",
+      "x": 47,
+      "y": 8
+    },
+    {
+      "step": 203,
+      "level": 4,
+      "action": "CLICK",
+      "x": 53,
+      "y": 8
+    },
+    {
+      "step": 204,
+      "level": 4,
+      "action": "CLICK",
+      "x": 41,
+      "y": 8
+    },
+    {
+      "step": 205,
+      "level": 4,
+      "action": "CLICK",
+      "x": 41,
+      "y": 8
+    },
+    {
+      "step": 206,
+      "level": 4,
+      "action": "CLICK",
+      "x": 29,
+      "y": 8
+    },
+    {
+      "step": 207,
+      "level": 4,
+      "action": "LEFT"
+    },
+    {
+      "step": 208,
+      "level": 4,
+      "action": "LEFT"
+    },
+    {
+      "step": 209,
+      "level": 4,
+      "action": "LEFT"
+    },
+    {
+      "step": 210,
+      "level": 4,
+      "action": "CLICK",
+      "x": 29,
+      "y": 8
+    },
+    {
+      "step": 211,
+      "level": 4,
+      "action": "CLICK",
+      "x": 29,
+      "y": 20
+    },
+    {
+      "step": 212,
+      "level": 4,
+      "action": "CLICK",
+      "x": 29,
+      "y": 20
+    },
+    {
+      "step": 213,
+      "level": 4,
+      "action": "CLICK",
+      "x": 29,
+      "y": 32
+    },
+    {
+      "step": 214,
+      "level": 4,
+      "action": "RIGHT"
+    },
+    {
+      "step": 215,
+      "level": 4,
+      "action": "RIGHT"
+    },
+    {
+      "step": 216,
+      "level": 4,
+      "action": "DOWN"
+    },
+    {
+      "step": 217,
+      "level": 4,
+      "action": "DOWN"
+    },
+    {
+      "step": 218,
+      "level": 4,
+      "action": "DOWN"
+    },
+    {
+      "step": 219,
+      "level": 4,
+      "action": "DOWN"
+    },
+    {
+      "step": 220,
+      "level": 4,
+      "action": "LEFT"
+    },
+    {
+      "step": 221,
+      "level": 4,
+      "action": "LEFT"
+    },
+    {
+      "step": 222,
+      "level": 4,
+      "action": "CLICK",
+      "x": 29,
+      "y": 32
+    },
+    {
+      "step": 223,
+      "level": 4,
+      "action": "CLICK",
+      "x": 29,
+      "y": 44
+    },
+    {
+      "step": 224,
+      "level": 4,
+      "action": "CLICK",
+      "x": 29,
+      "y": 44
+    },
+    {
+      "step": 225,
+      "level": 4,
+      "action": "CLICK",
+      "x": 29,
+      "y": 56
+    },
+    {
+      "step": 226,
+      "level": 4,
+      "action": "CLICK",
+      "x": 35,
+      "y": 56
+    },
+    {
+      "step": 227,
+      "level": 4,
+      "action": "CLICK",
+      "x": 23,
+      "y": 56
+    },
+    {
+      "step": 228,
+      "level": 5,
+      "action": "CLICK",
+      "x": 20,
+      "y": 20
+    },
+    {
+      "step": 229,
+      "level": 5,
+      "action": "CLICK",
+      "x": 20,
+      "y": 32
+    },
+    {
+      "step": 230,
+      "level": 5,
+      "action": "CLICK",
+      "x": 20,
+      "y": 26
+    },
+    {
+      "step": 231,
+      "level": 5,
+      "action": "CLICK",
+      "x": 20,
+      "y": 38
+    },
+    {
+      "step": 232,
+      "level": 5,
+      "action": "CLICK",
+      "x": 20,
+      "y": 32
+    },
+    {
+      "step": 233,
+      "level": 5,
+      "action": "CLICK",
+      "x": 20,
+      "y": 44
+    },
+    {
+      "step": 234,
+      "level": 5,
+      "action": "CLICK",
+      "x": 20,
+      "y": 38
+    },
+    {
+      "step": 235,
+      "level": 5,
+      "action": "CLICK",
+      "x": 20,
+      "y": 50
+    },
+    {
+      "step": 236,
+      "level": 5,
+      "action": "CLICK",
+      "x": 14,
+      "y": 50
+    },
+    {
+      "step": 237,
+      "level": 5,
+      "action": "CLICK",
+      "x": 26,
+      "y": 50
+    },
+    {
+      "step": 238,
+      "level": 5,
+      "action": "CLICK",
+      "x": 26,
+      "y": 56
+    },
+    {
+      "step": 239,
+      "level": 5,
+      "action": "CLICK",
+      "x": 26,
+      "y": 44
+    },
+    {
+      "step": 240,
+      "level": 5,
+      "action": "CLICK",
+      "x": 20,
+      "y": 44
+    },
+    {
+      "step": 241,
+      "level": 5,
+      "action": "CLICK",
+      "x": 32,
+      "y": 44
+    },
+    {
+      "step": 242,
+      "level": 5,
+      "action": "CLICK",
+      "x": 26,
+      "y": 44
+    },
+    {
+      "step": 243,
+      "level": 5,
+      "action": "CLICK",
+      "x": 38,
+      "y": 44
+    },
+    {
+      "step": 244,
+      "level": 5,
+      "action": "CLICK",
+      "x": 32,
+      "y": 44
+    },
+    {
+      "step": 245,
+      "level": 5,
+      "action": "CLICK",
+      "x": 44,
+      "y": 44
+    },
+    {
+      "step": 246,
+      "level": 5,
+      "action": "CLICK",
+      "x": 38,
+      "y": 44
+    },
+    {
+      "step": 247,
+      "level": 5,
+      "action": "CLICK",
+      "x": 50,
+      "y": 44
+    },
+    {
+      "step": 248,
+      "level": 5,
+      "action": "CLICK",
+      "x": 24,
+      "y": 44
+    },
+    {
+      "step": 249,
+      "level": 5,
+      "action": "CLICK",
+      "x": 36,
+      "y": 44
+    },
+    {
+      "step": 250,
+      "level": 5,
+      "action": "RIGHT"
+    },
+    {
+      "step": 251,
+      "level": 5,
+      "action": "RIGHT"
+    },
+    {
+      "step": 252,
+      "level": 5,
+      "action": "RIGHT"
+    },
+    {
+      "step": 253,
+      "level": 5,
+      "action": "RIGHT"
+    },
+    {
+      "step": 254,
+      "level": 5,
+      "action": "RIGHT"
+    },
+    {
+      "step": 255,
+      "level": 5,
+      "action": "RIGHT"
+    },
+    {
+      "step": 256,
+      "level": 5,
+      "action": "RIGHT"
+    },
+    {
+      "step": 257,
+      "level": 5,
+      "action": "UP"
+    },
+    {
+      "step": 258,
+      "level": 5,
+      "action": "UP"
+    },
+    {
+      "step": 259,
+      "level": 5,
+      "action": "CLICK",
+      "x": 30,
+      "y": 32
+    },
+    {
+      "step": 260,
+      "level": 5,
+      "action": "CLICK",
+      "x": 30,
+      "y": 20
+    },
+    {
+      "step": 261,
+      "level": 5,
+      "action": "CLICK",
+      "x": 30,
+      "y": 20
+    },
+    {
+      "step": 262,
+      "level": 5,
+      "action": "CLICK",
+      "x": 42,
+      "y": 20
+    },
+    {
+      "step": 263,
+      "level": 5,
+      "action": "RIGHT"
+    },
+    {
+      "step": 264,
+      "level": 5,
+      "action": "DOWN"
+    },
+    {
+      "step": 265,
+      "level": 5,
+      "action": "DOWN"
+    },
+    {
+      "step": 266,
+      "level": 5,
+      "action": "RIGHT"
+    },
+    {
+      "step": 267,
+      "level": 5,
+      "action": "UP"
+    },
+    {
+      "step": 268,
+      "level": 5,
+      "action": "UP"
+    },
+    {
+      "step": 269,
+      "level": 5,
+      "action": "CLICK",
+      "x": 48,
+      "y": 32
+    },
+    {
+      "step": 270,
+      "level": 5,
+      "action": "CLICK",
+      "x": 48,
+      "y": 20
+    },
+    {
+      "step": 271,
+      "level": 5,
+      "action": "CLICK",
+      "x": 42,
+      "y": 20
+    },
+    {
+      "step": 272,
+      "level": 5,
+      "action": "CLICK",
+      "x": 54,
+      "y": 20
+    },
+    {
+      "step": 273,
+      "level": 5,
+      "action": "CLICK",
+      "x": 4,
+      "y": 20
+    },
+    {
+      "step": 274,
+      "level": 5,
+      "action": "CLICK",
+      "x": 16,
+      "y": 20
+    },
+    {
+      "step": 275,
+      "level": 5,
+      "action": "CLICK",
+      "x": 10,
+      "y": 20
+    },
+    {
+      "step": 276,
+      "level": 5,
+      "action": "CLICK",
+      "x": 22,
+      "y": 20
+    },
+    {
+      "step": 277,
+      "level": 5,
+      "action": "CLICK",
+      "x": 16,
+      "y": 20
+    },
+    {
+      "step": 278,
+      "level": 5,
+      "action": "CLICK",
+      "x": 28,
+      "y": 20
+    },
+    {
+      "step": 279,
+      "level": 5,
+      "action": "CLICK",
+      "x": 22,
+      "y": 20
+    },
+    {
+      "step": 280,
+      "level": 5,
+      "action": "CLICK",
+      "x": 34,
+      "y": 20
+    },
+    {
+      "step": 281,
+      "level": 5,
+      "action": "CLICK",
+      "x": 28,
+      "y": 20
+    },
+    {
+      "step": 282,
+      "level": 5,
+      "action": "CLICK",
+      "x": 40,
+      "y": 20
+    },
+    {
+      "step": 283,
+      "level": 5,
+      "action": "CLICK",
+      "x": 34,
+      "y": 20
+    },
+    {
+      "step": 284,
+      "level": 5,
+      "action": "CLICK",
+      "x": 46,
+      "y": 20
+    },
+    {
+      "step": 285,
+      "level": 5,
+      "action": "RIGHT"
+    },
+    {
+      "step": 286,
+      "level": 5,
+      "action": "UP"
+    },
+    {
+      "step": 287,
+      "level": 5,
+      "action": "UP"
+    },
+    {
+      "step": 288,
+      "level": 5,
+      "action": "UP"
+    },
+    {
+      "step": 289,
+      "level": 5,
+      "action": "UP"
+    },
+    {
+      "step": 290,
+      "level": 5,
+      "action": "CLICK",
+      "x": 40,
+      "y": 20
+    },
+    {
+      "step": 291,
+      "level": 5,
+      "action": "CLICK",
+      "x": 52,
+      "y": 20
+    },
+    {
+      "step": 292,
+      "level": 5,
+      "action": "CLICK",
+      "x": 46,
+      "y": 20
+    },
+    {
+      "step": 293,
+      "level": 5,
+      "action": "CLICK",
+      "x": 58,
+      "y": 20
+    },
+    {
+      "step": 294,
+      "level": 5,
+      "action": "CLICK",
+      "x": 58,
+      "y": 20
+    },
+    {
+      "step": 295,
+      "level": 5,
+      "action": "CLICK",
+      "x": 58,
+      "y": 32
+    },
+    {
+      "step": 296,
+      "level": 5,
+      "action": "DOWN"
+    },
+    {
+      "step": 297,
+      "level": 5,
+      "action": "DOWN"
+    },
+    {
+      "step": 298,
+      "level": 5,
+      "action": "CLICK",
+      "x": 58,
+      "y": 32
+    },
+    {
+      "step": 299,
+      "level": 5,
+      "action": "CLICK",
+      "x": 46,
+      "y": 32
+    },
+    {
+      "step": 300,
+      "level": 5,
+      "action": "DOWN"
+    },
+    {
+      "step": 301,
+      "level": 5,
+      "action": "DOWN"
+    },
+    {
+      "step": 302,
+      "level": 5,
+      "action": "LEFT"
+    },
+    {
+      "step": 303,
+      "level": 5,
+      "action": "LEFT"
+    },
+    {
+      "step": 304,
+      "level": 5,
+      "action": "UP"
+    },
+    {
+      "step": 305,
+      "level": 5,
+      "action": "UP"
+    },
+    {
+      "step": 306,
+      "level": 5,
+      "action": "CLICK",
+      "x": 46,
+      "y": 32
+    },
+    {
+      "step": 307,
+      "level": 5,
+      "action": "CLICK",
+      "x": 34,
+      "y": 32
+    },
+    {
+      "step": 308,
+      "level": 5,
+      "action": "CLICK",
+      "x": 34,
+      "y": 32
+    },
+    {
+      "step": 309,
+      "level": 5,
+      "action": "CLICK",
+      "x": 34,
+      "y": 44
+    },
+    {
+      "step": 310,
+      "level": 5,
+      "action": "DOWN"
+    },
+    {
+      "step": 311,
+      "level": 5,
+      "action": "DOWN"
+    },
+    {
+      "step": 312,
+      "level": 5,
+      "action": "CLICK",
+      "x": 40,
+      "y": 44
+    },
+    {
+      "step": 313,
+      "level": 5,
+      "action": "CLICK",
+      "x": 28,
+      "y": 44
+    },
+    {
+      "step": 314,
+      "level": 5,
+      "action": "CLICK",
+      "x": 34,
+      "y": 44
+    },
+    {
+      "step": 315,
+      "level": 5,
+      "action": "CLICK",
+      "x": 22,
+      "y": 44
+    },
+    {
+      "step": 316,
+      "level": 5,
+      "action": "CLICK",
+      "x": 22,
+      "y": 44
+    },
+    {
+      "step": 317,
+      "level": 5,
+      "action": "CLICK",
+      "x": 22,
+      "y": 56
+    }
+  ]
+}
