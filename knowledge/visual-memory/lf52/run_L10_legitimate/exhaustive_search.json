@@ -1,0 +1,440 @@
+{
+  "initial_N": 2,
+  "round1_states": 123795,
+  "round1_reducing_jumps": 0,
+  "round1_any_N_jumps": 1084,
+  "round1_best_states": [
+    {
+      "depth": 14,
+      "path": [
+        "UP",
+        "UP",
+        "UP",
+        "UP",
+        "UP",
+        "UP",
+        "UP",
+        "UP",
+        "RIGHT",
+        "LEFT",
+        "DOWN",
+        "LEFT",
+        "LEFT",
+        "LEFT"
+      ],
+      "kind": "ANY_N",
+      "n_positions": [
+        [
+          4,
+          0
+        ],
+        [
+          6,
+          9
+        ]
+      ],
+      "jumps": [
+        [
+          4,
+          0,
+          0,
+          1,
+          [
+            4,
+            2
+          ]
+        ]
+      ]
+    },
+    {
+      "depth": 14,
+      "path": [
+        "UP",
+        "UP",
+        "UP",
+        "UP",
+        "UP",
+        "UP",
+        "UP",
+        "UP",
+        "RIGHT",
+        "LEFT",
+        "LEFT",
+        "LEFT",
+        "DOWN",
+        "LEFT"
+      ],
+      "kind": "ANY_N",
+      "n_positions": [
+        [
+          4,
+          0
+        ],
+        [
+          6,
+          9
+        ]
+      ],
+      "jumps": [
+        [
+          4,
+          0,
+          0,
+          1,
+          [
+            4,
+            2
+          ]
+        ]
+      ]
+    },
+    {
+      "depth": 15,
+      "path": [
+        "UP",
+        "UP",
+        "UP",
+        "UP",
+        "UP",
+        "UP",
+        "UP",
+        "UP",
+        "RIGHT",
+        "RIGHT",
+        "LEFT",
+        "LEFT",
+        "LEFT",
+        "DOWN",
+        "LEFT"
+      ],
+      "kind": "ANY_N",
+      "n_positions": [
+        [
+          4,
+          0
+        ],
+        [
+          6,
+          9
+        ]
+      ],
+      "jumps": [
+        [
+          4,
+          0,
+          0,
+          1,
+          [
+            4,
+            2
+          ]
+        ]
+      ]
+    },
+    {
+      "depth": 15,
+      "path": [
+        "UP",
+        "UP",
+        "UP",
+        "UP",
+        "UP",
+        "UP",
+        "UP",
+        "UP",
+        "RIGHT",
+        "LEFT",
+        "UP",
+        "DOWN",
+        "LEFT",
+        "LEFT",
+        "LEFT"
+      ],
+      "kind": "ANY_N",
+      "n_positions": [
+        [
+          4,
+          0
+        ],
+        [
+          6,
+          9
+        ]
+      ],
+      "jumps": [
+        [
+          4,
+          0,
+          0,
+          1,
+          [
+            4,
+            2
+          ]
+        ]
+      ]
+    },
+    {
+      "depth": 15,
+      "path": [
+        "UP",
+        "UP",
+        "UP",
+        "UP",
+        "UP",
+        "UP",
+        "UP",
+        "UP",
+        "RIGHT",
+        "LEFT",
+        "UP",
+        "LEFT",
+        "LEFT",
+        "DOWN",
+        "LEFT"
+      ],
+      "kind": "ANY_N",
+      "n_positions": [
+        [
+          4,
+          0
+        ],
+        [
+          6,
+          9
+        ]
+      ],
+      "jumps": [
+        [
+          4,
+          0,
+          0,
+          1,
+          [
+            4,
+            2
+          ]
+        ]
+      ]
+    },
+    {
+      "depth": 15,
+      "path": [
+        "UP",
+        "UP",
+        "UP",
+        "UP",
+        "UP",
+        "UP",
+        "UP",
+        "UP",
+        "RIGHT",
+        "LEFT",
+        "DOWN",
+        "LEFT",
+        "LEFT",
+        "LEFT",
+        "UP"
+      ],
+      "kind": "ANY_N",
+      "n_positions": [
+        [
+          4,
+          0
+        ],
+        [
+          6,
+          9
+        ]
+      ],
+      "jumps": [
+        [
+          4,
+          0,
+          0,
+          1,
+          [
+            4,
+            2
+          ]
+        ]
+      ]
+    },
+    {
+      "depth": 15,
+      "path": [
+        "UP",
+        "UP",
+        "UP",
+        "UP",
+        "UP",
+        "UP",
+        "UP",
+        "UP",
+        "RIGHT",
+        "LEFT",
+        "LEFT",
+        "UP",
+        "LEFT",
+        "DOWN",
+        "LEFT"
+      ],
+      "kind": "ANY_N",
+      "n_positions": [
+        [
+          4,
+          0
+        ],
+        [
+          6,
+          9
+        ]
+      ],
+      "jumps": [
+        [
+          4,
+          0,
+          0,
+          1,
+          [
+            4,
+            2
+          ]
+        ]
+      ]
+    },
+    {
+      "depth": 15,
+      "path": [
+        "UP",
+        "UP",
+        "UP",
+        "UP",
+        "UP",
+        "UP",
+        "UP",
+        "UP",
+        "RIGHT",
+        "LEFT",
+        "LEFT",
+        "LEFT",
+        "UP",
+        "DOWN",
+        "LEFT"
+      ],
+      "kind": "ANY_N",
+      "n_positions": [
+        [
+          4,
+          0
+        ],
+        [
+          6,
+          9
+        ]
+      ],
+      "jumps": [
+        [
+          4,
+          0,
+          0,
+          1,
+          [
+            4,
+            2
+          ]
+        ]
+      ]
+    },
+    {
+      "depth": 15,
+      "path": [
+        "UP",
+        "UP",
+        "UP",
+        "UP",
+        "UP",
+        "UP",
+        "UP",
+        "UP",
+        "RIGHT",
+        "LEFT",
+        "LEFT",
+        "LEFT",
+        "DOWN",
+        "LEFT",
+        "UP"
+      ],
+      "kind": "ANY_N",
+      "n_positions": [
+        [
+          4,
+          0
+        ],
+        [
+          6,
+          9
+        ]
+      ],
+      "jumps": [
+        [
+          4,
+          0,
+          0,
+          1,
+          [
+            4,
+            2
+          ]
+        ]
+      ]
+    },
+    {
+      "depth": 15,
+      "path": [
+        "DOWN",
+        "RIGHT",
+        "UP",
+        "UP",
+        "UP",
+        "UP",
+        "UP",
+        "UP",
+        "UP",
+        "UP",
+        "LEFT",
+        "UP",
+        "LEFT",
+        "LEFT",
+        "LEFT"
+      ],
+      "kind": "ANY_N",
+      "n_positions": [
+        [
+          4,
+          0
+        ],
+        [
+          6,
+          9
+        ]
+      ],
+      "jumps": [
+        [
+          4,
+          0,
+          0,
+          1,
+          [
+            4,
+            2
+          ]
+        ]
+      ]
+    }
+  ],
+  "round2_states": 52377,
+  "round2_best_reduction": 0,
+  "round2_path_to_best": [],
+  "timeout_reached": false
+}

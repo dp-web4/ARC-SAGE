@@ -1,0 +1,11 @@
+{
+  "initial_42_wall": true,
+  "initial_42_walkable": false,
+  "initial_42_block": true,
+  "initial_41_wall": true,
+  "initial_41_walkable": false,
+  "bfs_blue_at_41_and_block_at_42": 10,
+  "bfs_valid_down_jump_configs": 10,
+  "max_depth_searched": 15,
+  "states_searched": 15985
+}

@@ -1,0 +1,9 @@
+{
+  "starting_state": "N@(4,2) after jump from N@(4,0)",
+  "initial_N": 2,
+  "best_N_found": 2,
+  "states_searched": 1094088,
+  "max_depth": 15,
+  "reducing_path": [],
+  "timeout_reached": false
+}
