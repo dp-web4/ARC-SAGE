@@ -45,6 +45,14 @@ The result: 25 working solvers, each encoding a compressed ontology. A solver is
 
 See `PRUNE_NOTES.md` for what's been deliberately included, what was considered but excluded, and why.
 
+## Scope and continuation
+
+This repo preserves the **Phase 1** harness — the Claude Opus 4.6 driven world-model-plus-solver system that produced the public ARC-AGI-3 scorecard. Solvers, world models, knowledge, and capture/replay infrastructure are frozen at the public scorecard state.
+
+**Phase 2** — local-LLM continuation, world-model refinement, multi-machine federation of game-play sessions across the SAGE fleet, and the broader convergence between game-play (doing) and raising (being) — is ongoing in private repos (`dev-SAGE`, `shared-context`). Public disclosure of those streams is deferred to a date of our choosing.
+
+Research-purpose pre-disclosure inquiries: dp@metalinxx.io.
+
 ## Results
 
 **Latest scorecard: 92.82%** ([`c4e6442e`](https://arcprize.org/scorecards/c4e6442e-077d-4048-9eff-110c5a59ccfb), submitted 2026-04-15, against current human baselines)
