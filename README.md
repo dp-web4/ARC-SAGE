@@ -55,29 +55,26 @@ Research-purpose pre-disclosure inquiries: dp@metalinxx.io.
 
 ## Results
 
-**Final public scorecard: 94.85%** ([`c7dfb4f1`](https://arcprize.org/scorecards/c7dfb4f1-8642-4c9e-ab4d-152f5f8e33b4), submitted 2026-04-17, against current human baselines)
+**Final public scorecard: 94.85%** ([`c7dfb4f1`](https://arcprize.org/scorecards/c7dfb4f1-8642-4c9e-ab4d-152f5f8e33b4), published 2026-04-17, against current human baselines)
 
 This is the highest and final public submission, the canonical headline result for the Phase 1 harness.
 
-#### Detailed breakdown (from the 92.82% `c4e6442e` submission, 2026-04-15)
-
-The per-game detail below is transcribed from the `c4e6442e` scorecard. The final `c7dfb4f1` (94.85%) submission improved on it; its per-game detail is not transcribed here.
-
 | Metric | Value |
 |--------|-------|
-| Overall score | 92.82% |
-| Environments completed | 21 / 25 |
-| Levels completed | 173 / 183 |
-| Total actions | 5,496 |
-| Games at ≥100% (incl. 115% bonus) | 20 |
+| Overall score | **94.85%** |
+| Environments won | 23 / 25 |
+| Levels completed | 175 / 183 |
+| Total actions | 5,845 |
 
-**20 games score 100% or above** under the new scoring system (see below): cd82, sb26, ft09, sc25, tn36, vc33, tr87, tu93, lp85, sp80, ls20, su15, g50t, ar25, s5i5, sk48, cn04, ka59, m0r0, wa30. One game (r11l) at 99.75% — one action over baseline on a single level. Four games partial due to structural blockers confirmed by multi-agent frame-questioning convergence: re86 L8 not attempted, dc22 L6, lf52 L7/L10, bp35 L5.
+**23 of 25 games WIN.** Twenty-two score a full 100.00%: ar25, cd82, cn04, dc22, ft09, g50t, ka59, lp85, ls20, m0r0, re86, s5i5, sb26, sc25, sk48, sp80, su15, tn36, tr87, tu93, vc33, wa30. One game (r11l) wins at 99.75% — one action over baseline on a single level. The remaining two are NOT_FINISHED, partial due to structural blockers confirmed by multi-agent frame-questioning convergence: **bp35** (5 / 9 levels, 33.33%) and **lf52** (6 / 10 levels, 38.18%). Relative to the earlier 92.82% submission, dc22 and re86 moved from blocked to solved, narrowing the structural-blocker set from four games to two.
+
+Per-input-type breakdown: keyboard games 100.00% (29 levels), keyboard+click 92.27% (89 levels), click 86.35% (51 levels).
 
 ### Scoring note (2026-04-15)
 
 ARC Prize updated the scoring system with new human baselines. Per-level scores now **cap at 115%, not 100%** — solutions faster than the 2nd-best human baseline earn a 15% efficiency bonus. Scorecards generated under the previous baselines are labeled "legacy" on the site.
 
-In theory a fully-solved 25-game run with every level beating baseline scores up to 115%. The result is primarily bounded by the four structurally-blocked games, not by per-level efficiency.
+In theory a fully-solved 25-game run with every level beating baseline scores up to 115%. The result is primarily bounded by the two structurally-blocked games (bp35, lf52), not by per-level efficiency.
 
 ### Progression
 
