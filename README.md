@@ -59,6 +59,8 @@ Research-purpose pre-disclosure inquiries: dp@metalinxx.io.
 
 This is the highest and final public submission, the canonical headline result for the Phase 1 harness.
 
+**Read it precisely — real capability, under affordances a strict competition run would not grant.** The 94.85% is genuine and publicly verifiable, but the Phase-1 harness earned it *outside strict from-observation play*: it analyzed the games' (public) engine source and built per-game solver cartridges the model could draw on. So the result demonstrates what the model does **given engine-level context and tooling**, not blind from-observation solving. The capability is real; the affordances that unlocked it are ones strict competition rules withhold. (Which is also why "generalization" is the open frontier — the subsequent local-LLM work is about capability *without* those affordances.)
+
 | Metric | Value |
 |--------|-------|
 | Overall score | **94.85%** |
