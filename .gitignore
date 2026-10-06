@@ -13,3 +13,6 @@ env/
 *.egg-info/
 dist/
 build/
+
+# Large media is hosted as GitHub release assets (100 MB per-file limit), not in the repo
+media/

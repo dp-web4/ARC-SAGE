@@ -22,6 +22,7 @@ This was useful research into **world models, persistent context, multi-agent co
 **Final public scorecard: 94.85%**  
 Published: **2026-04-17**  
 Scorecard: https://arcprize.org/scorecards/c7dfb4f1-8642-4c9e-ab4d-152f5f8e33b4
+Gameplay video (363 MB, release asset): https://github.com/dp-web4/ARC-SAGE/releases/download/phase1-media/gameplay_video.mp4
 
 | Metric | Historical Phase-1 result |
 |---|---:|
