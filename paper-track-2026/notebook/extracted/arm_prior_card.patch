@@ -1,0 +1,121 @@
+diff --git a/ARC3-Inference/inference/agent/tool_agent.py b/ARC3-Inference/inference/agent/tool_agent.py
+index 57c475e..e883e53 100644
+--- a/ARC3-Inference/inference/agent/tool_agent.py
++++ b/ARC3-Inference/inference/agent/tool_agent.py
+@@ -562,6 +562,102 @@ def _verify_hazard_text() -> str:
+     return os.environ.get("ARC3_VERIFY_HAZARD_TEXT", "").strip() or _VERIFY_HAZARD_LINE
+ 
+ 
++# ARC3_PRIOR_CARD (default off; swing S2, thor-claude 10-10): the known-families
++# prior card. A compact menu of the mechanic FAMILIES verified across the 25
++# public games - for each, the everyday prior it caricatures, its tell-tale
++# signs on the board, the usual goal and one cheap test - every item phrased as
++# a hypothesis, never a fact, with no game ids or solutions. It piggybacks on
++# the verify gate: when ARC3_VERIFY arms a level, the same opener that carries
++# the verify/goal opener line carries the card immediately BEFORE that line,
++# once per armed level, and `prior_card fired level=<n>` is written. Nothing
++# fires unless ARC3_VERIFY is on and arms (the card has no gate of its own).
++# ARC3_PRIOR_CARD_TEXT overrides the text. Off, every request and artifact is
++# byte-identical to the tree without it. Sources: advisor_data variants_v0/v1
++# and win_trails_v1 REPORTs, KILLER_PRIORS_1008, arc-sage game-mechanics;
++# reviewed copy: blackbox/runs/PRIOR_CARD_v1.md (1,199 Qwen3.8 tokens).
++_PRIOR_CARD_TEXT = (
++    '[harness] Prior card: mechanic families seen in OTHER games; this game may be none of '
++    'them, or a blend. Each line is a hypothesis to test with one cheap probe, never a fact.\n'
++    'ANY GAME: a bar on an edge that shrinks per action MAY be the budget. A static picture, '
++    'panel or legend beside the play area MAY be the TARGET: compare the board with it. '
++    'ACTION5 MAY mean run/play/pour/submit. The theme (mirrors, pairs, sizes) MAY predict the '
++    "goal's form; an object's meaning MAY flip between levels.\n"
++    '\n'
++    'KEYBOARD (arrows, maybe ACTION5)\n'
++    '- Key fits lock: a HUD shape that changes on certain tiles MAY be a key: carry the '
++    'matching shape/colour/rotation into each lock; some tiles refill the bar. Test: step on '
++    'one tile, diff the HUD.\n'
++    '- Linked movers: if one arrow moves two tokens in mirrored directions, the goal MAY be to '
++    'merge or swap them, not to reach a place. Test: one arrow, diff.\n'
++    '- Record and replay: if ACTION5 rewinds you and a copy repeats your path, copies MAY hold '
++    'switches/doors while you reach the exit. Test: 3 steps, ACTION5, watch.\n'
++    '- Triggered pieces: objects that move once you face or near them, bounce, or echo your '
++    'moves late MAY be tools that clear blockers (often struck from behind). Test: face one, '
++    'wait a step.\n'
++    '- Helper: an agent that moves after each of yours MAY be an ally hauling items, not a '
++    'predator; ACTION5 MAY attach/detach. Goal: every item on a target slot. Test: watch it '
++    'for 3 moves.\n'
++    '- Rule table (dial to match): glyph pairs joined by arrows MAY be rewrite rules; '
++    'left/right moves a cursor, up/down cycles a glyph. Goal: answer row = input rewritten by '
++    'the rules. Test: one up.\n'
++    '\n'
++    'KEYBOARD + CLICK (a click or ACTION5 selects; arrows act)\n'
++    '- Fit pieces: the selected piece changes colour or gets a dot. Goals seen: grey pins of '
++    'two pieces overlap and turn green until none is grey; boxes sit exactly inside outline '
++    'markers (pushes chain; a move MAY change DISTANT objects); pieces squeeze against walls '
++    'and recolour in paint zones to fill outlines; reflections across movable mirror lines '
++    'cover every target dot. Test: move one piece, diff all.\n'
++    '- Rails: arrows extend/retract a rail that pushes coloured blocks. Goal MAY be blocks '
++    'ordered as a target row. Test: extend once.\n'
++    '- Gravity: only left/right and you fall off ledges; a click MAY delete a ground tile; '
++    'spikes kill; a gem is the goal; the world MAY close in. Test: click one tile under you.\n'
++    '- Region stamp (paint by numbers): a tool steps among a few fixed poses; ACTION5 paints a FIXED '
++    'region per pose in the palette colour. Goal: canvas = static target panel; later stamps '
++    'overpaint, so order matters. Test: stamp once, compare.\n'
++    '- Pipes: movable bars plus ACTION5 pour; liquid falls and splits on bars. Goal: fill '
++    'every receptacle, touch no danger zone (the view MAY be rotated). Test: one pour.\n'
++    '- Peg solitaire on tracks: click a piece, then an arrow: it jumps a neighbour, removing '
++    'it; arrow keys slide whole track networks with riders; the view MAY scroll. Goal: one '
++    'piece (or a stated count) left. Test: one arrow key.\n'
++    '- Crane and colour teleports: you walk; on-screen arrow buttons drive a crane that '
++    'carries bridges; a pad sends you to the same-colour pad, and a button that recolours a '
++    'pad MAY pick its partner (colour dial); keys and plates open gates. Goal: the exit tile. '
++    'Test: recolour a pad, then use it.\n'
++    '- Spell grid: toggling a small 3x3 grid into a legend pattern MAY cast '
++    'teleport/resize/blast. Goal: the exit. Test: copy one pattern.\n'
++    '\n'
++    'CLICK ONLY\n'
++    '- Lights-out colours: a click cycles colours on a pattern of tiles; 3x3 markers MAY '
++    'picture which neighbours must equal or differ from their centre. Goal: every marker '
++    'satisfied. Test: one click, diff.\n'
++    '- Rotating rings: paired arrow buttons rotate pieces round loop tracks; shared cells '
++    'couple loops. Goal: the right piece under each marker. Test: one button.\n'
++    '- Communicating vessels: a click moves level from one vessel of a pair to the other; '
++    'floats ride. Goal: every float at its mark. Test: one click.\n'
++    '- Suika/2048 merge: a click pulls nearby objects in; two of one size merge into the next; '
++    'predators bite or merge. Goal: exact counts of each tier inside the baskets (merge, then '
++    'deliver). Test: click one of a pair.\n'
++    '- Program a machine: columns of toggle bits MAY each encode one instruction (move, '
++    "rotate, scale, recolour); RUN executes. Goal: the piece's pose = the socket's. Unexplored "
++    'clicks MAY end the attempt. Test: set one column, RUN.\n'
++    '- Assemble a program: place tokens in frame slots, ACTION5 plays; frames read in order, a '
++    'ring token MAY call the frame of its colour. Goal: read sequence = target colour row; a '
++    'failure animation marks the first wrong slot. Test: one play.\n'
++    "- Limbs: click a limb, then a spot; the body sits at its limbs' centroid. Goal: each body "
++    'on its same-colour target. Test: move one limb.\n'
++    '- Slider arms: clicking left/right of a slider shrinks/grows an arm; a colour button '
++    "rotates that colour's arms. Goal: connectors on every target. Test: click each side."
++)
++
++
++def _prior_card_enabled() -> bool:
++    return _get_env_bool("ARC3_PRIOR_CARD", False)
++
++
++def _prior_card_text() -> str:
++    return os.environ.get("ARC3_PRIOR_CARD_TEXT", "").strip() or _PRIOR_CARD_TEXT
++
++
+ def _verify_config() -> dict[str, Any]:
+     return {
+         "gate": (os.environ.get("ARC3_VERIFY_GATE", "") or "stall").strip().lower(),
+@@ -6312,7 +6408,12 @@ class ToolAgent:
+         if not _verify_enabled() or not state or not state["opener_pending"]:
+             return user_prompt
+         state["opener_pending"] = False
+-        return user_prompt + "\n" + _verify_config()["opener_line"]
++        line = _verify_config()["opener_line"]
++        if _prior_card_enabled():
++            # ARC3_PRIOR_CARD: the card goes right before the goal opener line
++            state["status"].append(f"prior_card fired level={state['armed_level']}")
++            line = _prior_card_text() + "\n" + line
++        return user_prompt + "\n" + line
+ 
+     def _verify_flush(self, append_transcript: Callable[[str, str], None]) -> None:
+         state = getattr(self, "_verify", None)

@@ -1,0 +1,160 @@
+diff --git a/ARC3-Inference/inference/agent/python_tool_sandbox.py b/ARC3-Inference/inference/agent/python_tool_sandbox.py
+index cf72202..c15a0ff 100644
+--- a/ARC3-Inference/inference/agent/python_tool_sandbox.py
++++ b/ARC3-Inference/inference/agent/python_tool_sandbox.py
+@@ -415,7 +415,8 @@ _SANDBOX_BOOTSTRAP = textwrap.dedent(
+                     key: report.get(key)
+                     for key in ("level", "transitions", "checked", "exact", "baseline",
+                                 "mismatches", "changed", "exact_on_changed", "errors",
+-                                "abstained", "timed_out")
++                                "abstained", "timed_out", "cells_checked", "cells_available",
++                                "full_predictions", "sparse_predictions")
+                 },
+             })
+             _recv()
+diff --git a/ARC3-Inference/inference/agent/tool_agent.py b/ARC3-Inference/inference/agent/tool_agent.py
+index 69f9fe4..89a3dae 100644
+--- a/ARC3-Inference/inference/agent/tool_agent.py
++++ b/ARC3-Inference/inference/agent/tool_agent.py
+@@ -6107,7 +6107,8 @@ class ToolAgent:
+         fields = " ".join(
+             f"{key}={report.get(key)}"
+             for key in ("level", "transitions", "exact", "baseline", "mismatches",
+-                        "checked", "changed", "exact_on_changed", "errors", "timed_out")
++                        "checked", "changed", "exact_on_changed", "errors", "timed_out",
++                        "cells_checked", "cells_available", "full_predictions", "sparse_predictions")
+         )
+         self._verify_state()["status"].append(f"verify_replay_check {fields}")
+ 
+diff --git a/ARC3-Inference/inference/utils/verify_tools.py b/ARC3-Inference/inference/utils/verify_tools.py
+index d9339bd..8e198f2 100644
+--- a/ARC3-Inference/inference/utils/verify_tools.py
++++ b/ARC3-Inference/inference/utils/verify_tools.py
+@@ -22,6 +22,7 @@ import): its source is spliced verbatim into the sandbox bootstrap
+ (python_tool_sandbox.py), which runs under ``python -I -S``. The host imports
+ it normally for the per-step expectation check in the solver, and tests.
+ """
++import operator
+ import time
+ 
+ 
+@@ -39,11 +40,14 @@ VERIFY_DOCS = (
+     "  OR None to abstain on that transition.\n"
+     "  The harness replays every recorded transition of THIS level (RESETs and the\n"
+     "  action that ended an attempt are skipped) and returns: transitions, checked,\n"
+-    "  exact (sim fully right), baseline (a 'nothing changes' predictor fully right\n"
++    "  exact (predicted cells right), baseline (a 'nothing changes' predictor right\n"
+     "  on the same transitions), changed / exact_on_changed (transitions where the\n"
+     "  board really moved), and the first mismatches with cell diffs\n"
+     "  [row, col, predicted, observed, before]. border=N ignores N cells at each\n"
+     "  edge (HUD bars); last=N replays only the most recent N transitions.\n"
++    "  Sparse exact matches validate only the predicted cells, not the whole board.\n"
++    "  cells_checked/cells_available and full_predictions/sparse_predictions expose\n"
++    "  that coverage; empty or entirely border-excluded predictions abstain.\n"
+     "  replay_check() with no argument returns this text.\n"
+     "\n"
+     "action(actions, expect=[...])\n"
+@@ -57,11 +61,25 @@ VERIFY_DOCS = (
+ )
+ 
+ 
++def _verify_int(value):
++    """An int from an int-like (int, numpy integer: anything with __index__), else None.
++
++    Booleans (bool, numpy.bool_) and floats are not integers here.
++    """
++    if isinstance(value, bool) or type(value).__name__ == "bool_":
++        return None
++    try:
++        return operator.index(value)
++    except TypeError:
++        return None
++
++
+ def verify_color_letter(value, color_chars):
+     """A board letter from a letter or a 0-15 color index; ValueError otherwise."""
+-    if isinstance(value, bool):
++    if isinstance(value, bool) or type(value).__name__ == "bool_":
+         raise ValueError(f"color {value!r} is not a board letter")
+-    if isinstance(value, int):
++    if _verify_int(value) is not None:
++        value = _verify_int(value)
+         if 0 <= value < len(color_chars):
+             return color_chars[value]
+         raise ValueError(f"color index {value} is out of range 0-{len(color_chars) - 1}")
+@@ -79,9 +97,14 @@ def _verify_cell_key(key):
+     if not isinstance(key, (tuple, list)) or len(key) != 2:
+         raise ValueError(f"cell key {key!r} must be (row, col)")
+     try:
+-        return int(key[0]), int(key[1])
++        row, col = (int(v) if isinstance(v, str) else _verify_int(v) for v in key)
++        if row is None or col is None:
++            raise ValueError
++        if row < 0 or col < 0:
++            raise ValueError
++        return row, col
+     except (TypeError, ValueError):
+-        raise ValueError(f"cell key {key!r} must be two integers (row, col)")
++        raise ValueError(f"cell key {key!r} must be two nonnegative integers (row, col)")
+ 
+ 
+ def verify_normalize_cells(cells, color_chars):
+@@ -274,6 +297,10 @@ def verify_replay(
+         "baseline": 0,
+         "changed": 0,
+         "exact_on_changed": 0,
++        "cells_checked": 0,
++        "cells_available": 0,
++        "full_predictions": 0,
++        "sparse_predictions": 0,
+         "mismatches": 0,
+         "border": border,
+         "timed_out": False,
+@@ -304,9 +331,27 @@ def verify_replay(
+         if kind == "none":
+             report["abstained"] += 1
+             continue
+-        report["checked"] += 1
+         n_rows = len(after)
+         n_cols = max((len(r) for r in after), default=0)
++        available = sum(
++            in_region(r, c, n_rows, n_cols)
++            for r, row in enumerate(after) for c in range(len(row))
++        )
++        if kind == "sparse":
++            # Out-of-board coordinates remain contradictions. Only real HUD
++            # cells are ignored; a typo must not disappear into the border.
++            value = {
++                (r, c): guess for (r, c), guess in value.items()
++                if not (0 <= r < n_rows and 0 <= c < len(after[r]))
++                or in_region(r, c, n_rows, n_cols)
++            }
++        if not available or (kind == "sparse" and not value):
++            report["abstained"] += 1
++            continue
++        report["checked"] += 1
++        report[kind + "_predictions"] += 1
++        report["cells_available"] += available
++        report["cells_checked"] += available if kind == "full" else len(value)
+         wrong = []
+         baseline_ok = True
+         moved = False
+@@ -365,13 +410,16 @@ def verify_replay(
+     if report["checked"]:
+         report["verdict"] = (
+             f"sim exact on {report['exact']}/{report['checked']} checked transitions "
+-            f"({report['exact_on_changed']}/{report['changed']} of those where the board "
++            f"({report['exact_on_changed']}/{report['changed']} of those where the checked cells "
+             f"changed); the nothing-changes baseline is exact on {report['baseline']}/"
+             f"{report['checked']}"
+             + (" - the sim does NOT beat it" if report["exact"] <= report["baseline"] else "")
++            + (f"; sparse predictions check selected cells only, not whole-board validation "
++               f"({report['cells_checked']}/{report['cells_available']} cells compared)"
++               if report["sparse_predictions"] else "")
+         )
+     else:
+-        report["verdict"] = "no transition was checked (none recorded on this level, or sim_fn abstained/failed on all)"
++        report["verdict"] = "no transition was checked (none recorded, sim_fn abstained/failed, or no cells remained to check)"
+     if report["first_error"] is None:
+         del report["first_error"]
+     return report

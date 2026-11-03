@@ -1,0 +1,279 @@
+diff --git a/ARC3-Inference/inference/framework/solver.py b/ARC3-Inference/inference/framework/solver.py
+index e40976c..41bee89 100644
+--- a/ARC3-Inference/inference/framework/solver.py
++++ b/ARC3-Inference/inference/framework/solver.py
+@@ -178,6 +178,29 @@ BATCH_NOOP_BLOCK = os.environ.get(
+ ).strip().lower() in ("1", "true", "yes", "on")
+ 
+ 
++# ARC3_ACTION_LOG: one JSON line per action attempt, written to
++# <job_dir>/<game>_p<pass>_actions.jsonl beside the request log, for offline
++# analysis only. Nothing it writes reaches the model: the records are built
++# from the payload _execute_action already returns (copied, never mutated) and
++# go to a file no prompt reads. Read when the game's session is built, so a
++# test or notebook can set it per run. Off by default; off, no code path below
++# runs and every artifact is what it was without it.
++#
++# Not in benchmark.json: taaf's GameRun.to_json_dict() lists its fields
++# explicitly, so an extra attribute on the run would be dropped on save, and
++# extending it means changing taaf (a separate repository, also staged
++# separately on Kaggle).
++def _action_log_enabled() -> bool:
++    return os.environ.get("ARC3_ACTION_LOG", "0").strip().lower() in (
++        "1", "true", "yes", "on"
++    )
++
++
++def _bool_or_none(value: Any) -> bool | None:
++    """A measured verdict, or None. Never coerces an absent reading to False."""
++    return value if isinstance(value, bool) else None
++
++
+ _BLOCKED_VERDICTS = {
+     "known_noop": "BLOCKED (known no-op in this exact board state; never executed)",
+     "known_death": "BLOCKED (ended a previous attempt from this exact board state; never executed)",
+@@ -492,6 +515,12 @@ class _HarnessGameSession:
+     # and older animations are almost never what it is asking about.
+     animation_record: dict[str, Any] | None = None
+     _viewer_events_flushed: int = field(default=0, init=False, repr=False)
++    # ARC3_ACTION_LOG target, or None when the flag is off (the default).
++    action_log_path: Path | None = None
++    # One id per action(...) call that got as far as the action loop, and one
++    # per automatic RESET; batch_index is the 1-based position inside it.
++    _action_log_batch_id: int = field(default=0, init=False, repr=False)
++    _action_log_seq: int = field(default=0, init=False, repr=False)
+ 
+     def current_frame(self) -> Frame:
+         return Frame(
+@@ -608,6 +637,8 @@ class _HarnessGameSession:
+         self.transcript_path.touch(exist_ok=True)
+         self.token_baseline = _analyzer_reported_tokens(self.analyzer)
+         self.game_token_baseline = self.token_baseline
++        if self.action_log_path is not None:
++            self._start_action_log()
+         # A game that has not started yet sits in the top band, so every game
+         # gets going in queue order before any that has already trimmed comes
+         # back for a second turn.
+@@ -845,6 +876,134 @@ class _HarnessGameSession:
+             }
+         )
+ 
++    def _start_action_log(self) -> None:
++        try:
++            self.action_log_path.parent.mkdir(parents=True, exist_ok=True)
++            self.action_log_path.write_text("", encoding="utf-8")
++        except Exception as exc:  # logging must never change play
++            log.warning("action log: cannot create %s: %s", self.action_log_path, exc)
++
++    def _append_action_log(self, record: dict[str, Any]) -> None:
++        try:
++            with self.action_log_path.open("a", encoding="utf-8") as handle:
++                handle.write(json.dumps(record, sort_keys=True, default=str) + "\n")
++        except Exception as exc:  # logging must never change play
++            log.warning("action log: cannot append to %s: %s", self.action_log_path, exc)
++
++    def _action_log_record(
++        self,
++        *,
++        action: arcengine.ActionInput,
++        payload: dict[str, Any] | None,
++        level_before: int | None,
++        batch_index: int,
++        batch_size: int,
++        generated_tokens: int | None,
++        refusal: tuple[str | None, str | None] | None = None,
++    ) -> dict[str, Any]:
++        """One action attempt, from values the harness already computed.
++
++        Executed: every outcome is the payload's own field (_execute_action's
++        grid comparison, interior verdict and engine state), copied as is;
++        a field the payload does not carry as a bool is null, not False.
++        Refused (a guard or the staleness check stopped it before the engine
++        saw it): executed is False and every outcome is null.
++        """
++        run = self.game.game_run
++        analyzer = self.analyzer
++        session_tokens = getattr(analyzer, "_session_generated_tokens", None)
++        level_start_tokens = getattr(analyzer, "_tokens_at_level_start", None)
++        try:
++            tokens_on_level = (
++                int(session_tokens) - int(level_start_tokens)
++                if session_tokens is not None and level_start_tokens is not None
++                else None
++            )
++        except (TypeError, ValueError):
++            tokens_on_level = None
++        engine_name = action.id.name
++        data = dict(action.data or {})
++        click = None
++        if action.id == arcengine.GameAction.ACTION6:
++            model_data = _model_mouse_action_data(data)
++            click = {
++                "row": model_data["row"],
++                "col": model_data["col"],
++                "x": data.get("x"),
++                "y": data.get("y"),
++            }
++        self._action_log_seq += 1
++        now = time.time()
++        record: dict[str, Any] = {
++            "game_id": run.game_id if run is not None else str(self.game_index),
++            "pass": self.pass_index,
++            "seq": self._action_log_seq,
++            "analysis_step": self.analysis_step,
++            "batch_id": self._action_log_batch_id,
++            "batch_index": batch_index,
++            "batch_size": batch_size,
++            "level": level_before,
++            "action": engine_name,
++            "model_action": to_model_action(engine_name),
++            "action_display": _format_action_display(engine_name, data),
++            "click": click,
++            "wall_time": now,
++            "wall_time_iso": datetime.fromtimestamp(now).astimezone().isoformat(),
++            "session_generated_tokens": session_tokens,
++            "tokens_at_level_start": level_start_tokens,
++            "tokens_on_level": tokens_on_level,
++            "game_generated_tokens": (
++                _analyzer_reported_tokens(analyzer) - self.game_token_baseline
++            ),
++            "generated_tokens_charged": generated_tokens,
++        }
++        if payload is None:
++            kind, detail = refusal or (None, None)
++            record.update(
++                {
++                    "executed": False,
++                    "refused_by": kind,
++                    "refusal_detail": detail,
++                    "action_num": self.action_count,
++                    "level_after": None,
++                    "board_changed": None,
++                    "gameplay_changed": None,
++                    "no_op": None,
++                    "verdict": _BLOCKED_VERDICTS.get(kind or "", "BLOCKED (never executed)"),
++                    "level_completed": None,
++                    "game_over": None,
++                    "run_complete": None,
++                    "state": None,
++                    "score": None,
++                    "reward": None,
++                    "automatic": False,
++                    "run_elapsed_seconds": None,
++                }
++            )
++            return record
++        record.update(
++            {
++                "executed": True,
++                "refused_by": None,
++                "refusal_detail": None,
++                "action_num": payload.get("action_num"),
++                "level_after": payload.get("level"),
++                "board_changed": _bool_or_none(payload.get("board_changed")),
++                "gameplay_changed": _bool_or_none(payload.get("gameplay_changed")),
++                "no_op": _bool_or_none(payload.get("no_op")),
++                "verdict": _action_verdict(payload),
++                "level_completed": _bool_or_none(payload.get("level_completed")),
++                "game_over": _bool_or_none(payload.get("game_over")),
++                "run_complete": _bool_or_none(payload.get("run_complete")),
++                "state": payload.get("state"),
++                "score": payload.get("score"),
++                "reward": payload.get("reward"),
++                "automatic": bool(payload.get("automatic")),
++                "run_elapsed_seconds": payload.get("run_elapsed_seconds"),
++            }
++        )
++        return record
++
+     def write_viewer_payload(self) -> None:
+         if self.solver.job_dir is None:
+             return
+@@ -1005,6 +1164,8 @@ class _HarnessGameSession:
+             return self._error_payload(error or "Could not parse action request.")
+         if self.should_stop() or _is_engine_game_over(self.game):
+             return self._terminal_payload(requested_actions)
++        if self.action_log_path is not None:
++            self._action_log_batch_id += 1
+ 
+         executed_payloads: list[dict[str, Any]] = []
+         total_reward = 0.0
+@@ -1133,6 +1294,20 @@ class _HarnessGameSession:
+                 stop_reason = "no_op_action"
+                 break
+ 
++        if self.action_log_path is not None and blocked_kind is not None:
++            refused_index = len(executed_payloads)
++            self._append_action_log(
++                self._action_log_record(
++                    action=requested_actions[refused_index],
++                    payload=None,
++                    level_before=_level_number(self.game),
++                    batch_index=refused_index + 1,
++                    batch_size=batch_size,
++                    generated_tokens=None,
++                    refusal=(blocked_kind, blocked_detail),
++                )
++            )
++
+         if not executed_payloads:
+             if blocked_detail is not None:
+                 # Nothing ran at all: report the refusal itself rather than a
+@@ -1227,6 +1402,8 @@ class _HarnessGameSession:
+ 
+     def _execute_auto_reset(self) -> None:
+         action = arcengine.ActionInput(id=arcengine.GameAction.RESET, data={})
++        if self.action_log_path is not None:
++            self._action_log_batch_id += 1
+         self._execute_action(
+             action, batch_index=1, batch_size=1, generated_tokens=0, automatic=True
+         )
+@@ -1243,6 +1420,9 @@ class _HarnessGameSession:
+     ) -> dict[str, Any]:
+         previous_grid = _grid_from_state(self.game.current_state)
+         previous_completed = int(self.game.current_state.levels_completed)
++        level_before = (
++            _level_number(self.game) if self.action_log_path is not None else None
++        )
+         if generated_tokens is None:
+             current_tokens = _analyzer_reported_tokens(self.analyzer)
+             generated_tokens = max(0, current_tokens - self.token_baseline)
+@@ -1341,6 +1521,17 @@ class _HarnessGameSession:
+         )
+         self.write_runtime_state()
+         self._append_action_viewer_event(payload, current_frame)
++        if self.action_log_path is not None:
++            self._append_action_log(
++                self._action_log_record(
++                    action=action,
++                    payload=payload,
++                    level_before=level_before,
++                    batch_index=batch_index,
++                    batch_size=batch_size,
++                    generated_tokens=generated_tokens,
++                )
++            )
+         if flush_viewer_payload:
+             self.write_viewer_payload()
+         return payload
+@@ -1868,6 +2059,12 @@ class HarnessSolver(Solver):
+             viewer_data_path = self._artifacts_dir() / f"{run_stem}_viewer_data.json"
+             transcript_path = self._transcripts_dir() / f"{run_stem}.txt"
+             analysis_relpath = f"solver_analysis/{run_stem}.html"
++            action_log_path = (
++                (self.job_dir or Path.cwd() / "taaf_harness_artifacts")
++                / f"{run_stem}_actions.jsonl"
++                if _action_log_enabled()
++                else None
++            )
+             analyzer = self._make_analyzer(game, index, local_server)
+             session = _HarnessGameSession(
+                 solver=self,
+@@ -1880,6 +2077,7 @@ class HarnessSolver(Solver):
+                 analysis_html_relpath=analysis_relpath,
+                 stop_event=self._stop_event,
+                 viewer_data_path=viewer_data_path,
++                action_log_path=action_log_path,
+             )
+             session.play()
+         except Exception as exc:

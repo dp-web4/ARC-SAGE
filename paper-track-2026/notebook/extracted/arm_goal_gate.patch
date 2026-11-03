@@ -1,0 +1,319 @@
+diff --git a/ARC3-Inference/inference/agent/python_tool_sandbox.py b/ARC3-Inference/inference/agent/python_tool_sandbox.py
+index 666fbbc..3112ff1 100644
+--- a/ARC3-Inference/inference/agent/python_tool_sandbox.py
++++ b/ARC3-Inference/inference/agent/python_tool_sandbox.py
+@@ -493,6 +493,10 @@ _SANDBOX_BOOTSTRAP = textwrap.dedent(
+                     grid=[[COLOR_CHARS.index(ch) for ch in row] for row in rows],
+                 )
+ 
++            used_border = border_default if border is None else border
++            # the goal's fingerprint goes to the harness gauge only, never into
++            # the report the model reads (its stdout stays what it was)
++            goal_fp = verify_goal_fingerprint(target, used_border)
+             report = verify_plan_check(
+                 frame.ascii.split("\n"),
+                 steps,
+@@ -500,7 +504,7 @@ _SANDBOX_BOOTSTRAP = textwrap.dedent(
+                 target,
+                 color_chars=COLOR_CHARS,
+                 make_state=make_state,
+-                border=border_default if border is None else border,
++                border=used_border,
+                 max_cells=max_cells,
+                 seconds=seconds,
+             )
+@@ -520,6 +524,7 @@ _SANDBOX_BOOTSTRAP = textwrap.dedent(
+                     "cells_available": report.get("cells_available"),
+                     "error": report.get("first_error") is not None,
+                     "timed_out": report.get("timed_out"),
++                    "goal_fp": goal_fp,
+                 },
+             })
+             _recv()
+diff --git a/ARC3-Inference/inference/agent/tool_agent.py b/ARC3-Inference/inference/agent/tool_agent.py
+index a810861..d1f8443 100644
+--- a/ARC3-Inference/inference/agent/tool_agent.py
++++ b/ARC3-Inference/inference/agent/tool_agent.py
+@@ -371,6 +371,28 @@ def _verify_plan_check_enabled() -> bool:
+     return _get_env_bool("ARC3_VERIFY_PLAN_CHECK", False)
+ 
+ 
++# ARC3_VERIFY_HAZARD_LINE (default off): the goal-gate arm's hazard sub-flag.
++# After the FIRST death in a game (a step whose summary reports game_over:
++# "GAME OVER (attempt ended immediately after this action)"), the next opener
++# carries ONE line, once per game, and a `verify_hazard_line fired ...` gauge
++# is written (level and action_num of the dying step). Active iff
++# ARC3_VERIFY_HAZARD_LINE=1, whether or not ARC3_VERIFY is on: a death can come
++# before any stall arms the verify gate, and the line is measured as its own
++# sub-flag. ARC3_VERIFY_HAZARD_TEXT overrides the text.
++_VERIFY_HAZARD_LINE = (
++    "In this game an unexplored click or move can end the attempt; "
++    "probe with a commit-ready plan."
++)
++
++
++def _verify_hazard_enabled() -> bool:
++    return _get_env_bool("ARC3_VERIFY_HAZARD_LINE", False)
++
++
++def _verify_hazard_text() -> str:
++    return os.environ.get("ARC3_VERIFY_HAZARD_TEXT", "").strip() or _VERIFY_HAZARD_LINE
++
++
+ def _verify_config() -> dict[str, Any]:
+     return {
+         "gate": (os.environ.get("ARC3_VERIFY_GATE", "") or "stall").strip().lower(),
+@@ -6027,6 +6049,8 @@ class ToolAgent:
+             self._last_step_summary = self._summarize_step_sequence(action_results)
+             if _verify_enabled():
+                 self._verify_note_step_summary(self._last_step_summary, action_results)
++            if _verify_hazard_enabled():
++                self._verify_note_death(self._last_step_summary)
+             self._update_summarized_knowledge_from_step_summary()
+         elif self._last_step_summary and not self._last_step_summary.get("stale"):
+             # carried over across an exchange that executed nothing: mark it so
+@@ -6089,6 +6113,7 @@ class ToolAgent:
+             return
+         state.update(armed_level=level, arm_action=int(action_num), opener_pending=True)
+         state["uses"] = {"replay_check": 0, "plan_check": 0}
++        state["goal_fps"] = set()
+         state["status"].append(
+             f"verify_armed level={level} tokens={tokens} actions={actions} trigger={trigger}"
+         )
+@@ -6135,8 +6160,11 @@ class ToolAgent:
+                 f"{key}={report.get(key)}"
+                 for key in ("level", "satisfied", "goal_kind", "plan_length", "steps_simulated",
+                             "abstained_at", "unmet", "cells_checked", "cells_available",
+-                            "error", "timed_out")
++                            "error", "timed_out", "goal_fp")
+             )
++            goal_fps = self._verify_state().get("goal_fps")
++            if isinstance(goal_fps, set) and report.get("goal_fp"):
++                goal_fps.add(report["goal_fp"])
+             self._verify_state()["status"].append(f"verify_plan_check {fields}")
+             return
+         fields = " ".join(
+@@ -6188,10 +6216,36 @@ class ToolAgent:
+             f"cleared={'yes' if cleared else 'no'} "
+             f"actions_after_arm={max(0, int(action_num) - int(state['arm_action']))}"
+             + (f" replay_checks={uses.get('replay_check', 0)} plan_checks={uses.get('plan_check', 0)}"
++               f" plan_check_goals={len(state.get('goal_fps') or ())}"
+                if _verify_plan_check_enabled() else "")
+         )
+         state.update(armed_level=None, opener_pending=False)
+ 
++    def _verify_note_death(self, summary: dict[str, Any] | None) -> None:
++        """ARC3_VERIFY_HAZARD_LINE: the first attempt-ending step of the game
++        queues the hazard line for the next opener. Once per game: a new game
++        is a new agent, and `hazard` is never reset within one."""
++        state = self._verify_state()
++        if not summary or not summary.get("game_over") or state.get("hazard"):
++            return
++        state["hazard"] = {
++            "pending": True,
++            "level": summary.get("level"),
++            "action_num": summary.get("end_action_num"),
++        }
++
++    def _verify_hazard_opener(self, user_prompt: str) -> str:
++        """The hazard line, on the first opener after the game's first death."""
++        state = getattr(self, "_verify", None)
++        hazard = state.get("hazard") if state else None
++        if not _verify_hazard_enabled() or not hazard or not hazard["pending"]:
++            return user_prompt
++        hazard["pending"] = False
++        state["status"].append(
++            f"verify_hazard_line fired level={hazard['level']} action_num={hazard['action_num']}"
++        )
++        return user_prompt + "\n" + _verify_hazard_text()
++
+     def verify_session_end_status(self, action_count: int) -> str:
+         """Called by the solver when the game ends: the still-armed level did
+         not clear. Returns the gauges not yet written to a turn's transcript."""
+@@ -6912,18 +6966,19 @@ class ToolAgent:
+             self._pending_diff_image_label = self._turn_diff_image_label
+         if resume_mode == "state_only":
+             opening_message = self._build_user_message(
+-                self._verify_opener(
++                self._verify_hazard_opener(self._verify_opener(
+                     _yield_resume_prompt(resume_reason) + "\n\n" + _STATE_ONLY_CAPTION
+-                ),
++                )),
+                 current_frame,
+             )
+         elif resume_mode == "short":
+             opening_message = self._build_user_message(
+-                self._verify_opener(_yield_resume_prompt(resume_reason)), resume_frame
++                self._verify_hazard_opener(self._verify_opener(_yield_resume_prompt(resume_reason))),
++                resume_frame,
+             )
+         else:
+             opening_message = self._build_user_message(
+-                self._verify_opener(user_prompt),
++                self._verify_hazard_opener(self._verify_opener(user_prompt)),
+                 resume_frame if resuming_after_yield else current_frame,
+             )
+         # log what was actually SENT, not the argument that was passed in: on a
+diff --git a/ARC3-Inference/inference/utils/verify_tools.py b/ARC3-Inference/inference/utils/verify_tools.py
+index 0238ff8..a9503ae 100644
+--- a/ARC3-Inference/inference/utils/verify_tools.py
++++ b/ARC3-Inference/inference/utils/verify_tools.py
+@@ -23,6 +23,9 @@ the same gate and the same arming:
+   game action. It answers "does my plan reach my goal under my simulator?" -
+   the question replay_check ("is my simulator right about the past?") and
+   expect= ("was this step what I said?") never ask.
++  Each call's goal is fingerprinted for the harness gauge only
++  (verify_goal_fingerprint: `goal_fp` on the verify_plan_check line), so the
++  goal-revision rate per armed level can be read from the logs.
+ 
+ Everything is in the letter-coded board space the model already sees
+ (`frame.ascii`), never raw numeric color IDs.
+@@ -32,6 +35,7 @@ import): its source is spliced verbatim into the sandbox bootstrap
+ (python_tool_sandbox.py), which runs under ``python -I -S``. The host imports
+ it normally for the per-step expectation check in the solver, and tests.
+ """
++import hashlib
+ import operator
+ import re
+ import time
+@@ -92,6 +96,8 @@ PLAN_CHECK_DOCS = (
+     "  out, or no goal cell remained), steps_simulated, abstained_at, unmet and\n"
+     "  unmet_cells [row, col, predicted, goal], cells_checked/cells_available,\n"
+     "  predicted_final (the predicted end board), first_error, timed_out, verdict.\n"
++    "  The time budget is checked between callbacks and after they return; it does\n"
++    "  not interrupt a running callback. A late result is not a satisfied goal.\n"
+     "  It is your SIMULATOR's prediction, not the game's: a plan that satisfies\n"
+     "  your simulator but not the real game will not clear. replay_check tells you\n"
+     "  how far to trust the simulator. plan_check() with no argument returns this text."
+@@ -554,7 +560,7 @@ def verify_normalize_plan(plan, valid_actions=None):
+ def _verify_board_rows(rows, color_chars, what):
+     """Full-board rows -> list of row strings of board letters; ValueError otherwise."""
+     rows = list(rows)
+-    if not rows:
++    if not rows or not rows[0]:
+         raise ValueError(f"{what} is an empty board")
+     width = len(rows[0])
+     for r, row in enumerate(rows):
+@@ -627,8 +633,12 @@ def verify_plan_check(
+     }
+     board = list(start_rows)
+     stopped = None
++
++    def over_budget():
++        return seconds is not None and time.monotonic() - started > float(seconds)
++
+     for k, action_text in enumerate(plan, start=1):
+-        if seconds is not None and time.monotonic() - started > float(seconds):
++        if over_budget():
+             report["timed_out"] = True
+             stopped = f"the time budget ran out before step {k}"
+             break
+@@ -667,6 +677,10 @@ def verify_plan_check(
+             board = ["".join(row) for row in patched]
+             report["sparse_steps"] += 1
+         report["steps_simulated"] = k
++        if over_budget():
++            report["timed_out"] = True
++            stopped = f"the time budget ran out after step {k}"
++            break
+     report["predicted_final"] = "\n".join(board)
+     n_rows = len(board)
+     n_cols = max((len(r) for r in board), default=0)
+@@ -675,6 +689,9 @@ def verify_plan_check(
+         return border <= r < rows_n - border and border <= c < cols_n - border
+ 
+     note = None
++    if stopped is None and over_budget():
++        report["timed_out"] = True
++        stopped = "the time budget ran out before the goal check"
+     if stopped is None:
+         try:
+             if goal_kind == "predicate":
+@@ -741,7 +758,17 @@ def verify_plan_check(
+         except Exception as exc:  # the model's predicate; report, never raise
+             report["first_error"] = f"{type(exc).__name__}: {exc} (goal check)"
+             stopped = "the goal check failed"
+-    report["seconds"] = round(time.monotonic() - started, 3)
++        if over_budget():
++            report["timed_out"] = True
++            report["satisfied"] = None
++            stopped = "the time budget ran out during the goal check"
++    elapsed = time.monotonic() - started
++    if seconds is not None and elapsed > float(seconds):
++        # Also account for an over-budget callback that abstained or raised.
++        report["timed_out"] = True
++        report["satisfied"] = None
++        stopped = stopped or "the time budget ran out"
++    report["seconds"] = round(elapsed, 3)
+     steps = f"{report['steps_simulated']}/{report['plan_length']} planned step(s) simulated"
+     if stopped is not None:
+         head = f"not evaluated: {stopped}; {steps}"
+@@ -762,3 +789,68 @@ def verify_plan_check(
+             head += f"; predicate says: {report['goal_note']}"
+     report["verdict"] = head + ". " + PLAN_CHECK_CAVEAT
+     return report
++
++
++def _verify_code_key(code):
++    """A canonical, address-free text for a code object (nested ones recursed).
++
++    repr() of a nested code object carries its memory address, so constants
++    that are code objects are replaced by their own canonical text.
++    """
++    consts = []
++    for const in code.co_consts:
++        if hasattr(const, "co_code"):
++            consts.append("<code " + _verify_code_key(const) + ">")
++        else:
++            consts.append(repr(const))
++    return "code:" + code.co_code.hex() + "|consts:[" + ",".join(consts) + "]|names:" \
++        + repr(tuple(code.co_names))
++
++
++def _verify_predicate_key(fn):
++    """Source text of a predicate goal when inspect can find it, else its code.
++
++    A lambda's getsource is the whole LINE it sits on (the plan and the
++    plan_check call included), so a lambda is keyed by its code. Code passed
++    to the sandbox is compiled as '<python_tool>', where getsource finds no
++    file, so in the harness the code key is the one used.
++    """
++    if getattr(fn, "__name__", None) != "<lambda>":
++        try:
++            import inspect
++            return "source:" + inspect.getsource(fn)
++        except (OSError, TypeError):
++            pass
++    code = getattr(fn, "__code__", None)
++    if code is None:
++        code = getattr(getattr(fn, "__call__", None), "__code__", None)
++    if code is None:
++        # no source, no code (a builtin or C callable): its qualified name
++        return "callable:" + type(fn).__module__ + "." + type(fn).__qualname__ + ":" \
++            + str(getattr(fn, "__qualname__", ""))
++    return _verify_code_key(code)
++
++
++def verify_goal_fingerprint(goal, border=0):
++    """12 hex chars naming a NORMALIZED goal (verify_normalize_goal) and its border.
++
++    board: its row strings; sparse: its cells sorted by (row, col) - key order,
++    numpy keys and color indices are gone after normalization; predicate: its
++    source or code (_verify_predicate_key). This identifies representations,
++    NOT semantic goals. Predicate closure/default/global bindings and callable
++    instance state are not included: opposite targets can have the same fp.
++    Conversely, equivalent goals expressed differently can have different fps.
++    Distinct counts are neither an upper nor lower bound on semantic revisions;
++    predicate call sites/bindings need review even when the fp is unchanged.
++    The gauge counts distinct representations per armed level, nothing stronger.
++    """
++    kind, value = goal
++    if kind == "board":
++        text = "board|border=%d|" % int(border or 0) + "\n".join(value)
++    elif kind == "sparse":
++        text = "sparse|border=%d|" % int(border or 0) + ";".join(
++            "%d,%d=%s" % (r, c, letter) for (r, c), letter in sorted(value.items())
++        )
++    else:
++        text = "predicate|" + _verify_predicate_key(value)
++    return hashlib.sha256(text.encode("utf-8")).hexdigest()[:12]

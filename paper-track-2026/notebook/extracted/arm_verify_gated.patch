@@ -1,0 +1,1132 @@
+diff --git a/ARC3-Inference/inference/agent/python_tool_sandbox.py b/ARC3-Inference/inference/agent/python_tool_sandbox.py
+index 58a94b3..cf72202 100644
+--- a/ARC3-Inference/inference/agent/python_tool_sandbox.py
++++ b/ARC3-Inference/inference/agent/python_tool_sandbox.py
+@@ -16,6 +16,7 @@ import time
+ from typing import Any, Callable
+ 
+ from inference.utils import frame_diff as _frame_diff_module
++from inference.utils import verify_tools as _verify_tools_module
+ from inference.utils import segmentation as _segmentation
+ from inference.utils import retained_functions as _retained_functions
+ from inference.utils.grid_utils import ARC_COLOR_CHARS
+@@ -43,6 +44,8 @@ _SANDBOX_BOOTSTRAP = textwrap.dedent(
+ 
+     __FRAME_DIFF_SOURCE__
+ 
++    __VERIFY_TOOLS_SOURCE__
++
+     __RETAINED_FUNCTIONS_SOURCE__
+ 
+     HOST_STDOUT = sys.stdout
+@@ -340,6 +343,112 @@ _SANDBOX_BOOTSTRAP = textwrap.dedent(
+         return normalized
+ 
+ 
++    def _install_verify_tools(config, runtime_globals, plain_action, expect_slot):
++        # ARC3_VERIFY, armed for this level only: present in `initial` only
++        # then, so an unarmed snippet has neither name and action() keeps its
++        # one-argument signature.
++        border_default = int(config.get("border") or 0)
++        max_mismatches = int(config.get("max_mismatches") or 3)
++        max_cells = int(config.get("max_cells") or 8)
++        seconds = float(config.get("seconds") or 10)
++
++        def _level_transitions(level, last):
++            history = runtime_globals.get("history") or []
++            items = []
++            for index, entry in enumerate(history):
++                action_text = str(getattr(entry, "action", "") or "").strip()
++                if not action_text or index == 0:
++                    continue
++                before = history[index - 1].frame
++                after = entry.frame
++                if before is None or after is None:
++                    continue
++                if before.level != level or after.level != level:
++                    continue  # another level, or the action that left one
++                if action_text.upper() == "RESET":
++                    continue
++                if (entry.result or {}).get("game_over"):
++                    continue  # the death frame is not a board the sim models
++                items.append((index, before, after, action_text))
++            if last is not None:
++                items = items[-max(0, int(last)):] if int(last) > 0 else []
++            transitions = []
++            for index, before, after, action_text in items:
++                transitions.append({
++                    "index": index,
++                    "step": after.step,
++                    "action": action_text,
++                    "before": before.ascii.split("\n"),
++                    "after": after.ascii.split("\n"),
++                    # a fresh copy per call: sim_fn cannot touch the record
++                    "state": FrameView(
++                        ascii=before.ascii,
++                        step=before.step,
++                        level=before.level,
++                        shape=before.shape,
++                        grid=[list(row) for row in before._grid],
++                    ),
++                })
++            return transitions
++
++        def replay_check(sim_fn=None, border=None, last=None):
++            if sim_fn is None:
++                return VERIFY_DOCS
++            if not callable(sim_fn):
++                raise TypeError("replay_check(sim_fn): sim_fn must be callable as sim_fn(state, action)")
++            frame = runtime_globals.get("current_frame")
++            level = frame.level if frame is not None else 0
++            report = verify_replay(
++                _level_transitions(level, last),
++                sim_fn,
++                color_chars=COLOR_CHARS,
++                border=border_default if border is None else border,
++                max_mismatches=max_mismatches,
++                max_cells=max_cells,
++                seconds=seconds,
++            )
++            report = {"level": level, **report}
++            _send({
++                "type": "verify_report",
++                "kind": "replay_check",
++                "report": {
++                    key: report.get(key)
++                    for key in ("level", "transitions", "checked", "exact", "baseline",
++                                "mismatches", "changed", "exact_on_changed", "errors",
++                                "abstained", "timed_out")
++                },
++            })
++            _recv()
++            return report
++
++        def action(actions, expect=None):
++            if expect is None:
++                return plain_action(actions)
++            steps = verify_normalize_expect(
++                expect, len(_normalize_actions(actions)), COLOR_CHARS
++            )
++            expect_slot[:] = [steps]
++            try:
++                result = plain_action(actions)
++            finally:
++                del expect_slot[:]
++            failure = result.get("expect_failure") if isinstance(result, dict) else None
++            if failure:
++                skipped = failure.get("skipped") or []
++                print(
++                    f"[expect] halted after action {failure.get('step')} of "
++                    f"{failure.get('of')} ({failure.get('action')}): "
++                    + verify_describe_failure(failure)
++                    + (f"; {len(skipped)} later action(s) NOT executed: {skipped!r}"
++                       if skipped else "")
++                )
++            return result
++
++        runtime_globals["action"] = action
++        runtime_globals["replay_check"] = replay_check
++        runtime_globals["verify_docs"] = VERIFY_DOCS
++
++
+     def main():
+         initial = _recv()
+         global COLOR_CHARS
+@@ -486,18 +595,27 @@ _SANDBOX_BOOTSTRAP = textwrap.dedent(
+             ),
+         }
+ 
++        # ARC3_VERIFY: the armed wrapper's per-call expectations, read by
++        # action() below; empty unless that wrapper is installed and called
++        _verify_expect_slot = []
++
+         def action(actions):
+             if _terminal_state:
+                 raise TerminalStateActionError(_TERMINAL_DETAIL[_terminal_state[0]])
+             normalized_actions = _normalize_actions(actions)
+-            _send({
++            _action_message = {
+                 "type": "action",
+                 "actions": normalized_actions,
+                 # the solver decides precedence: a known death or a known no-op
+                 # is a sharper message than "your state may be stale", and it
+                 # carries a concrete override
+                 "stale_after": _stale_state[0] if _stale_state else None,
+-            })
++            }
++            if _verify_expect_slot:
++                # ARC3_VERIFY: set only by the armed action(..., expect=...)
++                # wrapper; absent otherwise, so the message is what it was
++                _action_message["expect"] = _verify_expect_slot[0]
++            _send(_action_message)
+             reply = _recv()
+             if reply.get("type") == "action_error":
+                 raise RuntimeError(str(reply.get("error", "action failed")))
+@@ -589,6 +707,10 @@ _SANDBOX_BOOTSTRAP = textwrap.dedent(
+             ]
+ 
+         runtime_globals["action"] = action
++        if isinstance(initial.get("verify"), dict):
++            _install_verify_tools(
++                initial["verify"], runtime_globals, action, _verify_expect_slot
++            )
+         if initial.get("animation_enabled"):
+             # Globals rather than attributes on last_transition: after a death
+             # the harness appends a RESET entry, so last_transition is the
+@@ -738,6 +860,8 @@ _SANDBOX_BOOTSTRAP = textwrap.dedent(
+     "__SEGMENTATION_SOURCE__\n", inspect.getsource(_segmentation)
+ ).replace(
+     "__FRAME_DIFF_SOURCE__\n", inspect.getsource(_frame_diff_module)
++).replace(
++    "__VERIFY_TOOLS_SOURCE__\n", inspect.getsource(_verify_tools_module)
+ )
+ 
+ 
+@@ -813,6 +937,8 @@ def run_sandboxed_python(
+     kept_functions: list[str] | None = None,
+     retain_imports: bool = False,
+     repair_hints: bool = False,
++    verify: dict[str, Any] | None = None,
++    verify_handler: Callable[[dict[str, Any]], None] | None = None,
+ ) -> dict[str, Any]:
+     with tempfile.TemporaryDirectory(prefix="rgb_python_tool_") as sandbox_dir:
+         host_action_results: list[dict[str, Any]] = []
+@@ -860,6 +986,9 @@ def run_sandboxed_python(
+                 "sandbox_cwd": sandbox_dir,
+                 "state": initial_state,
+                 "color_chars": ARC_COLOR_CHARS,
++                # ARC3_VERIFY, armed: the key exists only then, so the unarmed
++                # child receives exactly the message it always did
++                **({"verify": dict(verify)} if verify is not None else {}),
+             },
+         )
+ 
+@@ -923,14 +1052,29 @@ def run_sandboxed_python(
+                     {"type": "animation_result", "animation": animation_payload},
+                 )
+                 continue
++            if msg_type == "verify_report":
++                # ARC3_VERIFY: a replay_check summary for the harness's gauges.
++                # Acknowledged whatever happens, so the snippet never blocks.
++                if verify_handler is not None:
++                    try:
++                        verify_handler(dict(message))
++                    except Exception:  # noqa: BLE001 - gauges must never cost the snippet
++                        log.warning("verify report handler failed", exc_info=True)
++                _send_json_line(process.stdin, {"type": "verify_ack"})
++                continue
+             if msg_type == "action":
+                 try:
+                     # the message carries more than the action list: stale_after
+                     # tells the solver a previous action in this snippet changed
+                     # nothing, which it weighs after its own guards
++                    extra_action_kwargs: dict[str, Any] = {}
++                    if "expect" in message:
++                        # ARC3_VERIFY: only the armed wrapper sends it
++                        extra_action_kwargs["expect"] = message.get("expect")
+                     action_result_payload = action_handler(
+                         list(message.get("actions") or []),
+                         stale_after=message.get("stale_after"),
++                        **extra_action_kwargs,
+                     )
+                 except Exception:  # noqa: BLE001
+                     _send_json_line(
+diff --git a/ARC3-Inference/inference/agent/tool_agent.py b/ARC3-Inference/inference/agent/tool_agent.py
+index 84a9cdd..69f9fe4 100644
+--- a/ARC3-Inference/inference/agent/tool_agent.py
++++ b/ARC3-Inference/inference/agent/tool_agent.py
+@@ -67,6 +67,7 @@ from inference.agent.vision_context import (
+ )
+ 
+ from inference.agent.python_tool_sandbox import run_sandboxed_python
++from inference.utils.verify_tools import verify_describe_failure
+ from inference.agent.runtime_state import Frame, HistoryEntry, RUNTIME_STATE_FILENAME, load_runtime_state
+ from inference.utils.openai_compat import (
+     assemble_streamed_chat_response,
+@@ -324,6 +325,61 @@ def _format_valid_action_line(valid_actions: list[str] | None) -> str:
+     return ", ".join(names)
+ 
+ 
++# ARC3_VERIFY: escalation-gated verification tools. Off by default; off, no
++# code path below changes a request, a tool result or an artifact.
++#
++# The harness informs and the model decides every action. Once a level has
++# stalled - ARC3_VERIFY_TOKENS generated on it, or ARC3_VERIFY_ACTIONS actions
++# taken on it without a level-up - two cheap hypothesis tests become callable
++# from the python sandbox for the rest of that level: replay_check(sim_fn)
++# (the model's simulator against the level's recorded transitions, beside a
++# nothing-changes baseline) and action(..., expect=[...]) (per-step stated
++# expectations; the batch halts at the first contradiction). Gated rather than
++# always on because always-on world-modelling measured about +95% actions on
++# easy levels (Retrodict), and offered rather than forced because
++# actor-requested modelling beat auto-repair (Tycho). One opener line says the
++# tools exist; their documentation lives in the sandbox (`verify_docs`), not in
++# every prompt.
++#
++# ARC3_VERIFY_GATE: stall (tokens OR actions, default) | tokens | actions |
++# always (armed from the level's first turn - the always-on control) | off.
++# All read at call time so a test or notebook can set them per run.
++_VERIFY_OPENER_LINE = (
++    "[harness] Verification tools are now available for this level (harness tools; "
++    "the game is unchanged): `replay_check(sim_fn)` and `action(..., expect=...)` "
++    "\u2014 see tool docs: `print(verify_docs)`."
++)
++
++
++def _verify_enabled() -> bool:
++    return _get_env_bool("ARC3_VERIFY", False)
++
++
++def _verify_config() -> dict[str, Any]:
++    return {
++        "gate": (os.environ.get("ARC3_VERIFY_GATE", "") or "stall").strip().lower(),
++        "tokens": _get_env_int("ARC3_VERIFY_TOKENS", 40000),
++        "actions": _get_env_int("ARC3_VERIFY_ACTIONS", 50),
++        "from_level": _get_env_int("ARC3_VERIFY_FROM_LEVEL", 1),
++        "border": max(0, _get_env_int("ARC3_VERIFY_REPLAY_BORDER", 0)),
++        "max_mismatches": max(0, _get_env_int("ARC3_VERIFY_REPLAY_MISMATCHES", 3)),
++        "max_cells": max(1, _get_env_int("ARC3_VERIFY_REPLAY_CELLS", 8)),
++        "seconds": max(0.1, _get_env_float("ARC3_VERIFY_REPLAY_SECONDS", 10.0)),
++        "opener_line": os.environ.get("ARC3_VERIFY_OPENER_LINE", "").strip() or _VERIFY_OPENER_LINE,
++    }
++
++
++def _verify_halt_line(halt: dict[str, Any]) -> str:
++    skipped = halt.get("skipped") or []
++    return (
++        f"Note: the batch was halted after action {halt.get('step')} of {halt.get('of')} "
++        f"({halt.get('action')!r}) because the expectation you stated for it failed: "
++        f"{verify_describe_failure(halt)}."
++        + (f" The remaining {len(skipped)} action(s) ({skipped!r}) were never executed."
++           if skipped else "")
++    )
++
++
+ def _terminal_action_reason(result: dict[str, Any]) -> str | None:
+     if result.get("run_complete"):
+         return "run_complete"
+@@ -4952,6 +5008,8 @@ class ToolAgent:
+                 lines.append(
+                     f"({len(guard_stops) - 3} further guard stop(s) occurred this sequence.)"
+                 )
++            for halt in (previous_step_summary.get("expect_halts") or [])[:3]:
++                lines.append(_verify_halt_line(halt))
+             if previous_step_summary.get("run_complete"):
+                 lines.append("You have completed the run!")
+             elif previous_step_summary.get("level_transition"):
+@@ -5692,7 +5750,7 @@ class ToolAgent:
+             compact["stopped_early"] = bool(payload.get("stopped_early"))
+         # blocked_action names the refused action for the next turn's opener;
+         # without it the model was told "the sequence was stopped before None"
+-        for passthrough_key in ("no_op_action_index", "no_op_action", "skipped_actions", "gameplay_changed_per_action", "action_trace", "no_op", "fatal_action", "blocked_action", "action_echo", "animation"):
++        for passthrough_key in ("no_op_action_index", "no_op_action", "skipped_actions", "gameplay_changed_per_action", "action_trace", "no_op", "fatal_action", "blocked_action", "action_echo", "animation", "expect_failure"):
+             if passthrough_key in payload:
+                 compact[passthrough_key] = payload.get(passthrough_key)
+         if payload.get("stop_reason"):
+@@ -5775,7 +5833,8 @@ class ToolAgent:
+             return build_animation_view(record)
+ 
+         def _handle_action(
+-            actions: list[dict[str, Any]], *, stale_after: str | None = None
++            actions: list[dict[str, Any]], *, stale_after: str | None = None,
++            expect: Any = None,
+         ) -> dict[str, Any]:
+             nonlocal terminal_action_result, snippet_executed_actions
+             if self._step_env_callback is None:
+@@ -5846,6 +5905,9 @@ class ToolAgent:
+                 # own per-position guards, which name a specific action and
+                 # carry an override
+                 step_arguments["stale_after"] = stale_after
++            if expect is not None and self._verify_armed():
++                # ARC3_VERIFY: only the armed sandbox wrapper sends it
++                step_arguments["expect"] = expect
+             raw_payload = self._step_env_callback(step_arguments)
+             if not isinstance(raw_payload, dict):
+                 raise RuntimeError("action(actions) did not return a JSON-like payload.")
+@@ -5874,6 +5936,8 @@ class ToolAgent:
+                         "gameplay_changed"
+                     )
+             compact_payload = self._compact_action_result(raw_payload)
++            if compact_payload.get("expect_failure"):
++                self._verify_note_expect_halt(compact_payload["expect_failure"])
+             if guard is not None and normalized_actions:
+                 self._record_guard_observations(guard, raw_payload, compact_payload)
+             next_valid_actions = raw_payload.get("valid_actions")
+@@ -5902,6 +5966,7 @@ class ToolAgent:
+             kept_functions=self._retained_sources(),
+             retain_imports=_get_env_bool("ARC3_PERSISTENT_FUNCTIONS_IMPORTS", False),
+             repair_hints=_get_env_bool("ARC3_PERSISTENT_FUNCTIONS_REPAIR_HINTS", False),
++            **self._verify_sandbox_kwargs(),
+         )
+ 
+         action_results = [
+@@ -5942,6 +6007,8 @@ class ToolAgent:
+         )
+         if step_executed:
+             self._last_step_summary = self._summarize_step_sequence(action_results)
++            if _verify_enabled():
++                self._verify_note_step_summary(self._last_step_summary, action_results)
+             self._update_summarized_knowledge_from_step_summary()
+         elif self._last_step_summary and not self._last_step_summary.get("stale"):
+             # carried over across an exchange that executed nothing: mark it so
+@@ -5959,6 +6026,143 @@ class ToolAgent:
+             return self._run_python_tool(state_path, arguments)
+         return _ToolDispatchResult(json.dumps({"error": f"Unknown tool: {name}"}, indent=2))
+ 
++    # ARC3_VERIFY (see _verify_config). State lives in one lazily created dict
++    # so no constructor or session-reset hunk is needed: a new game is a new
++    # agent, and the gate re-reads the level from the frame every turn.
++    def _verify_state(self) -> dict[str, Any]:
++        state = getattr(self, "_verify", None)
++        if state is None:
++            state = {"armed_level": None, "arm_action": 0, "opener_pending": False, "status": []}
++            self._verify = state
++        return state
++
++    def _verify_armed(self) -> bool:
++        state = getattr(self, "_verify", None)
++        return bool(_verify_enabled() and state and state["armed_level"] is not None)
++
++    def _verify_gate(self, current_frame: Frame | None, action_num: int) -> None:
++        """Arm the tools for this level once it has stalled. Turn start only."""
++        if not _verify_enabled() or current_frame is None:
++            return
++        state = self._verify_state()
++        level = int(current_frame.level)
++        if state["armed_level"] == level:
++            return
++        if state["armed_level"] is not None:
++            # the level moved without a step summary saying so; close it out
++            self._verify_disarm(action_num, cleared=level > state["armed_level"])
++        config = _verify_config()
++        if level < config["from_level"]:
++            return
++        tokens = max(
++            0, self._session_generated_tokens - getattr(self, "_tokens_at_level_start", 0)
++        )
++        actions = max(0, int(action_num) - getattr(self, "_actions_at_level_start", 0))
++        gate = config["gate"]
++        trigger = None
++        if gate == "always":
++            trigger = "always"
++        elif gate in ("stall", "tokens", "actions"):
++            if gate != "actions" and config["tokens"] > 0 and tokens >= config["tokens"]:
++                trigger = "tokens"
++            elif gate != "tokens" and config["actions"] > 0 and actions >= config["actions"]:
++                trigger = "actions"
++        if trigger is None:
++            return
++        state.update(armed_level=level, arm_action=int(action_num), opener_pending=True)
++        state["status"].append(
++            f"verify_armed level={level} tokens={tokens} actions={actions} trigger={trigger}"
++        )
++
++    def _verify_opener(self, user_prompt: str) -> str:
++        """The one framed line, on the first full opener after arming."""
++        state = getattr(self, "_verify", None)
++        if not _verify_enabled() or not state or not state["opener_pending"]:
++            return user_prompt
++        state["opener_pending"] = False
++        return user_prompt + "\n" + _verify_config()["opener_line"]
++
++    def _verify_flush(self, append_transcript: Callable[[str, str], None]) -> None:
++        state = getattr(self, "_verify", None)
++        while state and state["status"]:
++            append_transcript("ANALYZER STATUS", state["status"].pop(0))
++
++    def _verify_sandbox_kwargs(self) -> dict[str, Any]:
++        if not self._verify_armed():
++            return {}
++        config = _verify_config()
++        return {
++            "verify": {
++                "level": self._verify["armed_level"],
++                "border": config["border"],
++                "max_mismatches": config["max_mismatches"],
++                "max_cells": config["max_cells"],
++                "seconds": config["seconds"],
++            },
++            "verify_handler": self._verify_on_report,
++        }
++
++    def _verify_on_report(self, message: dict[str, Any]) -> None:
++        report = message.get("report") or {}
++        fields = " ".join(
++            f"{key}={report.get(key)}"
++            for key in ("level", "transitions", "exact", "baseline", "mismatches",
++                        "checked", "changed", "exact_on_changed", "errors", "timed_out")
++        )
++        self._verify_state()["status"].append(f"verify_replay_check {fields}")
++
++    def _verify_note_expect_halt(self, failure: dict[str, Any]) -> None:
++        expected: list[str] = []
++        observed: list[str] = []
++        for item in failure.get("failed") or []:
++            if item.get("kind") == "cells":
++                for diff in item.get("diffs") or []:
++                    cell = f"({diff['cell'][0]},{diff['cell'][1]})"
++                    expected.append(f"{cell}:{diff['expected']}")
++                    observed.append(f"{cell}:{diff['observed']}")
++            else:
++                expected.append(f"{item.get('kind')}:{item.get('expected')}")
++                observed.append(f"{item.get('kind')}:{item.get('observed')}")
++        self._verify_state()["status"].append(
++            f"verify_expect_halt step={failure.get('step')} of={failure.get('of')} "
++            f"action={failure.get('action')!r} expected={','.join(expected)} "
++            f"observed={','.join(observed)} skipped={len(failure.get('skipped') or [])}"
++        )
++
++    def _verify_note_step_summary(
++        self, summary: dict[str, Any], action_results: list[dict[str, Any]]
++    ) -> None:
++        halts = [
++            item["expect_failure"]
++            for item in action_results
++            if isinstance(item.get("expect_failure"), dict)
++        ]
++        if halts:
++            summary["expect_halts"] = halts
++        if summary.get("level_transition") or summary.get("run_complete"):
++            self._verify_disarm(_priority_action_count(summary), cleared=True)
++
++    def _verify_disarm(self, action_num: int, *, cleared: bool) -> None:
++        state = self._verify_state()
++        if state["armed_level"] is None:
++            return
++        state["status"].append(
++            f"verify_level_outcome level={state['armed_level']} armed=yes "
++            f"cleared={'yes' if cleared else 'no'} "
++            f"actions_after_arm={max(0, int(action_num) - int(state['arm_action']))}"
++        )
++        state.update(armed_level=None, opener_pending=False)
++
++    def verify_session_end_status(self, action_count: int) -> str:
++        """Called by the solver when the game ends: the still-armed level did
++        not clear. Returns the gauges not yet written to a turn's transcript."""
++        state = getattr(self, "_verify", None)
++        if not state:
++            return ""
++        self._verify_disarm(action_count, cleared=False)
++        lines, state["status"] = list(state["status"]), []
++        return "\n".join(lines)
++
+     def _calibrate_from_usage(
+         self,
+         messages: list[dict[str, Any]],
+@@ -6585,6 +6789,8 @@ class ToolAgent:
+         analyzer_log = transcript_path or (state_path.parent / f"{state_path.stem}_analyzer.txt")
+         prompt_log = _resolve_prompt_log_path(state_path)
+         current_frame, history_entries = load_runtime_state(state_path)
++        if _verify_enabled():
++            self._verify_gate(current_frame, action_num)
+         user_prompt = self._build_user_prompt(
+             action_num,
+             valid_actions=valid_actions,
+@@ -6667,22 +6873,26 @@ class ToolAgent:
+             self._pending_diff_image_label = self._turn_diff_image_label
+         if resume_mode == "state_only":
+             opening_message = self._build_user_message(
+-                _yield_resume_prompt(resume_reason) + "\n\n" + _STATE_ONLY_CAPTION,
++                self._verify_opener(
++                    _yield_resume_prompt(resume_reason) + "\n\n" + _STATE_ONLY_CAPTION
++                ),
+                 current_frame,
+             )
+         elif resume_mode == "short":
+             opening_message = self._build_user_message(
+-                _yield_resume_prompt(resume_reason), resume_frame
++                self._verify_opener(_yield_resume_prompt(resume_reason)), resume_frame
+             )
+         else:
+             opening_message = self._build_user_message(
+-                user_prompt, resume_frame if resuming_after_yield else current_frame
++                self._verify_opener(user_prompt),
++                resume_frame if resuming_after_yield else current_frame,
+             )
+         # log what was actually SENT, not the argument that was passed in: on a
+         # resumed invocation the short/state_only substitution happens here, so
+         # transcribing `user_prompt` would report a full opener the model never
+         # saw - and at a 60s yield budget that is most turns
+         append_transcript("USER PROMPT", _message_display_text(opening_message))
++        self._verify_flush(append_transcript)
+         if resuming_after_yield:
+             # Tag EVERY resumption message, not just the short form. A yield
+             # leaves this turn's original opener in history, so the message
+@@ -7082,6 +7292,7 @@ class ToolAgent:
+                             )
+                             self._reasoning_effort_rung = -1
+                     append_transcript(f"TOOL RESULT: {tool_name}", _render_tool_result_display(dispatch.content))
++                    self._verify_flush(append_transcript)
+                     self._append_context_message(
+                         messages,
+                         {
+diff --git a/ARC3-Inference/inference/framework/solver.py b/ARC3-Inference/inference/framework/solver.py
+index e40976c..c52fc7a 100644
+--- a/ARC3-Inference/inference/framework/solver.py
++++ b/ARC3-Inference/inference/framework/solver.py
+@@ -63,6 +63,11 @@ from inference.utils.viewer_artifacts import (
+     append_raw_events_sidecar,
+     reset_raw_events_sidecar,
+ )
++from inference.utils.grid_utils import format_grid_ascii
++from inference.utils.verify_tools import (
++    verify_check_expectation,
++    verify_describe_failure,
++)
+ 
+ log = logging.getLogger(__name__)
+ 
+@@ -300,6 +305,79 @@ def _interior_gameplay_changed(
+             return True
+     return False
+ 
++# ARC3_VERIFY: per-step expectations the model attached to a batch with
++# action(..., expect=[...]). The agent forwards them only while its stall gate
++# has armed the level; this side honours them only with the flag on, so with
++# it off step_env ignores the key entirely. Read at call time, so a test or
++# notebook can set it per run.
++def _verify_enabled() -> bool:
++    return os.environ.get("ARC3_VERIFY", "0").strip().lower() in (
++        "1", "true", "yes", "on"
++    )
++
++
++def _expect_steps(arguments: dict[str, Any], batch_size: int) -> list | None:
++    """One expectation (dict or None) per requested action, or None for none."""
++    raw = arguments.get("expect")
++    if raw is None or not _verify_enabled() or not isinstance(raw, list):
++        return None
++    steps = [spec if isinstance(spec, dict) and spec else None for spec in raw[:batch_size]]
++    steps.extend([None] * (batch_size - len(steps)))
++    return steps if any(steps) else None
++
++
++def _expect_failure(
++    steps: list,
++    batch_index: int,
++    payload: dict[str, Any],
++    grid: tuple[tuple[int, ...], ...],
++    requested_displays: list[str],
++) -> dict[str, Any] | None:
++    """The stated expectation for this executed step, checked against what
++    the harness observed after it. None when it held or none was stated.
++
++    Observations are the harness's own: the board after the step (as the
++    letters the model reads), level_completed/run_complete for level_up, and
++    the interior gameplay_changed measurement for no_change."""
++    spec = steps[batch_index - 1] if batch_index - 1 < len(steps) else None
++    if not spec:
++        return None
++    changed = payload.get("gameplay_changed")
++    failures, checked = verify_check_expectation(
++        spec,
++        format_grid_ascii(grid).split("\n") if grid else [],
++        level_up=bool(payload.get("level_completed") or payload.get("run_complete")),
++        no_change=(not changed) if isinstance(changed, bool) else None,
++        max_cells=max(1, _env_number("ARC3_VERIFY_EXPECT_CELLS", 8, int)),
++    )
++    if not failures:
++        return None
++    return {
++        "step": batch_index,
++        "of": len(requested_displays),
++        "action": requested_displays[batch_index - 1],
++        "failed": failures,
++        "checked": checked,
++        "skipped": list(requested_displays[batch_index:]),
++    }
++
++
++def _expect_failure_detail(failure: dict[str, Any]) -> str:
++    step, total = failure["step"], failure["of"]
++    skipped = failure.get("skipped") or []
++    return (
++        f"Action {step} of {total} ({failure['action']!r}) EXECUTED, and the "
++        f"expectation you stated for it failed: {verify_describe_failure(failure)}. "
++        + (
++            f"Actions {step + 1}-{total} ({skipped!r}) were HALTED and did not "
++            "execute. "
++            if skipped else ""
++        )
++        + "The board is as observed after that action. The halt comes from the "
++        "expectation you attached to the batch; nothing else about the plan was judged."
++    )
++
++
+ _LOCAL_SERVER_PROCESS_ENV_KEYS = (
+     "LOCAL_ANALYZER_API_KEY",
+     "OPENAI_API_KEY",
+@@ -445,6 +523,11 @@ def _is_run_complete(game: taaf.game.Game) -> bool:
+     return game.current_state.raw.state == arcengine.GameState.WIN
+ 
+ 
++def _append_status_section(transcript_path: Path, content: str) -> None:
++    with transcript_path.open("a", encoding="utf-8") as handle:
++        handle.write(f"[ANALYZER STATUS]\n{content.strip()}\n\n")
++
++
+ def _write_transcript_html(transcript_path: Path, html_path: Path, title: str) -> None:
+     if not transcript_path.exists():
+         return
+@@ -740,6 +823,8 @@ class _HarnessGameSession:
+                 run.solver_note = f"tokens={total_tokens}"
+             self._finish_if_needed()
+             self.state_path.unlink(missing_ok=True)
++            if _verify_enabled():
++                self._verify_session_end()
+             self._write_analysis_html()
+             self.write_viewer_payload()
+ 
+@@ -750,6 +835,21 @@ class _HarnessGameSession:
+                 run.state = "cancelled"
+             self.game.finish_game()
+ 
++    def _verify_session_end(self) -> None:
++        """The armed level's outcome when the game ends on it (not cleared).
++
++        Written into the transcript as an ANALYZER STATUS gauge; a level that
++        clears is reported by the agent at the level-up itself."""
++        status = getattr(self.analyzer, "verify_session_end_status", None)
++        if not callable(status):
++            return
++        try:
++            note = status(self.action_count)
++            if note:
++                _append_status_section(self.transcript_path, note)
++        except Exception as exc:  # a gauge must never change play
++            log.warning("verify: session-end gauge failed: %s", exc)
++
+     def _write_analysis_html(self) -> None:
+         if self.solver.job_dir is None:
+             return
+@@ -1018,6 +1118,8 @@ class _HarnessGameSession:
+         guard_hook = getattr(self, "action_guard_hook", None)
+         blocked_detail: str | None = None
+         blocked_kind: str | None = None
++        expect_steps = _expect_steps(arguments, batch_size)
++        expect_failure: dict[str, Any] | None = None
+ 
+         # Checked AFTER the per-position guards below, so a known death or a
+         # known no-op takes precedence: both name a specific action and offer an
+@@ -1114,6 +1216,14 @@ class _HarnessGameSession:
+                 return self._error_payload(f"{type(exc).__name__}: {exc}")
+             executed_payloads.append(payload)
+             total_reward += float(payload.get("reward", 0.0) or 0.0)
++            if expect_steps is not None:
++                expect_failure = _expect_failure(
++                    expect_steps,
++                    batch_index,
++                    payload,
++                    _grid_from_state(self.game.current_state),
++                    requested_displays,
++                )
+ 
+             if payload.get("run_complete"):
+                 stop_reason = "run_complete"
+@@ -1124,6 +1234,9 @@ class _HarnessGameSession:
+             if payload.get("level_completed"):
+                 stop_reason = "level_completed"
+                 break
++            if expect_failure is not None:
++                stop_reason = "expect_failed"
++                break
+             if (
+                 BATCH_NOOP_BLOCK
+                 and NOOP_GUARD_BORDER_WIDTH > 0
+@@ -1222,6 +1335,13 @@ class _HarnessGameSession:
+                 "size - batching is still the right approach, and the stop is what keeps "
+                 "a wrong movement model from costing the whole sequence."
+             )
++        if expect_failure is not None:
++            final_payload["expect_failure"] = expect_failure
++            final_payload["stop_detail"] = _expect_failure_detail(expect_failure)
++            trace = final_payload.get("action_trace")
++            position = int(expect_failure["step"]) - 1
++            if isinstance(trace, list) and 0 <= position < len(trace):
++                trace[position] = f"{trace[position]} | EXPECTATION FAILED"
+         self.write_viewer_payload()
+         return final_payload
+ 
+diff --git a/ARC3-Inference/inference/utils/verify_tools.py b/ARC3-Inference/inference/utils/verify_tools.py
+new file mode 100644
+index 0000000..d9339bd
+--- /dev/null
++++ b/ARC3-Inference/inference/utils/verify_tools.py
+@@ -0,0 +1,377 @@
++"""ARC3_VERIFY: cheap hypothesis tests the model can call on its own beliefs.
++
++Two tests, both offered only after the level has stalled (the gate lives in
++tool_agent.py), both optional, neither choosing an action:
++
++- replay_check(sim_fn): the model's own simulator, replayed against the
++  RECORDED transitions of the current level (the `history` the sandbox already
++  exposes). Read-only; no game action. The report sets the simulator beside the
++  trivial "nothing changes" predictor on the same transitions, because a
++  simulator that does not beat that baseline has learned nothing yet.
++- action(actions, expect=[...]): per-step expectations the model states for a
++  batch. The harness checks each executed step's observation against its
++  expectation and halts the REST of the batch at the first contradiction - the
++  one veto, and only of steps the model itself made conditional by stating
++  what it expected. Steps without an expectation run exactly as before.
++
++Everything is in the letter-coded board space the model already sees
++(`frame.ascii`), never raw numeric color IDs.
++
++This module must stay dependency-free (stdlib only, no ``from __future__``
++import): its source is spliced verbatim into the sandbox bootstrap
++(python_tool_sandbox.py), which runs under ``python -I -S``. The host imports
++it normally for the per-step expectation check in the solver, and tests.
++"""
++import time
++
++
++VERIFY_EXPECT_KEYS = ("cells", "level_up", "no_change")
++
++VERIFY_DOCS = (
++    "Verification tools (harness tools; they do not change the game).\n"
++    "\n"
++    "replay_check(sim_fn, border=0, last=None)\n"
++    "  sim_fn(state, action) -> predicted next state. `state` is a frame like\n"
++    "  history[i].frame (.ascii, .segmentation, .shape, .level, .step); `action` is the\n"
++    "  action string as recorded in history (e.g. 'UP', 'MOUSE(row=3, col=7)').\n"
++    "  Return the predicted board as an ascii string or a list of row strings (same\n"
++    "  letters as .ascii), OR a dict {(row, col): letter} to predict only those cells,\n"
++    "  OR None to abstain on that transition.\n"
++    "  The harness replays every recorded transition of THIS level (RESETs and the\n"
++    "  action that ended an attempt are skipped) and returns: transitions, checked,\n"
++    "  exact (sim fully right), baseline (a 'nothing changes' predictor fully right\n"
++    "  on the same transitions), changed / exact_on_changed (transitions where the\n"
++    "  board really moved), and the first mismatches with cell diffs\n"
++    "  [row, col, predicted, observed, before]. border=N ignores N cells at each\n"
++    "  edge (HUD bars); last=N replays only the most recent N transitions.\n"
++    "  replay_check() with no argument returns this text.\n"
++    "\n"
++    "action(actions, expect=[...])\n"
++    "  One entry per action (None = no expectation for that step), each a dict with\n"
++    "  any of: 'cells': {(row, col): letter} the board must show after that step;\n"
++    "  'level_up': True/False; 'no_change': True/False (no change inside the board\n"
++    "  area). The batch runs step by step and HALTS at the first step whose\n"
++    "  observation contradicts its expectation; the remaining actions are not\n"
++    "  executed. The result carries `expect_failure` (step, expected, observed).\n"
++    "  A single action may take a single dict."
++)
++
++
++def verify_color_letter(value, color_chars):
++    """A board letter from a letter or a 0-15 color index; ValueError otherwise."""
++    if isinstance(value, bool):
++        raise ValueError(f"color {value!r} is not a board letter")
++    if isinstance(value, int):
++        if 0 <= value < len(color_chars):
++            return color_chars[value]
++        raise ValueError(f"color index {value} is out of range 0-{len(color_chars) - 1}")
++    if isinstance(value, str) and len(value) == 1 and value in color_chars:
++        return value
++    raise ValueError(
++        f"color {value!r} is not a board letter (one of {color_chars!r})"
++    )
++
++
++def _verify_cell_key(key):
++    if isinstance(key, str):
++        parts = [p for p in key.replace("(", " ").replace(")", " ").replace(",", " ").split() if p]
++        key = tuple(parts)
++    if not isinstance(key, (tuple, list)) or len(key) != 2:
++        raise ValueError(f"cell key {key!r} must be (row, col)")
++    try:
++        return int(key[0]), int(key[1])
++    except (TypeError, ValueError):
++        raise ValueError(f"cell key {key!r} must be two integers (row, col)")
++
++
++def verify_normalize_cells(cells, color_chars):
++    """{(r, c): letter} or [(r, c, letter), ...] -> [[r, c, letter], ...]."""
++    out = []
++    if isinstance(cells, dict):
++        items = list(cells.items())
++    elif isinstance(cells, (list, tuple)):
++        items = []
++        for item in cells:
++            if not isinstance(item, (list, tuple)) or len(item) != 3:
++                raise ValueError(f"cell entry {item!r} must be (row, col, letter)")
++            items.append(((item[0], item[1]), item[2]))
++    else:
++        raise ValueError("'cells' must be a dict {(row, col): letter}")
++    for key, value in items:
++        r, c = _verify_cell_key(key)
++        out.append([r, c, verify_color_letter(value, color_chars)])
++    return out
++
++
++def verify_normalize_expect(expect, n_actions, color_chars):
++    """The model's expect argument -> a JSON-safe list, one entry per action.
++
++    Raises ValueError/TypeError BEFORE anything runs, so a malformed
++    expectation costs no action.
++    """
++    if expect is None:
++        return None
++    if isinstance(expect, dict):
++        if n_actions != 1:
++            raise ValueError(
++                "expect must be a list with one entry per action (None for steps "
++                "without an expectation) when more than one action is submitted"
++            )
++        expect = [expect]
++    if not isinstance(expect, (list, tuple)):
++        raise TypeError("expect must be a list of dicts/None, one per action")
++    if len(expect) > n_actions:
++        raise ValueError(
++            f"expect has {len(expect)} entries but only {n_actions} action(s) were submitted"
++        )
++    steps = []
++    for index, spec in enumerate(expect, start=1):
++        if spec is None:
++            steps.append(None)
++            continue
++        if not isinstance(spec, dict):
++            raise TypeError(f"expect entry {index} must be a dict or None")
++        unknown = [k for k in spec if k not in VERIFY_EXPECT_KEYS]
++        if unknown:
++            raise ValueError(
++                f"expect entry {index} has unknown key(s) {unknown!r}; "
++                f"use {list(VERIFY_EXPECT_KEYS)!r}"
++            )
++        entry = {}
++        if "cells" in spec and spec["cells"] is not None:
++            entry["cells"] = verify_normalize_cells(spec["cells"], color_chars)
++        for flag in ("level_up", "no_change"):
++            if flag in spec and spec[flag] is not None:
++                if not isinstance(spec[flag], bool):
++                    raise ValueError(f"expect entry {index}: {flag!r} must be True or False")
++                entry[flag] = spec[flag]
++        steps.append(entry or None)
++    steps.extend([None] * (n_actions - len(steps)))
++    return steps
++
++
++def verify_check_expectation(spec, rows, *, level_up, no_change, max_cells=8):
++    """Contradictions between one step's stated expectation and its observation.
++
++    rows: the board after the step as letter rows. level_up / no_change: the
++    harness's own measurements for that step (None = not measured, which is
++    reported as such and never counted as a contradiction).
++    Returns (failures, checked) where failures is a list of dicts.
++    """
++    failures = []
++    checked = 0
++    if not spec:
++        return failures, checked
++    cell_failures = []
++    for r, c, want in spec.get("cells") or []:
++        checked += 1
++        observed = None
++        if 0 <= r < len(rows) and 0 <= c < len(rows[r]):
++            observed = rows[r][c]
++        if observed != want:
++            cell_failures.append({"cell": [r, c], "expected": want, "observed": observed})
++    if cell_failures:
++        failures.append({
++            "kind": "cells",
++            "wrong": len(cell_failures),
++            "of": len(spec.get("cells") or []),
++            "diffs": cell_failures[:max(1, int(max_cells))],
++        })
++    for flag, observed in (("level_up", level_up), ("no_change", no_change)):
++        if flag not in spec:
++            continue
++        checked += 1
++        if observed is None:
++            continue
++        if bool(observed) != bool(spec[flag]):
++            failures.append({"kind": flag, "expected": bool(spec[flag]), "observed": bool(observed)})
++    return failures, checked
++
++
++def verify_describe_failure(failure):
++    """One compact clause per failed expectation, for stop_detail and stdout."""
++    parts = []
++    for item in failure.get("failed") or []:
++        if item.get("kind") == "cells":
++            diffs = ", ".join(
++                f"({d['cell'][0]},{d['cell'][1]}) expected {d['expected']!r} observed {d['observed']!r}"
++                for d in item.get("diffs") or []
++            )
++            more = item["wrong"] - len(item.get("diffs") or [])
++            parts.append(
++                f"{item['wrong']} of {item['of']} expected cell(s) wrong: {diffs}"
++                + (f" (+{more} more)" if more > 0 else "")
++            )
++        else:
++            parts.append(
++                f"{item['kind']} expected {item['expected']} observed {item['observed']}"
++            )
++    return "; ".join(parts)
++
++
++def verify_rows_of(value):
++    """A predicted full board as a list of row strings, or None if not one."""
++    if isinstance(value, str):
++        return value.split("\n")
++    if isinstance(value, (list, tuple)) and value:
++        if all(isinstance(row, str) for row in value):
++            return list(value)
++    return None
++
++
++def verify_prediction(pred, color_chars):
++    """sim_fn's return -> ('none', None) | ('full', rows) | ('sparse', {(r, c): letter}).
++
++    Raises ValueError for a value of no recognised shape.
++    """
++    if pred is None:
++        return "none", None
++    if isinstance(pred, dict):
++        sparse = {}
++        for key, value in pred.items():
++            sparse[_verify_cell_key(key)] = verify_color_letter(value, color_chars)
++        return "sparse", sparse
++    ascii_text = getattr(pred, "ascii", None)
++    if isinstance(ascii_text, str):
++        return "full", ascii_text.split("\n")
++    rows = verify_rows_of(pred)
++    if rows is not None:
++        return "full", rows
++    if isinstance(pred, (list, tuple)) and pred and all(isinstance(r, (list, tuple)) for r in pred):
++        return "full", [
++            "".join(verify_color_letter(v, color_chars) for v in row) for row in pred
++        ]
++    raise ValueError(
++        f"sim_fn returned {type(pred).__name__}; expected an ascii string, a list of "
++        "row strings, a dict {(row, col): letter}, or None"
++    )
++
++
++def verify_replay(
++    transitions,
++    sim_fn,
++    *,
++    color_chars,
++    border=0,
++    max_mismatches=3,
++    max_cells=8,
++    seconds=10.0,
++):
++    """Replay recorded transitions through sim_fn; compare with what happened.
++
++    transitions: list of dicts {index, step, action, before (letter rows),
++    after (letter rows), state (a fresh frame object for sim_fn)}. The caller
++    builds `state` per transition so sim_fn can never mutate the record.
++    """
++    border = max(0, int(border or 0))
++    started = time.monotonic()
++    report = {
++        "transitions": len(transitions),
++        "checked": 0,
++        "abstained": 0,
++        "errors": 0,
++        "exact": 0,
++        "baseline": 0,
++        "changed": 0,
++        "exact_on_changed": 0,
++        "mismatches": 0,
++        "border": border,
++        "timed_out": False,
++        "first_error": None,
++        "first_mismatches": [],
++    }
++
++    def in_region(r, c, n_rows, n_cols):
++        return border <= r < n_rows - border and border <= c < n_cols - border
++
++    for item in transitions:
++        if seconds is not None and time.monotonic() - started > float(seconds):
++            report["timed_out"] = True
++            break
++        before = item["before"]
++        after = item["after"]
++        try:
++            pred = sim_fn(item["state"], item["action"])
++            kind, value = verify_prediction(pred, color_chars)
++        except Exception as exc:  # the model's code; report, never raise
++            report["errors"] += 1
++            if report["first_error"] is None:
++                report["first_error"] = (
++                    f"{type(exc).__name__}: {exc} (transition {item['index']}, "
++                    f"action {item['action']!r})"
++                )
++            continue
++        if kind == "none":
++            report["abstained"] += 1
++            continue
++        report["checked"] += 1
++        n_rows = len(after)
++        n_cols = max((len(r) for r in after), default=0)
++        wrong = []
++        baseline_ok = True
++        moved = False
++        shape_note = None
++        if kind == "full":
++            if len(value) != n_rows or any(len(value[r]) != len(after[r]) for r in range(min(len(value), n_rows))):
++                shape_note = (
++                    f"predicted shape {len(value)}x{max((len(r) for r in value), default=0)} "
++                    f"!= observed {n_rows}x{n_cols}"
++                )
++            for r in range(n_rows):
++                for c in range(len(after[r])):
++                    if not in_region(r, c, n_rows, n_cols):
++                        continue
++                    obs = after[r][c]
++                    prev = before[r][c] if r < len(before) and c < len(before[r]) else None
++                    if prev != obs:
++                        moved = True
++                        baseline_ok = False
++                    guess = value[r][c] if r < len(value) and c < len(value[r]) else None
++                    if guess != obs:
++                        wrong.append([r, c, guess, obs, prev])
++        else:
++            for (r, c), guess in sorted(value.items()):
++                obs = after[r][c] if 0 <= r < n_rows and 0 <= c < len(after[r]) else None
++                prev = before[r][c] if 0 <= r < len(before) and 0 <= c < len(before[r]) else None
++                if prev != obs:
++                    moved = True
++                    baseline_ok = False
++                if guess != obs:
++                    wrong.append([r, c, guess, obs, prev])
++        exact = not wrong and shape_note is None
++        if exact:
++            report["exact"] += 1
++        if baseline_ok:
++            report["baseline"] += 1
++        if moved:
++            report["changed"] += 1
++            if exact:
++                report["exact_on_changed"] += 1
++        if not exact:
++            report["mismatches"] += 1
++            if len(report["first_mismatches"]) < max(0, int(max_mismatches)):
++                entry = {
++                    "index": item["index"],
++                    "step": item["step"],
++                    "action": item["action"],
++                    "prediction": kind,
++                    "wrong_cells": len(wrong),
++                    "cells": wrong[:max(1, int(max_cells))],
++                }
++                if shape_note:
++                    entry["shape"] = shape_note
++                report["first_mismatches"].append(entry)
++    report["seconds"] = round(time.monotonic() - started, 3)
++    if report["checked"]:
++        report["verdict"] = (
++            f"sim exact on {report['exact']}/{report['checked']} checked transitions "
++            f"({report['exact_on_changed']}/{report['changed']} of those where the board "
++            f"changed); the nothing-changes baseline is exact on {report['baseline']}/"
++            f"{report['checked']}"
++            + (" - the sim does NOT beat it" if report["exact"] <= report["baseline"] else "")
++        )
++    else:
++        report["verdict"] = "no transition was checked (none recorded on this level, or sim_fn abstained/failed on all)"
++    if report["first_error"] is None:
++        del report["first_error"]
++    return report

@@ -1,0 +1,615 @@
+diff --git a/ARC3-Inference/inference/agent/tool_agent.py b/ARC3-Inference/inference/agent/tool_agent.py
+index 84a9cdd..44ef7d5 100644
+--- a/ARC3-Inference/inference/agent/tool_agent.py
++++ b/ARC3-Inference/inference/agent/tool_agent.py
+@@ -122,6 +122,175 @@ def _level_transfer_guidance_enabled() -> bool:
+     return _get_env_bool("ARC3_LEVEL_TRANSFER_GUIDANCE", False)
+ 
+ 
++# ---------------------------------------------------------------------------
++# Level memory (ARC3_LEVEL_MEMORY, default off).
++#
++# History is kept across levels but drained from the oldest end once the
++# prompt crosses the budget, and a long game drains several times - so the
++# derivations of the levels it already cleared are the first thing it loses,
++# and the later (higher-weight) levels pay to re-derive them. This keeps, per
++# cleared level, the model's own one-line rule (asked for once in the next
++# opener) and the tail of the actions that cleared it, and re-shows them as one
++# tagged user message right after the system prompt - but ONLY when a drain has
++# already moved the head of history, i.e. when the cached prefix is invalid
++# from the first history message anyway, so the block costs no extra prefill.
++# It is never added to the system prompt, which would force a full re-prefill
++# at every level-up.
++#
++# The block informs; it never instructs. It names its origin (the model's own
++# words from earlier levels of this game) and the prior that bounds it (the
++# mechanic may have changed; one cheap probe before relying on it).
++# ---------------------------------------------------------------------------
++_LEVEL_MEMORY_CONTROL_KIND = "level_memory"
++_LEVEL_MEMORY_HEADER = (
++    "Notes from levels you already cleared in THIS game (your own words and the "
++    "actions that won; written by you, carried by the harness because older "
++    "history was trimmed — they may not apply if the mechanic changed, so "
++    "check with one cheap probe before relying on them):"
++)
++_LEVEL_MEMORY_RULE_RE = re.compile(
++    r"rule\s+for\s+level\s*(\d+)?\s*[:\-–—]\s*(.*)", re.IGNORECASE
++)
++# an echo of the ask itself ("state in one line starting with `Rule for level
++# 1:` what you found ...") is not a rule
++_LEVEL_MEMORY_ECHO_RE = re.compile(
++    r"^\W*(what\s+(you|i)\s+found|before\s+continuing)", re.IGNORECASE
++)
++
++
++def _level_memory_enabled() -> bool:
++    """Read at call time; off unless ARC3_LEVEL_MEMORY is truthy."""
++    return _get_env_bool("ARC3_LEVEL_MEMORY", False)
++
++
++def _level_memory_action_tail() -> int:
++    return max(1, _get_env_int("ARC3_LEVEL_MEMORY_ACTIONS", 30))
++
++
++def _level_memory_fallback_chars() -> int:
++    return max(50, _get_env_int("ARC3_LEVEL_MEMORY_FALLBACK_CHARS", 400))
++
++
++def _level_memory_entry_chars() -> int:
++    return max(200, _get_env_int("ARC3_LEVEL_MEMORY_ENTRY_CHARS", 1500))
++
++
++def _level_memory_total_chars() -> int:
++    return max(500, _get_env_int("ARC3_LEVEL_MEMORY_TOTAL_CHARS", 6000))
++
++
++def _message_is_level_memory(message: dict[str, Any]) -> bool:
++    return message.get(_CONTROL_MESSAGE_KEY) == _LEVEL_MEMORY_CONTROL_KIND
++
++
++def _level_memory_find_rule(text: str, level: int) -> str:
++    """The text after the last `Rule for level N:` label in `text`.
++
++    The last match, not the first: reasoning often restates the ask before
++    answering it. A label carrying another level number is taken only when no
++    label for `level` exists (models miscount 0- vs 1-based levels)."""
++    if not text:
++        return ""
++    exact: list[str] = []
++    other: list[str] = []
++    for line in str(text).splitlines():
++        match = _LEVEL_MEMORY_RULE_RE.search(line)
++        if not match:
++            continue
++        body = match.group(2).strip().strip("`*\"' ").strip()
++        if len(body) < 8 or _LEVEL_MEMORY_ECHO_RE.match(body):
++            continue
++        number = match.group(1)
++        if number is None or number == str(level):
++            exact.append(body)
++        else:
++            other.append(body)
++    if exact:
++        return exact[-1]
++    return other[-1] if other else ""
++
++
++def _level_memory_clip(text: str, limit: int, *, keep_end: bool = False) -> str:
++    text = " ".join(str(text or "").split())
++    if len(text) <= limit:
++        return text
++    if limit <= 3:
++        return text[:limit]
++    return ("..." + text[-(limit - 3):]) if keep_end else (text[: limit - 3] + "...")
++
++
++def _render_level_memory_entry(entry: dict[str, Any], squeeze: int = 0) -> str:
++    """One cleared level. `squeeze` 0..3: 0 full, 1 and 2 progressively shorter,
++    3 a one-line stub (used for the oldest levels when the block is over cap)."""
++    level = entry.get("level")
++    if squeeze >= 3:
++        return f"Level {level}: (notes omitted for space)"
++    entry_cap = _level_memory_entry_chars()
++    rule_cap = {0: entry_cap - 300, 1: 600, 2: 250}[squeeze]
++    action_cap = {0: _level_memory_action_tail(), 1: 15, 2: 5}[squeeze]
++    actions = list(entry.get("actions") or [])
++    total_actions = int(entry.get("attempt_actions") or len(actions))
++    shown = actions[-action_cap:] if action_cap else []
++    if entry.get("labelled"):
++        head = (
++            f"Level {level} — the rule you wrote after clearing it: "
++            f"\"{_level_memory_clip(entry.get('rule', ''), max(40, rule_cap))}\""
++        )
++    else:
++        tail = _level_memory_clip(
++            entry.get("rule", ""), max(40, rule_cap), keep_end=True
++        )
++        head = (
++            f"Level {level} — you wrote no \"Rule for level {level}:\" line; "
++            "this is the end of your reasoning just before the clear, unedited "
++            f"(unlabelled): \"{tail or '(no reasoning was captured)'}\""
++        )
++    if shown:
++        action_line = (
++            f"  Actions that cleared it (last {len(shown)} of {total_actions} in the "
++            f"attempt that cleared it): {', '.join(shown)}"
++        )
++    else:
++        action_line = "  Actions that cleared it: (none recorded)"
++    text = f"{head}\n{action_line}"
++    if len(text) > entry_cap:
++        # the actions are the cheaper half to lose: keep the head whole and
++        # shorten the action line from its front (the winning end stays)
++        room = max(0, entry_cap - len(head) - 1)
++        text = f"{head}\n{_level_memory_clip(action_line, room, keep_end=True)}" if room else head[:entry_cap]
++    return text
++
++
++def _render_level_memory_block(entries: list[dict[str, Any]]) -> str:
++    """Header plus one paragraph per cleared level, oldest first, within the
++    total cap. Over the cap, the OLDEST level is squeezed first, one step at a
++    time, then the next oldest."""
++    ordered = sorted(entries, key=lambda e: int(e.get("level") or 0))
++    squeeze = [0] * len(ordered)
++    cap = _level_memory_total_chars()
++
++    def render() -> str:
++        parts = [
++            _render_level_memory_entry(entry, squeeze[i])
++            for i, entry in enumerate(ordered)
++        ]
++        return "\n\n".join([_LEVEL_MEMORY_HEADER, *parts])
++
++    text = render()
++    while len(text) > cap:
++        index = next((i for i, s in enumerate(squeeze) if s < 3), None)
++        if index is None:
++            # every level is a stub and it still does not fit: keep the newest
++            while len(ordered) > 1 and len(text) > cap:
++                ordered.pop(0)
++                squeeze.pop(0)
++                text = render()
++            return text[:cap]
++        squeeze[index] += 1
++        text = render()
++    return text
++
++
+ def _contains_tool_call_markup(*chunks: str) -> bool:
+     for chunk in chunks:
+         lowered = chunk.lower()
+@@ -3585,6 +3754,7 @@ class ToolAgent:
+         self._last_step_summary: dict[str, Any] | None = None
+         self._last_action_call_result: dict[str, Any] | None = None
+         self._summarized_knowledge = _empty_world_model()
++        self._level_memory_reset()
+ 
+     def _headers(self) -> dict[str, str]:
+         api_key = (
+@@ -3620,6 +3790,8 @@ class ToolAgent:
+             self._turns_without_wm_update = 0
+             self._pending_wm_rebuild_reason = ""
+             self._pending_wm_revise_reason = ""
++            # a new game: notes from another game's levels would be false
++            self._level_memory_reset()
+ 
+     @property
+     def total_tokens(self) -> int:
+@@ -3848,6 +4020,8 @@ class ToolAgent:
+         summary = self._last_step_summary
+         if not summary:
+             return
++        if _level_memory_enabled():
++            self._level_memory_observe_step(summary)
+         wipe_reason = ""
+         revise_reason = ""
+         if summary.get("level_transition"):
+@@ -4828,6 +5002,12 @@ class ToolAgent:
+             default=current_level,
+         )
+         lines: list[str] = []
++        level_memory_ask = ""
++        if _level_memory_enabled():
++            level_memory_ask = self._level_memory_ask_line()
++            self._lm_ask_level = (
++                self._lm_pending["level"] if level_memory_ask else None
++            )
+         if previous_step_summary and previous_step_summary.get("stale"):
+             lines.extend(_stale_summary_lines(previous_step_summary))
+         elif previous_step_summary:
+@@ -4960,6 +5140,10 @@ class ToolAgent:
+                     if _level_transfer_guidance_enabled()
+                     else "You have progressed to a new level!"
+                 )
++                if level_memory_ask:
++                    # right under the level-up line it refers to
++                    lines.append(level_memory_ask)
++                    level_memory_ask = ""
+             else:
+                 lines.append(
+                     self._manual_reset_context_line(previous_step_summary)
+@@ -5077,6 +5261,10 @@ class ToolAgent:
+                 "to context eviction."
+             )
+         lines.extend(self._prepare_auto_diff(current_frame, previous_step_summary))
++        if level_memory_ask:
++            # still unanswered (the asking turn got no reply), and this opener
++            # is not the level-up one
++            lines.append(level_memory_ask)
+         state_line = f"Current state: step {current_step}, level {current_level}"
+         if observed_max_level > current_level:
+             state_line += f" out of observed max level {observed_max_level} so far"
+@@ -6173,6 +6361,12 @@ class ToolAgent:
+             # returned above and left history untouched
+             replaced_count = len(self._history_messages)
+             self._history_messages = [request, reply]
++            if _level_memory_enabled():
++                # the whole history went, so the prefix is invalid from the
++                # first message: the notes ride in front of the summary
++                notes = self._level_memory_block()
++                if notes is not None:
++                    self._history_messages = [notes, request, reply]
+             # this discards history without going through the trimmer, so the
+             # prefix is invalid and the flag has to be set by hand - otherwise
+             # the next request keeps a priority that assumes a warm cache
+@@ -6311,6 +6505,12 @@ class ToolAgent:
+         self._has_evicted = True
+ 
+     def _persistent_history_messages(self, messages: list[dict[str, Any]], *, tools: list[dict[str, Any]] | None = None) -> list[dict[str, Any]]:
++        level_memory = _level_memory_enabled()
++        if level_memory:
++            # taken out so no pruner, image window or turn cap sees it; put
++            # back (or rebuilt) once below, after every eviction step has run
++            messages, lm_notes = self._level_memory_split(messages)
++            lm_head = messages[1] if len(messages) > 1 else None
+         original_history = messages[1:]
+         if _any_control_pruning_enabled():
+             messages = _prune_control_messages(messages)
+@@ -6320,7 +6520,13 @@ class ToolAgent:
+             # retention slot
+             messages = _apply_history_image_window(messages, keep_images)
+         before_trim = len(messages)
+-        trimmed = self._trim_messages_for_context(messages, tools=tools)
++        if level_memory:
++            self._lm_suspended = True
++        try:
++            trimmed = self._trim_messages_for_context(messages, tools=tools)
++        finally:
++            if level_memory:
++                self._lm_suspended = False
+         if not trimmed:
+             if original_history:
+                 self._note_history_evicted()
+@@ -6347,6 +6553,8 @@ class ToolAgent:
+         # messages. Image removal can leave the message count unchanged.
+         if history != original_history:
+             self._note_history_evicted()
++        if level_memory:
++            history = self._level_memory_attach(history, lm_head, lm_notes)
+         return history
+ 
+     def _priority_total_levels(self) -> int:
+@@ -6462,6 +6670,15 @@ class ToolAgent:
+     ) -> list[dict[str, Any]]:
+         if not messages:
+             return []
++        level_memory = _level_memory_enabled()
++        if level_memory:
++            messages, lm_notes = self._level_memory_split(messages)
++            lm_head = messages[1] if len(messages) > 1 else None
++            # the block is outside the drained list, so its tokens come off the
++            # budget up front - the size it has now or will have if rebuilt
++            extra_safety_tokens = max(0, extra_safety_tokens) + (
++                self._level_memory_reserve_tokens(lm_notes)
++            )
+         system_message = messages[0]
+         history = list(messages[1:])
+         preserve_recent = max(0, preserve_recent)
+@@ -6543,6 +6760,8 @@ class ToolAgent:
+         # yielding the slot to another game costs nothing.
+         if len(history) != len(messages) - 1:
+             self._note_history_evicted()
++        if level_memory:
++            history = self._level_memory_attach(history, lm_head, lm_notes)
+         return [system_message, *history]
+ 
+     def _force_reduce_messages(
+@@ -6553,13 +6772,219 @@ class ToolAgent:
+     ) -> list[dict[str, Any]]:
+         if not messages:
+             return []
++        original = messages
++        level_memory = _level_memory_enabled()
++        if level_memory:
++            messages, lm_notes = self._level_memory_split(messages)
++            lm_head = messages[1] if len(messages) > 1 else None
+         system_message = messages[0]
+         history = list(messages[1:])
+         if not self._drop_oldest_history_block(history, preserve_recent=max(0, preserve_recent)):
+-            return list(messages)
++            return list(original)
+         self._note_history_evicted()
++        if level_memory:
++            history = self._level_memory_attach(history, lm_head, lm_notes)
+         return [system_message, *history]
+ 
++    # -- level memory (ARC3_LEVEL_MEMORY) ---------------------------------
++    def _level_memory_reset(self) -> None:
++        self._lm_entries: dict[int, dict[str, Any]] = {}
++        # bounded tail of the CURRENT attempt on the current level
++        self._lm_level_actions: list[str] = []
++        self._lm_attempt_actions = 0
++        # a level just cleared, waiting for the model's one-line rule
++        self._lm_pending: dict[str, Any] | None = None
++        # the latest reasoning (or text) the model wrote, for the fallback
++        self._lm_last_thought = ""
++        # transcript lines, flushed by analyze() where append_transcript exists
++        self._lm_gauges: list[str] = []
++        self._lm_suspended = False
++        self._lm_ask_level: int | None = None
++
++    def _level_memory_ready(self) -> None:
++        # an agent unpickled from before this feature existed
++        if not hasattr(self, "_lm_entries"):
++            self._level_memory_reset()
++
++    def _level_memory_observe_step(self, summary: dict[str, Any]) -> None:
++        self._level_memory_ready()
++        tail_cap = _level_memory_action_tail()
++        if summary.get("game_over"):
++            # the level restarted: nothing before this is part of the attempt
++            # that will eventually clear it
++            self._lm_level_actions = []
++            self._lm_attempt_actions = 0
++        else:
++            for name in summary.get("executed_actions") or []:
++                name = str(name).strip()
++                if not name:
++                    continue
++                if name.split("(")[0].strip().upper() == "RESET":
++                    self._lm_level_actions = []
++                    self._lm_attempt_actions = 0
++                    continue
++                self._lm_level_actions.append(name)
++                self._lm_attempt_actions += 1
++            self._lm_level_actions = self._lm_level_actions[-tail_cap:]
++        if summary.get("level_transition") and not summary.get("run_complete"):
++            try:
++                new_level = int(summary.get("level") or 2)
++            except (TypeError, ValueError):
++                new_level = 2
++            if self._lm_pending is not None:
++                # a second clear before the first was answered
++                self._level_memory_finalize("", "fallback")
++            self._lm_pending = {
++                "level": max(1, new_level - 1),
++                "actions": list(self._lm_level_actions[-tail_cap:]),
++                "attempt_actions": self._lm_attempt_actions,
++                "thought": self._lm_last_thought,
++                "asked": False,
++            }
++            self._lm_level_actions = []
++            self._lm_attempt_actions = 0
++
++    def _level_memory_observe_reply(self, reasoning: str, content: str) -> None:
++        self._level_memory_ready()
++        pending = self._lm_pending
++        if pending is not None:
++            level = int(pending["level"])
++            rule = _level_memory_find_rule(content, level)
++            source = "content"
++            if not rule:
++                rule = _level_memory_find_rule(reasoning, level)
++                source = "reasoning"
++            if rule:
++                self._level_memory_finalize(rule, source)
++        for thought in (reasoning, content):
++            if thought and not _is_degenerate_text(thought):
++                self._lm_last_thought = str(thought)[-4000:]
++                break
++
++    def _level_memory_finalize(self, rule: str, source: str) -> None:
++        pending = self._lm_pending
++        if pending is None:
++            return
++        self._lm_pending = None
++        labelled = bool(rule)
++        text = (
++            rule if labelled
++            else str(pending.get("thought") or "")[-_level_memory_fallback_chars():]
++        )
++        text = text[: _level_memory_entry_chars()]
++        level = int(pending["level"])
++        actions = list(pending.get("actions") or [])
++        self._lm_entries[level] = {
++            "level": level,
++            "rule": text,
++            "labelled": labelled,
++            "source": source if labelled else "fallback",
++            "actions": actions,
++            "attempt_actions": int(pending.get("attempt_actions") or len(actions)),
++        }
++        self._lm_gauges.append(
++            f"level_memory_capture level={level} labelled={'yes' if labelled else 'no'} "
++            f"rule_chars={len(text)} actions={len(actions)} "
++            f"source={source if labelled else 'fallback'}"
++        )
++
++    def _level_memory_ask_line(self) -> str:
++        pending = getattr(self, "_lm_pending", None)
++        if pending is None:
++            return ""
++        level = pending["level"]
++        return (
++            f"You just cleared level {level}. Before continuing, state in one line "
++            f"starting with `Rule for level {level}:` what you found the "
++            "goal/mechanic to be."
++        )
++
++    def _level_memory_entries(self) -> list[dict[str, Any]]:
++        self._level_memory_ready()
++        entries = list(self._lm_entries.values())
++        pending = self._lm_pending
++        if pending is not None and int(pending["level"]) not in self._lm_entries:
++            # a drain between the clear and the answer: carry what exists now,
++            # marked as unlabelled, rather than lose the level until next drain
++            entries.append({
++                "level": int(pending["level"]),
++                "rule": str(pending.get("thought") or "")[-_level_memory_fallback_chars():],
++                "labelled": False,
++                "actions": list(pending.get("actions") or []),
++                "attempt_actions": pending.get("attempt_actions"),
++            })
++        return entries
++
++    def _level_memory_block(self) -> dict[str, Any] | None:
++        entries = self._level_memory_entries()
++        if not entries:
++            return None
++        text = _render_level_memory_block(entries)
++        levels = ",".join(str(e["level"]) for e in sorted(entries, key=lambda e: e["level"]))
++        self._lm_gauges.append(f"level_memory_reinsert levels=[{levels}] chars={len(text)}")
++        return _mark_control_message(
++            {"role": "user", "content": text}, _LEVEL_MEMORY_CONTROL_KIND
++        )
++
++    def _level_memory_reserve_tokens(self, notes: dict[str, Any] | None) -> int:
++        candidates: list[str] = []
++        if notes is not None:
++            candidates.append(str(notes.get("content") or ""))
++        entries = self._level_memory_entries()
++        if entries:
++            candidates.append(_render_level_memory_block(entries))
++        if not candidates:
++            return 0
++        longest = max(candidates, key=len)
++        return max(
++            0,
++            self._estimate_request_input_tokens([{"role": "user", "content": longest}])
++            - self._estimate_request_input_tokens([]),
++        )
++
++    @staticmethod
++    def _level_memory_split(
++        messages: list[dict[str, Any]],
++    ) -> tuple[list[dict[str, Any]], dict[str, Any] | None]:
++        notes = None
++        kept: list[dict[str, Any]] = []
++        for message in messages:
++            if _message_is_level_memory(message):
++                notes = message
++                continue
++            kept.append(message)
++        return kept, notes
++
++    def _level_memory_attach(
++        self,
++        history: list[dict[str, Any]],
++        original_head: dict[str, Any] | None,
++        previous: dict[str, Any] | None,
++    ) -> list[dict[str, Any]]:
++        """Put the notes block at the head of `history` (system excluded).
++
++        Rebuilt only when the head of history moved - a drain, a turn cap, a
++        pruned or image-stripped head - since that is exactly when the cached
++        prefix is invalid from the first history message and the block costs
++        nothing extra. Otherwise the block that was there stays, unchanged, so
++        a level cleared since the last drain does not move the prefix; it
++        joins at the next drain."""
++        if getattr(self, "_lm_suspended", False):
++            return history
++        head_moved = original_head is not None and (
++            not history
++            or not (
++                history[0] is original_head
++                or _strip_message_images(history[0]) == _strip_message_images(original_head)
++            )
++        )
++        notes = previous
++        if head_moved:
++            notes = self._level_memory_block() or previous
++        if notes is None:
++            return history
++        return [notes, *history]
++
+     def analyze(
+         self,
+         state_path: Path,
+@@ -6612,6 +7037,11 @@ class ToolAgent:
+ 
+         append_transcript("SYSTEM PROMPT", self._system_prompt)
+ 
++        def flush_level_memory_gauges() -> None:
++            pending_lines = getattr(self, "_lm_gauges", None)
++            while pending_lines:
++                append_transcript("ANALYZER STATUS", pending_lines.pop(0))
++
+         previous_history_messages = list(self._history_messages)
+         # Mirrors the history snapshot: a turn abandoned on a request failure is
+         # rolled back, and the per-game token allowance has to roll back with it
+@@ -6692,6 +7122,16 @@ class ToolAgent:
+             # turn and is pure duplication afterwards, which is precisely what
+             # ARC3_PRUNE_CONTROL_CONTEXT exists to drop.
+             _mark_control_message(opening_message, "resume")
++        level_memory = _level_memory_enabled()
++        level_memory_replies = 0
++        if level_memory:
++            self._level_memory_ready()
++            if (
++                self._lm_pending is not None
++                and resume_mode == "full"
++                and self._lm_ask_level == self._lm_pending["level"]
++            ):
++                self._lm_pending["asked"] = True
+         messages: list[dict[str, Any]] = [
+             {"role": "system", "content": self._system_prompt}, *self._history_messages,
+         ]
+@@ -6701,6 +7141,7 @@ class ToolAgent:
+             tools=self._tools(state_path),
+             preserve_recent=1,
+         )
++        flush_level_memory_gauges()
+         step_executed = False
+         turn_tool_call_count = 0
+         captured_reasoning = ""
+@@ -6741,6 +7182,7 @@ class ToolAgent:
+                 tools = self._tools(state_path)
+                 tool_choice = _request_tool_choice(tools)
+                 messages = self._trim_messages_for_context(messages, tools=tools)
++                flush_level_memory_gauges()
+                 self._maybe_handover()
+                 latest_request_messages = json.loads(json.dumps(messages))
+                 latest_request_tools = json.loads(json.dumps(tools))
+@@ -6849,6 +7291,10 @@ class ToolAgent:
+                     recovered_tool_calls_from_markup = bool(tool_calls)
+                 reasoning = _strip_tool_call_markup(raw_reasoning) if tool_call_markup_in_text else raw_reasoning
+                 content = _strip_tool_call_markup(raw_content) if tool_call_markup_in_text else raw_content
++                if level_memory:
++                    self._level_memory_observe_reply(reasoning, content)
++                    level_memory_replies += 1
++                    flush_level_memory_gauges()
+                 malformed_argument_errors: list[str] = []
+                 for tool_call in tool_calls:
+                     function = tool_call.get("function", {}) if isinstance(tool_call, dict) else {}
+@@ -7180,10 +7626,21 @@ class ToolAgent:
+         finally:
+             if step_executed and not self._wm_absorbed_in_turn:
+                 self._turns_without_wm_update += 1
++            if (
++                level_memory
++                and preserve_history
++                and level_memory_replies
++                and self._lm_pending is not None
++                and self._lm_pending.get("asked")
++            ):
++                # the turn that carried the ask is over without a labelled
++                # line: keep the end of the reasoning that cleared the level
++                self._level_memory_finalize("", "fallback")
+             if preserve_history:
+                 self._history_messages = self._persistent_history_messages(messages, tools=self._tools(state_path))
+             else:
+                 self._history_messages = previous_history_messages
++            flush_level_memory_gauges()
+             solver_obj = getattr(self._step_env_callback, "__self__", None)
+             if solver_obj is not None and hasattr(solver_obj, "action_guard_hook"):
+                 solver_obj.action_guard_hook = None

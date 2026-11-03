@@ -1,0 +1,52 @@
+[
+ {
+  "name": "rules",
+  "file": "rules.md",
+  "chars": 36239
+ },
+ {
+  "name": "Description",
+  "file": "Description.md",
+  "chars": 1665
+ },
+ {
+  "name": "Timeline",
+  "file": "Timeline.md",
+  "chars": 275
+ },
+ {
+  "name": "Submission Requirements",
+  "file": "Submission_Requirements.md",
+  "chars": 1941
+ },
+ {
+  "name": "data-description",
+  "file": "data-description.md",
+  "chars": 442
+ },
+ {
+  "name": "abstract",
+  "file": "abstract.md",
+  "chars": 252
+ },
+ {
+  "name": "Evaluation",
+  "file": "Evaluation.md",
+  "chars": 2128
+ },
+ {
+  "name": "tracks-and-awards",
+  "file": "tracks-and-awards.md",
+  "chars": 107
+ },
+ {
+  "name": "Bonus Prize",
+  "file": "Bonus_Prize.md",
+  "chars": 182
+ },
+ {
+  "name": "judges",
+  "file": "judges.md",
+  "chars": 107
+ }
+]

@@ -1,0 +1,702 @@
+diff --git a/ARC3-Inference/inference/agent/python_tool_sandbox.py b/ARC3-Inference/inference/agent/python_tool_sandbox.py
+index 3112ff1..d05c0d2 100644
+--- a/ARC3-Inference/inference/agent/python_tool_sandbox.py
++++ b/ARC3-Inference/inference/agent/python_tool_sandbox.py
+@@ -1,6 +1,7 @@
+ """Lightweight isolated runner for analyzer Python tool calls."""
+ from __future__ import annotations
+ 
++import base64
+ import inspect
+ import json
+ import logging
+@@ -13,6 +14,7 @@ import tempfile
+ import threading
+ import textwrap
+ import time
++import zlib
+ from typing import Any, Callable
+ 
+ from inference.utils import frame_diff as _frame_diff_module
+@@ -460,6 +462,10 @@ _SANDBOX_BOOTSTRAP = textwrap.dedent(
+         max_cells = int(config.get("max_cells") or 8)
+         seconds = float(config.get("seconds") or 10)
+         docs = VERIFY_DOCS + "\n\n" + PLAN_CHECK_DOCS
++        search_config = config.get("plan_search")
++        if isinstance(search_config, dict):
++            # ARC3_VERIFY_PLAN_SEARCH: only then is the key present
++            docs = docs + "\n\n" + PLAN_SEARCH_DOCS
+ 
+         def replay_check_with_docs(sim_fn=None, border=None, last=None):
+             if sim_fn is None:
+@@ -533,6 +539,98 @@ _SANDBOX_BOOTSTRAP = textwrap.dedent(
+         runtime_globals["replay_check"] = replay_check_with_docs
+         runtime_globals["plan_check"] = plan_check
+         runtime_globals["verify_docs"] = docs
++        if isinstance(search_config, dict):
++            _install_plan_search(search_config, runtime_globals, docs, border_default)
++
++
++    class _PredictedFrameView(FrameView):
++        # plan_search's state for a predicted board: the integer grid behind
++        # .segmentation is built only if sim_fn reads it (thousands of states)
++        def __init__(self, *, rows, step, level):
++            super().__init__(
++                ascii="\n".join(rows), step=step, level=level,
++                shape=(len(rows), len(rows[0]) if rows else 0), grid=None,
++            )
++            self._rows = rows
++
++        @property
++        def segmentation(self):
++            if self._grid is None:
++                self._grid = [[COLOR_CHARS.index(ch) for ch in row] for row in self._rows]
++            return FrameView.segmentation.fget(self)
++
++
++    def _install_plan_search(search_config, runtime_globals, docs, border_default):
++        # ARC3_VERIFY_PLAN_SEARCH, on top of an armed plan_check. The harness
++        # searches the model's simulator; it never runs an action.
++        max_seconds = float(search_config.get("seconds") or 15)
++
++        def plan_search(sim_fn=None, goal=None, actions=None, max_depth=None, max_nodes=None,
++                        beam=None, seconds=None, border=None):
++            if sim_fn is None:
++                return docs
++            if not callable(sim_fn):
++                raise TypeError("plan_search(sim_fn, goal, actions): sim_fn must be callable as sim_fn(state, action)")
++            # malformed arguments raise here, before anything is simulated
++            moves = verify_search_actions(actions, runtime_globals.get("valid_actions"))
++            target = verify_normalize_goal(goal, COLOR_CHARS)
++            frame = runtime_globals.get("current_frame")
++            if frame is None:
++                raise RuntimeError("plan_search: there is no current_frame to start from")
++            depth_cap = int(search_config.get("max_depth") or 30) if max_depth is None else int(max_depth)
++            node_cap = int(search_config.get("max_nodes") or 20000) if max_nodes is None else int(max_nodes)
++            node_cap = min(max(1, node_cap), PLAN_SEARCH_MAX_NODES_CEILING)
++            budget = max_seconds if seconds is None else min(max(0.0, float(seconds)), max_seconds)
++            used_border = border_default if border is None else border
++
++            def make_state(rows, depth):
++                if depth == 0:
++                    # the real current frame, copied as plan_check copies it
++                    return FrameView(
++                        ascii=frame.ascii, step=frame.step, level=frame.level,
++                        shape=frame.shape, grid=[list(row) for row in frame._grid],
++                    )
++                return _PredictedFrameView(rows=rows, step=frame.step + depth, level=frame.level)
++
++            goal_fp = verify_goal_fingerprint(target, used_border)
++            report = verify_plan_search(
++                frame.ascii.split("\n"),
++                sim_fn,
++                target,
++                moves,
++                color_chars=COLOR_CHARS,
++                make_state=make_state,
++                border=used_border,
++                max_depth=depth_cap,
++                max_nodes=node_cap,
++                beam=beam,
++                seconds=budget,
++            )
++            report = {"level": frame.level, **report}
++            _send({
++                "type": "verify_report",
++                "kind": "plan_search",
++                "report": {
++                    "level": report.get("level"),
++                    "found": report.get("found"),
++                    "goal_kind": report.get("goal_kind"),
++                    "plan_length": report.get("plan_length"),
++                    "nodes": report.get("nodes"),
++                    "expanded": report.get("nodes_expanded"),
++                    "depth": report.get("depth_reached"),
++                    "actions": len(report.get("actions") or ()),
++                    "beam": report.get("beam"),
++                    "capped": report.get("capped"),
++                    "abstained": report.get("abstained"),
++                    "errors": (report.get("errors") or 0) + (report.get("goal_errors") or 0),
++                    "timed_out": report.get("timed_out"),
++                    "goal_fp": goal_fp,
++                },
++            })
++            _recv()
++            return report
++
++        runtime_globals["plan_search"] = plan_search
+ 
+ 
+     def main():
+@@ -951,6 +1049,19 @@ _SANDBOX_BOOTSTRAP = textwrap.dedent(
+ )
+ 
+ 
++# The child gets its program as ONE argv string (`python -I -S -c ...`), and
++# Linux caps a single argument at MAX_ARG_STRLEN = 131072 bytes: past it, Popen
++# raises OSError (E2BIG) and EVERY python call answers "Sandbox process could
++# not start." The spliced bootstrap reached ~112 KB with the verify tools and
++# crossed the cap when plan_search was added, so it travels compressed. The
++# launcher compiles it as '<string>' exactly as -c does (same tracebacks, same
++# __name__ == "__main__") and binds no new global name.
++_SANDBOX_LAUNCHER = (
++    "exec(compile(__import__('zlib').decompress(__import__('base64').b64decode('"
++    + base64.b64encode(zlib.compress(_SANDBOX_BOOTSTRAP.encode("utf-8"), 9)).decode("ascii")
++    + "')).decode('utf-8'), '<string>', 'exec'))"
++)
++
+ log = logging.getLogger(__name__)
+ 
+ 
+@@ -1030,7 +1141,7 @@ def run_sandboxed_python(
+         host_action_results: list[dict[str, Any]] = []
+         try:
+             process = subprocess.Popen(
+-                [sys.executable, "-I", "-S", "-c", _SANDBOX_BOOTSTRAP],
++                [sys.executable, "-I", "-S", "-c", _SANDBOX_LAUNCHER],
+                 stdin=subprocess.PIPE,
+                 stdout=subprocess.PIPE,
+                 stderr=subprocess.PIPE,
+diff --git a/ARC3-Inference/inference/agent/tool_agent.py b/ARC3-Inference/inference/agent/tool_agent.py
+index e883e53..93e7c7a 100644
+--- a/ARC3-Inference/inference/agent/tool_agent.py
++++ b/ARC3-Inference/inference/agent/tool_agent.py
+@@ -540,6 +540,27 @@ def _verify_plan_check_enabled() -> bool:
+     return _get_env_bool("ARC3_VERIFY_PLAN_CHECK", False)
+ 
+ 
++# ARC3_VERIFY_PLAN_SEARCH (default off; swing S1): on top of plan_check, adds
++# plan_search(sim_fn, goal, actions) - a breadth-first search over the model's
++# OWN simulator from the current frame for a plan reaching the model's goal.
++# The model writes the sim and names the goal; the harness only searches. It
++# never runs an action. Without ARC3_VERIFY_PLAN_CHECK it is off too. Off,
++# every request, tool result and artifact is what it was without it.
++# ARC3_VERIFY_SEARCH_SECONDS caps one search (default 15, below the python
++# tool's own 30 s kill); ARC3_VERIFY_SEARCH_MAX_DEPTH / _MAX_NODES set the
++# defaults the model may override per call (nodes hard-capped in the sandbox).
++_VERIFY_OPENER_LINE_SEARCH = (
++    "[harness] Verification tools are now available for this level (harness tools; "
++    "the game is unchanged): `replay_check(sim_fn)`, `plan_check(sim_fn, plan, goal)`, "
++    "`plan_search(sim_fn, goal, actions)` and `action(..., expect=...)` "
++    "\u2014 see tool docs: `print(verify_docs)`."
++)
++
++
++def _verify_plan_search_enabled() -> bool:
++    return _verify_plan_check_enabled() and _get_env_bool("ARC3_VERIFY_PLAN_SEARCH", False)
++
++
+ # ARC3_VERIFY_HAZARD_LINE (default off): the goal-gate arm's hazard sub-flag.
+ # After the FIRST death in a game (a step whose summary reports game_over:
+ # "GAME OVER (attempt ended immediately after this action)"), the next opener
+@@ -669,11 +690,20 @@ def _verify_config() -> dict[str, Any]:
+         "max_cells": max(1, _get_env_int("ARC3_VERIFY_REPLAY_CELLS", 8)),
+         "seconds": max(0.1, _get_env_float("ARC3_VERIFY_REPLAY_SECONDS", 10.0)),
+         "opener_line": os.environ.get("ARC3_VERIFY_OPENER_LINE", "").strip() or (
+-            _VERIFY_OPENER_LINE_PLAN if _verify_plan_check_enabled() else _VERIFY_OPENER_LINE
++            _VERIFY_OPENER_LINE_SEARCH if _verify_plan_search_enabled()
++            else _VERIFY_OPENER_LINE_PLAN if _verify_plan_check_enabled() else _VERIFY_OPENER_LINE
+         ),
+     }
+ 
+ 
++def _verify_search_config() -> dict[str, Any]:
++    return {
++        "seconds": max(0.1, _get_env_float("ARC3_VERIFY_SEARCH_SECONDS", 15.0)),
++        "max_depth": max(1, _get_env_int("ARC3_VERIFY_SEARCH_MAX_DEPTH", 30)),
++        "max_nodes": max(1, _get_env_int("ARC3_VERIFY_SEARCH_MAX_NODES", 20000)),
++    }
++
++
+ def _verify_halt_line(halt: dict[str, Any]) -> str:
+     skipped = halt.get("skipped") or []
+     return (
+@@ -6396,7 +6426,7 @@ class ToolAgent:
+         if trigger is None:
+             return
+         state.update(armed_level=level, arm_action=int(action_num), opener_pending=True)
+-        state["uses"] = {"replay_check": 0, "plan_check": 0}
++        state["uses"] = {"replay_check": 0, "plan_check": 0, "plan_search": 0}
+         state["goal_fps"] = set()
+         state["status"].append(
+             f"verify_armed level={level} tokens={tokens} actions={actions} trigger={trigger}"
+@@ -6433,6 +6463,7 @@ class ToolAgent:
+                 "seconds": config["seconds"],
+                 # the key exists only when on: off, the sandbox gets the same message
+                 **({"plan_check": True} if _verify_plan_check_enabled() else {}),
++                **({"plan_search": _verify_search_config()} if _verify_plan_search_enabled() else {}),
+             },
+             "verify_handler": self._verify_on_report,
+         }
+@@ -6456,6 +6487,15 @@ class ToolAgent:
+                 goal_fps.add(report["goal_fp"])
+             self._verify_state()["status"].append(f"verify_plan_check {fields}")
+             return
++        if kind == "plan_search":
++            fields = " ".join(
++                f"{key}={report.get(key)}"
++                for key in ("level", "found", "goal_kind", "plan_length", "nodes", "expanded",
++                            "depth", "actions", "beam", "capped", "abstained", "errors",
++                            "timed_out", "goal_fp")
++            )
++            self._verify_state()["status"].append(f"verify_plan_search {fields}")
++            return
+         fields = " ".join(
+             f"{key}={report.get(key)}"
+             for key in ("level", "transitions", "exact", "baseline", "mismatches",
+@@ -6507,6 +6547,7 @@ class ToolAgent:
+             + (f" replay_checks={uses.get('replay_check', 0)} plan_checks={uses.get('plan_check', 0)}"
+                f" plan_check_goals={len(state.get('goal_fps') or ())}"
+                if _verify_plan_check_enabled() else "")
++            + (f" plan_searches={uses.get('plan_search', 0)}" if _verify_plan_search_enabled() else "")
+         )
+         state.update(armed_level=None, opener_pending=False)
+ 
+diff --git a/ARC3-Inference/inference/utils/verify_tools.py b/ARC3-Inference/inference/utils/verify_tools.py
+index a9503ae..3e8f2de 100644
+--- a/ARC3-Inference/inference/utils/verify_tools.py
++++ b/ARC3-Inference/inference/utils/verify_tools.py
+@@ -27,6 +27,17 @@ the same gate and the same arming:
+   (verify_goal_fingerprint: `goal_fp` on the verify_plan_check line), so the
+   goal-revision rate per armed level can be read from the logs.
+ 
++A fourth is offered only when ARC3_VERIFY_PLAN_SEARCH is on as well as
++ARC3_VERIFY_PLAN_CHECK (swing S1, the April paradigm inside the box: the model
++writes the simulator and names the goal, the harness searches):
++
++- plan_search(sim_fn, goal, actions): breadth-first (optionally beam) search
++  over the model's OWN simulator from the CURRENT frame for a shortest plan
++  reaching the model's goal. Read-only; zero game actions; it never executes
++  the plan. The plan is right only under the model's simulator; the report
++  hands back per-step `expect` cells so executing it with
++  action(plan, expect=...) halts at the first step the game contradicts.
++
+ Everything is in the letter-coded board space the model already sees
+ (`frame.ascii`), never raw numeric color IDs.
+ 
+@@ -109,6 +120,48 @@ PLAN_CHECK_CAVEAT = (
+     "to trust this sim."
+ )
+ 
++# Appended after PLAN_CHECK_DOCS only when ARC3_VERIFY_PLAN_SEARCH is on as
++# well, so with it off the docs are the plan_check docs exactly.
++PLAN_SEARCH_DOCS = (
++    "plan_search(sim_fn, goal, actions=None, max_depth=30, max_nodes=20000, beam=None,\n"
++    "            seconds=None, border=0)\n"
++    "  Searches for a plan that reaches `goal` under YOUR sim_fn, starting from\n"
++    "  current_frame. No game action is taken and nothing is executed. sim_fn and goal\n"
++    "  are exactly as in plan_check (full board / sparse patch / None = abstain, which\n"
++    "  prunes that branch; goal = board, {(row, col): letter}, or predicate).\n"
++    "  actions: the action strings to try at every state, e.g. ['UP', 'LEFT',\n"
++    "  'MOUSE(row=12, col=30)']. If None, the game's non-click actions are used\n"
++    "  (RESET and UNDO excluded): clicks are never guessed, so pass the click\n"
++    "  candidates you mean (e.g. one cell of each object) as MOUSE strings.\n"
++    "  Breadth-first: the plan returned is a SHORTEST one under your sim. States whose\n"
++    "  board (inside `border`) was already seen are not expanded again.\n"
++    "  beam=K keeps only the K states with the most board/sparse goal cells matched at\n"
++    "  each depth (faster, no longer shortest or exhaustive; ignored for predicates).\n"
++    "  It helps when progress shows as more goal cells right (painting, toggling);\n"
++    "  for one moving piece every position scores alike, so use plain search there.\n"
++    "  max_nodes caps distinct states kept; seconds is capped by the harness budget,\n"
++    "  checked between callbacks and after they return (a late result never counts).\n"
++    "  Returns: found (True; False = every reachable state searched without the goal;\n"
++    "  None = a cap, the clock, a beam, or a sim/goal error stopped it first), plan,\n"
++    "  plan_length, expect (per step: the cells your sim says that step changes, ready\n"
++    "  for action(plan, expect=report['expect'])), predicted_final, nodes,\n"
++    "  nodes_expanded, sim_calls, depth_reached, capped, abstained, errors,\n"
++    "  first_error, closest (best goal-cell match seen, with its plan), timed_out,\n"
++    "  verdict. A found plan is correct only under YOUR simulator: replay_check tells\n"
++    "  you how far to trust it. plan_search() with no argument returns this text."
++)
++
++PLAN_SEARCH_CAVEAT = (
++    "Any plan here is correct only under YOUR simulator, not the game's (and 'no "
++    "plan' means none under your sim): run replay_check(sim_fn) to see how far to "
++    "trust it, and execute a plan with action(plan, expect=report['expect']) so the "
++    "harness halts at the first step the game contradicts your sim."
++)
++
++# A memory bound in the sandbox, whatever max_nodes the model asks for.
++PLAN_SEARCH_MAX_NODES_CEILING = 100000
++PLAN_SEARCH_DEFAULT_EXCLUDED = ("MOUSE", "RESET", "UNDO")
++
+ 
+ def _verify_int(value):
+     """An int from an int-like (int, numpy integer: anything with __index__), else None.
+@@ -854,3 +907,376 @@ def verify_goal_fingerprint(goal, border=0):
+     else:
+         text = "predicate|" + _verify_predicate_key(value)
+     return hashlib.sha256(text.encode("utf-8")).hexdigest()[:12]
++
++
++def verify_search_actions(actions, valid_actions=None):
++    """plan_search's action set -> distinct action strings in history's format.
++
++    actions=None: the game's non-click names (PLAN_SEARCH_DEFAULT_EXCLUDED are
++    left out: a click needs a cell, and RESET/UNDO are not board moves a
++    board-only simulator can model). An explicit list is validated exactly as a
++    plan_check plan, so an unknown name raises BEFORE anything is simulated.
++    """
++    if actions is None:
++        names = []
++        for value in valid_actions or []:
++            name = str(value).strip().upper()
++            if name and name not in PLAN_SEARCH_DEFAULT_EXCLUDED and name not in names:
++                names.append(name)
++        if not names:
++            raise ValueError(
++                "plan_search: the game offers no non-click action to try; pass "
++                "actions=[...] with click candidates as 'MOUSE(row=R, col=C)'"
++            )
++        return verify_normalize_plan(names, valid_actions)
++    try:
++        steps = verify_normalize_plan(actions, valid_actions)
++    except (TypeError, ValueError) as exc:
++        raise type(exc)("plan_search actions: " + str(exc).replace("plan step", "entry"))
++    if not steps:
++        raise ValueError("plan_search: actions is empty; pass at least one action string")
++    out = []
++    for text in steps:
++        if text not in out:
++            out.append(text)
++    return out
++
++
++def _verify_search_goal_test(goal, border, start_rows):
++    """(test(board) -> (satisfied, met), goal_cells) for a normalized goal.
++
++    met counts the goal cells a board matches (board/sparse goals; None for a
++    predicate). Raises ValueError before any search when no goal cell remains
++    inside the border. A predicate's own exception propagates to the caller.
++    """
++    kind, value = goal
++    if kind == "predicate":
++        def test_predicate(board):
++            verdict = value(list(board))
++            if isinstance(verdict, tuple) and len(verdict) == 2:
++                verdict = verdict[0]
++            # numpy's bool type is named "bool_" (1.x) or "bool" (2.x)
++            if not (isinstance(verdict, bool) or type(verdict).__name__ in ("bool_", "bool")):
++                raise TypeError(
++                    f"goal predicate returned {type(verdict).__name__}; expected bool "
++                    "or (bool, note)"
++                )
++            return bool(verdict), None
++        return test_predicate, None
++    if kind == "board":
++        g_rows = len(value)
++        g_cols = max((len(r) for r in value), default=0)
++        lo, hi = border, g_cols - border
++        segments = [(r, value[r][lo:hi]) for r in range(border, g_rows - border)]
++        segments = [(r, seg) for r, seg in segments if seg]
++        total = sum(len(seg) for _, seg in segments)
++        if not total:
++            raise ValueError("plan_search: no goal cell remained inside the border")
++
++        def test_board(board):
++            met = 0
++            for r, seg in segments:
++                have = board[r][lo:hi] if r < len(board) else ""
++                if have == seg:
++                    met += len(seg)
++                else:
++                    met += sum(map(operator.eq, have, seg))
++            shape_ok = len(board) == g_rows and all(len(row) == g_cols for row in board)
++            return met == total and shape_ok, met
++        return test_board, total
++    n_rows = len(start_rows)
++    n_cols = max((len(r) for r in start_rows), default=0)
++    # as plan_check: out-of-board goal cells stay (unmet); only HUD cells drop
++    cells = [
++        (r, c, want) for (r, c), want in sorted(value.items())
++        if not (r < n_rows and c < len(start_rows[r]))
++        or (border <= r < n_rows - border and border <= c < n_cols - border)
++    ]
++    if not cells:
++        raise ValueError("plan_search: every goal cell was inside the border; nothing to search for")
++
++    def test_sparse(board):
++        met = 0
++        for r, c, want in cells:
++            if r < len(board) and c < len(board[r]) and board[r][c] == want:
++                met += 1
++        return met == len(cells), met
++    return test_sparse, len(cells)
++
++
++def _verify_search_key(board, border):
++    """A digest of the board inside the border: equal digests = one state."""
++    inner = board[border:len(board) - border] if border else board
++    text = "\n".join(row[border:len(row) - border] for row in inner) if border else "\n".join(board)
++    if not text.strip("\n"):
++        text = "\n".join(board)
++    head = "%dx%d|" % (len(board), len(board[0]) if board else 0)
++    return hashlib.blake2b((head + text).encode("utf-8"), digest_size=16).digest()
++
++
++def verify_plan_search(
++    start_rows,
++    sim_fn,
++    goal,
++    actions,
++    *,
++    color_chars,
++    make_state,
++    border=0,
++    max_depth=30,
++    max_nodes=20000,
++    beam=None,
++    seconds=15.0,
++    expect_cells=16,
++):
++    """Breadth-first search over sim_fn from start_rows for a plan reaching goal.
++
++    actions: normalized action strings (verify_search_actions). goal: a
++    normalized goal (verify_normalize_goal). make_state(rows, depth) builds the
++    fresh state sim_fn sees at a state `depth` actions from the start (depth 0
++    is the real current frame). A state is identified by its board inside the
++    border (_verify_search_key); a repeated state is not expanded again. beam=K
++    (board/sparse goals only) keeps the K best states by goal cells matched at
++    each depth. Caps: max_depth (actions), max_nodes (distinct states kept),
++    seconds (checked between callbacks and after each returns: a result that
++    arrives late is discarded, never reported as found). The model's code is
++    reported on, never raised; malformed arguments raise before any sim call.
++    The harness never executes the plan.
++    """
++    border = max(0, int(border or 0))
++    goal_kind = goal[0]
++    max_depth = max(0, int(max_depth))
++    max_nodes = max(1, int(max_nodes))
++    beam = None if beam is None else max(1, int(beam))
++    use_beam = beam is not None and goal_kind != "predicate"
++    test, goal_cells = _verify_search_goal_test(goal, border, list(start_rows))
++    started = time.monotonic()
++
++    def over_budget():
++        return seconds is not None and time.monotonic() - started > float(seconds)
++
++    report = {
++        "found": None,
++        "goal_kind": goal_kind,
++        "plan": None,
++        "plan_length": None,
++        "actions": list(actions),
++        "nodes": 1,
++        "nodes_expanded": 0,
++        "sim_calls": 0,
++        "duplicates": 0,
++        "depth_reached": 0,
++        "max_depth": max_depth,
++        "max_nodes": max_nodes,
++        "beam": beam if use_beam else None,
++        "beam_pruned": 0,
++        "capped": None,
++        "abstained": 0,
++        "errors": 0,
++        "goal_errors": 0,
++        "first_error": None,
++        "border": border,
++        "timed_out": False,
++    }
++    if beam is not None and not use_beam:
++        report["beam_ignored"] = "a predicate goal has no cell count to rank states by; plain BFS"
++    boards = [list(start_rows)]
++    parents = [-1]
++    moves = [None]
++    depths = [0]
++    mets = [None]
++    seen = {_verify_search_key(boards[0], border)}
++    best = None  # (met, node) of the closest state, shallowest first
++
++    def note_error(text):
++        if report["first_error"] is None:
++            report["first_error"] = text
++
++    def evaluate(node):
++        nonlocal best
++        try:
++            ok, met = test(boards[node])
++        except Exception as exc:  # the model's predicate; report, never raise
++            report["goal_errors"] += 1
++            note_error(f"{type(exc).__name__}: {exc} (goal check)")
++            return False
++        mets[node] = met
++        if met is not None and (best is None or met > best[0]):
++            best = (met, node)
++        return ok
++
++    def plan_of(node):
++        steps = []
++        while parents[node] >= 0:
++            steps.append(node)
++            node = parents[node]
++        return steps[::-1]
++
++    found = 0 if evaluate(0) else None
++    stop = None
++    if over_budget():
++        stop, found = "time", None
++    frontier = [0]
++    depth = 0
++    while found is None and stop is None and frontier:
++        if depth >= max_depth:
++            stop = "depth"
++            break
++        layer = []
++        for node in frontier:
++            report["nodes_expanded"] += 1
++            board = boards[node]
++            for index, action_text in enumerate(actions):
++                if over_budget():
++                    stop = "time"
++                    break
++                report["sim_calls"] += 1
++                try:
++                    pred = sim_fn(make_state(board, depth), action_text)
++                    kind, value = verify_prediction(pred, color_chars)
++                    if kind == "full":
++                        value = _verify_board_rows(value, color_chars, "sim_fn's board")
++                    elif kind == "sparse":
++                        outside = [
++                            cell for cell in sorted(value)
++                            if not (cell[0] < len(board) and cell[1] < len(board[cell[0]]))
++                        ]
++                        if outside:
++                            raise ValueError(
++                                f"sim_fn's patch names cell(s) {outside[:4]!r} outside the "
++                                f"{len(board)}x{len(board[0]) if board else 0} board"
++                            )
++                except Exception as exc:  # the model's code; report, never raise
++                    if over_budget():
++                        stop = "time"  # a late error is a timeout, as in plan_check
++                        break
++                    report["errors"] += 1
++                    note_error(
++                        f"{type(exc).__name__}: {exc} (depth {depth + 1}, action "
++                        f"{action_text!r}, after {[actions[moves[n]] for n in plan_of(node)]!r})"
++                    )
++                    continue
++                if over_budget():
++                    stop = "time"  # a late result is discarded, never searched on
++                    break
++                if kind == "none":
++                    report["abstained"] += 1
++                    continue
++                if kind == "full":
++                    if len(value) == len(board):
++                        # share unchanged row strings with the parent (memory)
++                        child = [old if old == new else new for old, new in zip(board, value)]
++                    else:
++                        child = list(value)
++                else:
++                    child = list(board)
++                    by_row = {}
++                    for (r, c), letter in value.items():
++                        by_row.setdefault(r, {})[c] = letter
++                    for r, cols in by_row.items():
++                        row = list(child[r])
++                        for c, letter in cols.items():
++                            row[c] = letter
++                        child[r] = "".join(row)
++                key = _verify_search_key(child, border)
++                if key in seen:
++                    report["duplicates"] += 1
++                    continue
++                if len(boards) >= max_nodes:
++                    stop = "nodes"
++                    break
++                seen.add(key)
++                boards.append(child)
++                parents.append(node)
++                moves.append(index)
++                depths.append(depth + 1)
++                mets.append(None)
++                new = len(boards) - 1
++                report["depth_reached"] = depth + 1
++                ok = evaluate(new)
++                if over_budget():
++                    stop = "time"  # a late goal verdict is not a found plan
++                    break
++                if ok:
++                    found = new
++                    break
++                layer.append(new)
++            if found is not None or stop is not None:
++                break
++        depth += 1
++        if use_beam and len(layer) > beam:
++            # stable: equal scores keep generation (action) order
++            ranked = sorted(layer, key=lambda n: -(mets[n] or 0))
++            report["beam_pruned"] += len(layer) - beam
++            layer = ranked[:beam]
++        frontier = layer
++    report["nodes"] = len(boards)
++    elapsed = time.monotonic() - started
++    if stop == "time" or (seconds is not None and elapsed > float(seconds)):
++        report["timed_out"] = True
++        stop = "time"
++        found = None
++    report["capped"] = stop
++    report["seconds"] = round(elapsed, 3)
++    if found is not None:
++        path = plan_of(found)
++        report["found"] = True
++        report["plan"] = [actions[moves[n]] for n in path]
++        report["plan_length"] = len(path)
++        expect = []
++        prev = boards[0]
++        for n in path:
++            cur = boards[n]
++            entry = None
++            if len(cur) == len(prev) and all(len(a) == len(b) for a, b in zip(cur, prev)):
++                cells = [
++                    [r, c, cur[r][c]]
++                    for r in range(border, len(cur) - border) if cur[r] != prev[r]
++                    for c in range(border, len(cur[r]) - border) if cur[r][c] != prev[r][c]
++                ]
++                if cells:
++                    entry = {"cells": cells[:max(1, int(expect_cells))]}
++            expect.append(entry)
++            prev = cur
++        report["expect"] = expect
++        report["predicted_final"] = "\n".join(boards[found])
++    elif stop is None and not frontier and not report["errors"] and not report["goal_errors"] \
++            and not report["beam_pruned"]:
++        report["found"] = False
++    if best is not None:
++        report["closest"] = {
++            "met": best[0],
++            "of": goal_cells,
++            "depth": depths[best[1]],
++            "plan": [actions[moves[n]] for n in plan_of(best[1])],
++        }
++    if report["first_error"] is None:
++        del report["first_error"]
++    states = f"{report['nodes']} state(s), {report['nodes_expanded']} expanded, depth {report['depth_reached']}"
++    if report["found"]:
++        head = (f"plan found: {report['plan_length']} action(s) reach the goal under your sim "
++                + ("(beam search: short, not guaranteed shortest)" if report["beam_pruned"]
++                   else "(a shortest plan under your sim)")
++                + f"; {states}")
++        if goal_kind == "sparse":
++            head += f"; a sparse goal checks {goal_cells} chosen cell(s), not the whole board"
++    elif report["found"] is False:
++        head = (f"no plan: every state your sim reaches from the current frame was searched "
++                f"({states}) and none satisfies the goal")
++    else:
++        reasons = {
++            "time": "the time budget ran out",
++            "depth": f"the depth cap ({max_depth}) was reached",
++            "nodes": f"the state cap ({max_nodes}) was reached",
++        }
++        why = [reasons[stop]] if stop else []
++        if report["beam_pruned"]:
++            why.append(f"the beam dropped {report['beam_pruned']} state(s)")
++        if report["errors"] or report["goal_errors"]:
++            why.append(f"{report['errors']} sim error(s) and {report['goal_errors']} goal "
++                       "error(s) cut branches")
++        head = f"not found, search incomplete: {'; '.join(why) or 'stopped'} ({states})"
++    if report["abstained"]:
++        head += f"; your sim abstained {report['abstained']} time(s) (those branches pruned)"
++    report["verdict"] = head + ". " + PLAN_SEARCH_CAVEAT
++    return report

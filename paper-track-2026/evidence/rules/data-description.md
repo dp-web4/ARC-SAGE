@@ -1,0 +1,3 @@
+Welcome to the ARC Prize 2026 Paper Track! 
+
+This competition does not have a dataset. It is intended for participants of [ARC-AGI-2](https://www.kaggle.com/competitions/arc-prize-2026-arc-agi-2) and [ARC-AGI-3](https://www.kaggle.com/competitions/arc-prize-2026-arc-agi-3) to document their solution. To learn more about ARC Prize 2026, head over to [the main competition site](https://www.kaggle.com/competitions/arc-prize-2026-arc-agi-3). 

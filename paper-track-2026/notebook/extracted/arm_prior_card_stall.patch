@@ -1,0 +1,108 @@
+diff --git a/ARC3-Inference/inference/agent/tool_agent.py b/ARC3-Inference/inference/agent/tool_agent.py
+index 93e7c7a..8c3ee31 100644
+--- a/ARC3-Inference/inference/agent/tool_agent.py
++++ b/ARC3-Inference/inference/agent/tool_agent.py
+@@ -679,6 +679,27 @@ def _prior_card_text() -> str:
+     return os.environ.get("ARC3_PRIOR_CARD_TEXT", "").strip() or _PRIOR_CARD_TEXT
+ 
+ 
++# ARC3_PRIOR_CARD_TRIGGER (default unset = "verify": the card rides the verify
++# opener as above). "stall" gives the card its OWN gate, independent of
++# ARC3_VERIFY (the LEAN stack runs it with the verify tools off): at a turn's
++# start, once a level has taken ARC3_PRIOR_CARD_ACTIONS (default 50) actions
++# without clearing - counted exactly as the verify gate counts them, from the
++# level-start action count the agent keeps for every run - that turn's opener
++# carries the card as its own line, once per level, and
++# `prior_card fired level=<n> trigger=stall` is written. Under "stall" the
++# verify opener no longer carries the card, so it never fires twice. Any other
++# value is the default. Off (ARC3_PRIOR_CARD unset/0) nothing here runs.
++def _prior_card_stall_trigger() -> bool:
++    return (
++        _prior_card_enabled()
++        and os.environ.get("ARC3_PRIOR_CARD_TRIGGER", "").strip().lower() == "stall"
++    )
++
++
++def _prior_card_actions() -> int:
++    return _get_env_int("ARC3_PRIOR_CARD_ACTIONS", 50)
++
++
+ def _verify_config() -> dict[str, Any]:
+     return {
+         "gate": (os.environ.get("ARC3_VERIFY_GATE", "") or "stall").strip().lower(),
+@@ -6439,12 +6460,39 @@ class ToolAgent:
+             return user_prompt
+         state["opener_pending"] = False
+         line = _verify_config()["opener_line"]
+-        if _prior_card_enabled():
++        if _prior_card_enabled() and not _prior_card_stall_trigger():
+             # ARC3_PRIOR_CARD: the card goes right before the goal opener line
+             state["status"].append(f"prior_card fired level={state['armed_level']}")
+             line = _prior_card_text() + "\n" + line
+         return user_prompt + "\n" + line
+ 
++    def _prior_card_gate(self, current_frame: Frame | None, action_num: int) -> None:
++        """ARC3_PRIOR_CARD_TRIGGER=stall: queue the card once per level, at the
++        first turn start with >= ARC3_PRIOR_CARD_ACTIONS actions on the level.
++        The action count is the verify gate's (same level-start counter)."""
++        if current_frame is None:
++            return
++        state = self._verify_state()
++        fired = state.setdefault("prior_card_levels", set())
++        level = int(current_frame.level)
++        if level in fired:
++            return
++        threshold = _prior_card_actions()
++        actions = max(0, int(action_num) - getattr(self, "_actions_at_level_start", 0))
++        if threshold <= 0 or actions < threshold:
++            return
++        fired.add(level)
++        state["prior_card_pending"] = level
++
++    def _prior_card_opener(self, user_prompt: str) -> str:
++        """The card as its own line on the first opener after its stall gate."""
++        state = getattr(self, "_verify", None)
++        if not _prior_card_stall_trigger() or not state or state.get("prior_card_pending") is None:
++            return user_prompt
++        level = state.pop("prior_card_pending")
++        state["status"].append(f"prior_card fired level={level} trigger=stall")
++        return user_prompt + "\n" + _prior_card_text()
++
+     def _verify_flush(self, append_transcript: Callable[[str, str], None]) -> None:
+         state = getattr(self, "_verify", None)
+         while state and state["status"]:
+@@ -7451,6 +7499,8 @@ class ToolAgent:
+         current_frame, history_entries = load_runtime_state(state_path)
+         if _verify_enabled():
+             self._verify_gate(current_frame, action_num)
++        if _prior_card_stall_trigger():
++            self._prior_card_gate(current_frame, action_num)
+         user_prompt = self._build_user_prompt(
+             action_num,
+             valid_actions=valid_actions,
+@@ -7538,19 +7588,21 @@ class ToolAgent:
+             self._pending_diff_image_label = self._turn_diff_image_label
+         if resume_mode == "state_only":
+             opening_message = self._build_user_message(
+-                self._verify_hazard_opener(self._verify_opener(
++                self._verify_hazard_opener(self._prior_card_opener(self._verify_opener(
+                     _yield_resume_prompt(resume_reason) + "\n\n" + _STATE_ONLY_CAPTION
+-                )),
++                ))),
+                 current_frame,
+             )
+         elif resume_mode == "short":
+             opening_message = self._build_user_message(
+-                self._verify_hazard_opener(self._verify_opener(_yield_resume_prompt(resume_reason))),
++                self._verify_hazard_opener(self._prior_card_opener(
++                    self._verify_opener(_yield_resume_prompt(resume_reason))
++                )),
+                 resume_frame,
+             )
+         else:
+             opening_message = self._build_user_message(
+-                self._verify_hazard_opener(self._verify_opener(user_prompt)),
++                self._verify_hazard_opener(self._prior_card_opener(self._verify_opener(user_prompt))),
+                 resume_frame if resuming_after_yield else current_frame,
+             )
+         # log what was actually SENT, not the argument that was passed in: on a

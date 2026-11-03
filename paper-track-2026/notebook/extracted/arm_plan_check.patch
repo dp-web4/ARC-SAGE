@@ -1,0 +1,548 @@
+diff --git a/ARC3-Inference/inference/agent/python_tool_sandbox.py b/ARC3-Inference/inference/agent/python_tool_sandbox.py
+index c15a0ff..666fbbc 100644
+--- a/ARC3-Inference/inference/agent/python_tool_sandbox.py
++++ b/ARC3-Inference/inference/agent/python_tool_sandbox.py
+@@ -448,6 +448,86 @@ _SANDBOX_BOOTSTRAP = textwrap.dedent(
+         runtime_globals["action"] = action
+         runtime_globals["replay_check"] = replay_check
+         runtime_globals["verify_docs"] = VERIFY_DOCS
++        if config.get("plan_check"):
++            _install_plan_check(config, runtime_globals, replay_check)
++
++
++    def _install_plan_check(config, runtime_globals, replay_check):
++        # ARC3_VERIFY_PLAN_CHECK, on top of an armed ARC3_VERIFY: the config
++        # key exists only then, so without it nothing here runs and the docs
++        # stay the replay_check/expect text exactly.
++        border_default = int(config.get("border") or 0)
++        max_cells = int(config.get("max_cells") or 8)
++        seconds = float(config.get("seconds") or 10)
++        docs = VERIFY_DOCS + "\n\n" + PLAN_CHECK_DOCS
++
++        def replay_check_with_docs(sim_fn=None, border=None, last=None):
++            if sim_fn is None:
++                return docs
++            return replay_check(sim_fn, border=border, last=last)
++
++        def plan_check(sim_fn=None, plan=None, goal=None, border=None):
++            if sim_fn is None:
++                return docs
++            if not callable(sim_fn):
++                raise TypeError("plan_check(sim_fn, plan, goal): sim_fn must be callable as sim_fn(state, action)")
++            # malformed arguments raise here, before anything is simulated
++            steps = verify_normalize_plan(plan, runtime_globals.get("valid_actions"))
++            target = verify_normalize_goal(goal, COLOR_CHARS)
++            frame = runtime_globals.get("current_frame")
++            if frame is None:
++                raise RuntimeError("plan_check: there is no current_frame to start from")
++
++            def make_state(rows, k):
++                if k == 0:
++                    # the real current frame, copied as replay_check copies one
++                    return FrameView(
++                        ascii=frame.ascii, step=frame.step, level=frame.level,
++                        shape=frame.shape, grid=[list(row) for row in frame._grid],
++                    )
++                # a predicted board: segmentation is recomputed from it; the
++                # level cannot change and the step is the plan's count
++                return FrameView(
++                    ascii="\n".join(rows), step=frame.step + k, level=frame.level,
++                    shape=(len(rows), len(rows[0]) if rows else 0),
++                    grid=[[COLOR_CHARS.index(ch) for ch in row] for row in rows],
++                )
++
++            report = verify_plan_check(
++                frame.ascii.split("\n"),
++                steps,
++                sim_fn,
++                target,
++                color_chars=COLOR_CHARS,
++                make_state=make_state,
++                border=border_default if border is None else border,
++                max_cells=max_cells,
++                seconds=seconds,
++            )
++            report = {"level": frame.level, "plan": steps, **report}
++            _send({
++                "type": "verify_report",
++                "kind": "plan_check",
++                "report": {
++                    "level": report.get("level"),
++                    "satisfied": report.get("satisfied"),
++                    "goal_kind": report.get("goal_kind"),
++                    "plan_length": report.get("plan_length"),
++                    "steps_simulated": report.get("steps_simulated"),
++                    "abstained_at": report.get("abstained_at"),
++                    "unmet": report.get("unmet"),
++                    "cells_checked": report.get("cells_checked"),
++                    "cells_available": report.get("cells_available"),
++                    "error": report.get("first_error") is not None,
++                    "timed_out": report.get("timed_out"),
++                },
++            })
++            _recv()
++            return report
++
++        runtime_globals["replay_check"] = replay_check_with_docs
++        runtime_globals["plan_check"] = plan_check
++        runtime_globals["verify_docs"] = docs
+ 
+ 
+     def main():
+diff --git a/ARC3-Inference/inference/agent/tool_agent.py b/ARC3-Inference/inference/agent/tool_agent.py
+index 89a3dae..a810861 100644
+--- a/ARC3-Inference/inference/agent/tool_agent.py
++++ b/ARC3-Inference/inference/agent/tool_agent.py
+@@ -355,6 +355,22 @@ def _verify_enabled() -> bool:
+     return _get_env_bool("ARC3_VERIFY", False)
+ 
+ 
++# ARC3_VERIFY_PLAN_CHECK (default off): adds plan_check(sim_fn, plan, goal) to
++# the armed tools - the model's simulator rolled over a PLAN from the current
++# frame, its predicted end board compared with a GOAL the model states. Same
++# gate and arming as replay_check; it never picks or runs an action. Off, every
++# request, tool result and artifact is what it was without it.
++_VERIFY_OPENER_LINE_PLAN = (
++    "[harness] Verification tools are now available for this level (harness tools; "
++    "the game is unchanged): `replay_check(sim_fn)`, `plan_check(sim_fn, plan, goal)` "
++    "and `action(..., expect=...)` — see tool docs: `print(verify_docs)`."
++)
++
++
++def _verify_plan_check_enabled() -> bool:
++    return _get_env_bool("ARC3_VERIFY_PLAN_CHECK", False)
++
++
+ def _verify_config() -> dict[str, Any]:
+     return {
+         "gate": (os.environ.get("ARC3_VERIFY_GATE", "") or "stall").strip().lower(),
+@@ -365,7 +381,9 @@ def _verify_config() -> dict[str, Any]:
+         "max_mismatches": max(0, _get_env_int("ARC3_VERIFY_REPLAY_MISMATCHES", 3)),
+         "max_cells": max(1, _get_env_int("ARC3_VERIFY_REPLAY_CELLS", 8)),
+         "seconds": max(0.1, _get_env_float("ARC3_VERIFY_REPLAY_SECONDS", 10.0)),
+-        "opener_line": os.environ.get("ARC3_VERIFY_OPENER_LINE", "").strip() or _VERIFY_OPENER_LINE,
++        "opener_line": os.environ.get("ARC3_VERIFY_OPENER_LINE", "").strip() or (
++            _VERIFY_OPENER_LINE_PLAN if _verify_plan_check_enabled() else _VERIFY_OPENER_LINE
++        ),
+     }
+ 
+ 
+@@ -6070,6 +6088,7 @@ class ToolAgent:
+         if trigger is None:
+             return
+         state.update(armed_level=level, arm_action=int(action_num), opener_pending=True)
++        state["uses"] = {"replay_check": 0, "plan_check": 0}
+         state["status"].append(
+             f"verify_armed level={level} tokens={tokens} actions={actions} trigger={trigger}"
+         )
+@@ -6098,12 +6117,28 @@ class ToolAgent:
+                 "max_mismatches": config["max_mismatches"],
+                 "max_cells": config["max_cells"],
+                 "seconds": config["seconds"],
++                # the key exists only when on: off, the sandbox gets the same message
++                **({"plan_check": True} if _verify_plan_check_enabled() else {}),
+             },
+             "verify_handler": self._verify_on_report,
+         }
+ 
+     def _verify_on_report(self, message: dict[str, Any]) -> None:
+         report = message.get("report") or {}
++        kind = message.get("kind")
++        uses = self._verify_state().get("uses")
++        if isinstance(uses, dict) and kind in uses:
++            uses[kind] += 1
++        if kind == "plan_check":
++            # one line per goal-check, so a run can count them
++            fields = " ".join(
++                f"{key}={report.get(key)}"
++                for key in ("level", "satisfied", "goal_kind", "plan_length", "steps_simulated",
++                            "abstained_at", "unmet", "cells_checked", "cells_available",
++                            "error", "timed_out")
++            )
++            self._verify_state()["status"].append(f"verify_plan_check {fields}")
++            return
+         fields = " ".join(
+             f"{key}={report.get(key)}"
+             for key in ("level", "transitions", "exact", "baseline", "mismatches",
+@@ -6147,10 +6182,13 @@ class ToolAgent:
+         state = self._verify_state()
+         if state["armed_level"] is None:
+             return
++        uses = state.get("uses") or {}
+         state["status"].append(
+             f"verify_level_outcome level={state['armed_level']} armed=yes "
+             f"cleared={'yes' if cleared else 'no'} "
+             f"actions_after_arm={max(0, int(action_num) - int(state['arm_action']))}"
++            + (f" replay_checks={uses.get('replay_check', 0)} plan_checks={uses.get('plan_check', 0)}"
++               if _verify_plan_check_enabled() else "")
+         )
+         state.update(armed_level=None, opener_pending=False)
+ 
+diff --git a/ARC3-Inference/inference/utils/verify_tools.py b/ARC3-Inference/inference/utils/verify_tools.py
+index 8e198f2..0238ff8 100644
+--- a/ARC3-Inference/inference/utils/verify_tools.py
++++ b/ARC3-Inference/inference/utils/verify_tools.py
+@@ -14,6 +14,16 @@ tool_agent.py), both optional, neither choosing an action:
+   one veto, and only of steps the model itself made conditional by stating
+   what it expected. Steps without an expectation run exactly as before.
+ 
++A third test is offered only when ARC3_VERIFY_PLAN_CHECK is on as well, with
++the same gate and the same arming:
++
++- plan_check(sim_fn, plan, goal): the model's own simulator rolled forward from
++  the CURRENT frame over a PLAN, and the predicted end board compared with a
++  GOAL the model states (a board, sparse cells, or a predicate). Read-only; no
++  game action. It answers "does my plan reach my goal under my simulator?" -
++  the question replay_check ("is my simulator right about the past?") and
++  expect= ("was this step what I said?") never ask.
++
+ Everything is in the letter-coded board space the model already sees
+ (`frame.ascii`), never raw numeric color IDs.
+ 
+@@ -23,6 +33,7 @@ import): its source is spliced verbatim into the sandbox bootstrap
+ it normally for the per-step expectation check in the solver, and tests.
+ """
+ import operator
++import re
+ import time
+ 
+ 
+@@ -60,6 +71,38 @@ VERIFY_DOCS = (
+     "  A single action may take a single dict."
+ )
+ 
++# Appended to VERIFY_DOCS only when ARC3_VERIFY_PLAN_CHECK is on, so the
++# flag-off docs are the same string as before plan_check existed.
++PLAN_CHECK_DOCS = (
++    "plan_check(sim_fn, plan, goal, border=0)\n"
++    "  Rolls YOUR sim_fn forward from current_frame over `plan` (a list of action\n"
++    "  strings as in history: 'UP', 'MOUSE(row=3, col=7)', or action dicts) and\n"
++    "  compares the predicted END board with `goal`. No game action is taken.\n"
++    "  sim_fn is called exactly as in replay_check. A full-board return replaces\n"
++    "  the board; a sparse {(row, col): letter} return is applied as a patch over\n"
++    "  the previous predicted board; None stops the rollout (sim abstained).\n"
++    "  The `state` for step k is built from the predicted board (.ascii, .shape,\n"
++    "  .segmentation recomputed from it); .level stays the current level and\n"
++    "  .step counts +1 per planned action - a level-up cannot be simulated.\n"
++    "  goal: a full board (ascii string or row strings), OR {(row, col): letter}\n"
++    "  for only the cells you care about, OR a callable goal(rows) -> bool or\n"
++    "  (bool, note) on the predicted end board as row strings. border=N ignores N\n"
++    "  edge cells for board/sparse goals, as in replay_check.\n"
++    "  Returns: satisfied (True/False; None if the sim abstained, raised, timed\n"
++    "  out, or no goal cell remained), steps_simulated, abstained_at, unmet and\n"
++    "  unmet_cells [row, col, predicted, goal], cells_checked/cells_available,\n"
++    "  predicted_final (the predicted end board), first_error, timed_out, verdict.\n"
++    "  It is your SIMULATOR's prediction, not the game's: a plan that satisfies\n"
++    "  your simulator but not the real game will not clear. replay_check tells you\n"
++    "  how far to trust the simulator. plan_check() with no argument returns this text."
++)
++
++PLAN_CHECK_CAVEAT = (
++    "This is your SIMULATOR's prediction, not the game's: a plan that satisfies your "
++    "simulator but not the real game will not clear; replay_check tells you how far "
++    "to trust this sim."
++)
++
+ 
+ def _verify_int(value):
+     """An int from an int-like (int, numpy integer: anything with __index__), else None.
+@@ -423,3 +466,299 @@ def verify_replay(
+     if report["first_error"] is None:
+         del report["first_error"]
+     return report
++
++
++
++_PLAN_ACTION_RE = re.compile(r"^\s*([A-Za-z_][A-Za-z0-9_]*)\s*(?:\((.*)\))?\s*$", re.S)
++_PLAN_MOUSE_ARG_RE = re.compile(r"^\s*(row|col)\s*=\s*(\d+)\s*$", re.I)
++
++
++def _verify_plan_mouse(index, row, col):
++    row_i, col_i = _verify_int(row), _verify_int(col)
++    if isinstance(row, str) and row.strip().isdigit():
++        row_i = int(row)
++    if isinstance(col, str) and col.strip().isdigit():
++        col_i = int(col)
++    if row_i is None or col_i is None or row_i < 0 or col_i < 0:
++        raise ValueError(
++            f"plan step {index}: MOUSE needs nonnegative integer row and col, got "
++            f"row={row!r}, col={col!r}"
++        )
++    return f"MOUSE(row={row_i}, col={col_i})"
++
++
++def verify_normalize_plan(plan, valid_actions=None):
++    """The model's plan -> action strings in the format history records.
++
++    Accepts a list of strings ('UP', 'mouse(row=3, col=7)') and/or action dicts
++    ({'action': 'MOUSE', 'row': 3, 'col': 7}); a single string or dict is a
++    one-step plan. Names are upper-cased and MOUSE is rewritten to the exact
++    'MOUSE(row=R, col=C)' spelling replay_check's sim_fn receives. Raises
++    ValueError/TypeError BEFORE anything is simulated. valid_actions, when
++    non-empty, is the set of names the game offers this turn.
++    """
++    if isinstance(plan, (str, dict)):
++        plan = [plan]
++    if not isinstance(plan, (list, tuple)):
++        raise TypeError("plan must be a list of action strings or action dicts")
++    allowed = [str(v).strip().upper() for v in (valid_actions or []) if str(v).strip()]
++    out = []
++    for index, item in enumerate(plan, start=1):
++        if isinstance(item, dict):
++            name = str(item.get("action", "")).strip().upper()
++            if not name:
++                raise ValueError(f"plan step {index} is missing an `action` field")
++            if name == "MOUSE":
++                if "row" not in item or "col" not in item:
++                    raise ValueError(f"plan step {index}: MOUSE needs `row` and `col`")
++                text = _verify_plan_mouse(index, item["row"], item["col"])
++            else:
++                text = name
++        elif isinstance(item, str):
++            match = _PLAN_ACTION_RE.match(item)
++            if not match:
++                raise ValueError(f"plan step {index}: {item!r} is not an action string")
++            name, args = match.group(1).upper(), match.group(2)
++            if name == "MOUSE":
++                if args is None:
++                    raise ValueError(
++                        f"plan step {index}: write a click as 'MOUSE(row=R, col=C)'"
++                    )
++                fields = {}
++                for part in args.split(","):
++                    arg = _PLAN_MOUSE_ARG_RE.match(part)
++                    if not arg or arg.group(1).lower() in fields:
++                        raise ValueError(
++                            f"plan step {index}: {item!r} must read 'MOUSE(row=R, col=C)'"
++                        )
++                    fields[arg.group(1).lower()] = int(arg.group(2))
++                if set(fields) != {"row", "col"}:
++                    raise ValueError(
++                        f"plan step {index}: {item!r} must read 'MOUSE(row=R, col=C)'"
++                    )
++                text = _verify_plan_mouse(index, fields["row"], fields["col"])
++            elif args is not None:
++                raise ValueError(f"plan step {index}: {name} takes no arguments ({item!r})")
++            else:
++                text = name
++        else:
++            raise TypeError(f"plan step {index} must be an action string or an action dict")
++        if allowed and name not in allowed:
++            raise ValueError(
++                f"plan step {index}: {name!r} is not one of this game's actions {allowed!r}"
++            )
++        out.append(text)
++    return out
++
++
++def _verify_board_rows(rows, color_chars, what):
++    """Full-board rows -> list of row strings of board letters; ValueError otherwise."""
++    rows = list(rows)
++    if not rows:
++        raise ValueError(f"{what} is an empty board")
++    width = len(rows[0])
++    for r, row in enumerate(rows):
++        if len(row) != width:
++            raise ValueError(
++                f"{what} is ragged: row {r} has {len(row)} cells, row 0 has {width}"
++            )
++        for c, ch in enumerate(row):
++            if ch not in color_chars:
++                raise ValueError(
++                    f"{what} has {ch!r} at ({r}, {c}), not a board letter ({color_chars!r})"
++                )
++    return rows
++
++
++def verify_normalize_goal(goal, color_chars):
++    """The model's goal -> ('board', rows) | ('sparse', {(r, c): letter}) | ('predicate', fn)."""
++    if goal is None:
++        raise TypeError("plan_check needs a goal: a board, {(row, col): letter}, or a predicate")
++    if callable(goal) and not isinstance(goal, (str, dict, list, tuple)) \
++            and not isinstance(getattr(goal, "ascii", None), str):
++        return "predicate", goal
++    kind, value = verify_prediction(goal, color_chars)
++    if kind == "full":
++        return "board", _verify_board_rows(value, color_chars, "goal")
++    if kind == "sparse":
++        if not value:
++            raise ValueError("goal {} names no cells")
++        return "sparse", value
++    raise TypeError("plan_check needs a goal: a board, {(row, col): letter}, or a predicate")
++
++
++def verify_plan_check(
++    start_rows,
++    plan,
++    sim_fn,
++    goal,
++    *,
++    color_chars,
++    make_state,
++    border=0,
++    max_cells=8,
++    seconds=10.0,
++):
++    """Roll sim_fn over plan from start_rows; compare the predicted end with goal.
++
++    plan: normalized action strings (verify_normalize_plan). goal: a normalized
++    goal (verify_normalize_goal). make_state(rows, k) builds the fresh state
++    object sim_fn sees before planned step k+1 (k = steps simulated so far).
++    The model's code (sim_fn, a predicate goal) is reported on, never raised.
++    """
++    border = max(0, int(border or 0))
++    goal_kind, goal_value = goal
++    started = time.monotonic()
++    report = {
++        "satisfied": None,
++        "goal_kind": goal_kind,
++        "plan_length": len(plan),
++        "steps_simulated": 0,
++        "abstained_at": None,
++        "full_steps": 0,
++        "sparse_steps": 0,
++        "unmet": None,
++        "unmet_cells": [],
++        "cells_checked": None,
++        "cells_available": None,
++        "border": border,
++        "timed_out": False,
++        "first_error": None,
++    }
++    board = list(start_rows)
++    stopped = None
++    for k, action_text in enumerate(plan, start=1):
++        if seconds is not None and time.monotonic() - started > float(seconds):
++            report["timed_out"] = True
++            stopped = f"the time budget ran out before step {k}"
++            break
++        try:
++            pred = sim_fn(make_state(board, k - 1), action_text)
++            kind, value = verify_prediction(pred, color_chars)
++            if kind == "full":
++                value = _verify_board_rows(value, color_chars, "sim_fn's board")
++            elif kind == "sparse":
++                outside = [
++                    cell for cell in sorted(value)
++                    if not (cell[0] < len(board) and cell[1] < len(board[cell[0]]))
++                ]
++                if outside:
++                    raise ValueError(
++                        f"sim_fn's patch names cell(s) {outside[:4]!r} outside the "
++                        f"{len(board)}x{len(board[0]) if board else 0} board"
++                    )
++        except Exception as exc:  # the model's code; report, never raise
++            report["first_error"] = (
++                f"{type(exc).__name__}: {exc} (plan step {k}, action {action_text!r})"
++            )
++            stopped = f"sim_fn failed at step {k}"
++            break
++        if kind == "none":
++            report["abstained_at"] = k
++            stopped = f"sim abstained at step {k} ({action_text!r})"
++            break
++        if kind == "full":
++            board = value
++            report["full_steps"] += 1
++        else:
++            patched = [list(row) for row in board]
++            for (r, c), letter in value.items():
++                patched[r][c] = letter
++            board = ["".join(row) for row in patched]
++            report["sparse_steps"] += 1
++        report["steps_simulated"] = k
++    report["predicted_final"] = "\n".join(board)
++    n_rows = len(board)
++    n_cols = max((len(r) for r in board), default=0)
++
++    def in_region(r, c, rows_n, cols_n):
++        return border <= r < rows_n - border and border <= c < cols_n - border
++
++    note = None
++    if stopped is None:
++        try:
++            if goal_kind == "predicate":
++                verdict = goal_value(list(board))
++                note_text = None
++                if isinstance(verdict, tuple) and len(verdict) == 2:
++                    verdict, note_text = verdict
++                # numpy's bool type is named "bool_" (1.x) or "bool" (2.x)
++                if not (isinstance(verdict, bool) or type(verdict).__name__ in ("bool_", "bool")):
++                    raise TypeError(
++                        f"goal predicate returned {type(verdict).__name__}; expected bool "
++                        "or (bool, note)"
++                    )
++                report["satisfied"] = bool(verdict)
++                if note_text is not None:
++                    report["goal_note"] = str(note_text)
++            elif goal_kind == "board":
++                g_rows = len(goal_value)
++                g_cols = max((len(r) for r in goal_value), default=0)
++                if g_rows != n_rows or g_cols != n_cols:
++                    report["shape"] = (
++                        f"predicted end board {n_rows}x{n_cols} != goal {g_rows}x{g_cols}"
++                    )
++                wrong = []
++                checked = 0
++                for r in range(g_rows):
++                    for c in range(len(goal_value[r])):
++                        if not in_region(r, c, g_rows, g_cols):
++                            continue
++                        checked += 1
++                        guess = board[r][c] if r < n_rows and c < len(board[r]) else None
++                        if guess != goal_value[r][c]:
++                            wrong.append([r, c, guess, goal_value[r][c]])
++                report["cells_checked"] = checked
++                report["cells_available"] = checked
++                report["unmet"] = len(wrong)
++                report["unmet_cells"] = wrong[:max(1, int(max_cells))]
++                if not checked:
++                    note = "no goal cell remained inside the border"
++                else:
++                    report["satisfied"] = not wrong and "shape" not in report
++            else:
++                # out-of-board goal cells stay (unmet); only real HUD cells drop
++                cells = {
++                    (r, c): want for (r, c), want in goal_value.items()
++                    if not (r < n_rows and c < len(board[r])) or in_region(r, c, n_rows, n_cols)
++                }
++                wrong = []
++                for (r, c), want in sorted(cells.items()):
++                    guess = board[r][c] if r < n_rows and c < len(board[r]) else None
++                    if guess != want:
++                        wrong.append([r, c, guess, want])
++                report["cells_checked"] = len(cells)
++                report["cells_available"] = sum(
++                    in_region(r, c, n_rows, n_cols)
++                    for r, row in enumerate(board) for c in range(len(row))
++                )
++                report["unmet"] = len(wrong)
++                report["unmet_cells"] = wrong[:max(1, int(max_cells))]
++                if not cells:
++                    note = "every goal cell was inside the border; nothing was checked"
++                else:
++                    report["satisfied"] = not wrong
++        except Exception as exc:  # the model's predicate; report, never raise
++            report["first_error"] = f"{type(exc).__name__}: {exc} (goal check)"
++            stopped = "the goal check failed"
++    report["seconds"] = round(time.monotonic() - started, 3)
++    steps = f"{report['steps_simulated']}/{report['plan_length']} planned step(s) simulated"
++    if stopped is not None:
++        head = f"not evaluated: {stopped}; {steps}"
++    elif note is not None:
++        head = f"not evaluated: {note}; {steps}"
++    elif report["satisfied"]:
++        head = f"goal satisfied by the predicted end board ({steps})"
++        if goal_kind == "sparse":
++            head += (f"; a sparse goal checks {report['cells_checked']} chosen cell(s), "
++                     f"not the whole board ({report['cells_available']} cells)")
++    else:
++        head = f"goal NOT satisfied by the predicted end board ({steps})"
++        if report["unmet"]:
++            head += f"; {report['unmet']} goal cell(s) unmet"
++        if report.get("shape"):
++            head += f"; {report['shape']}"
++        if report.get("goal_note"):
++            head += f"; predicate says: {report['goal_note']}"
++    report["verdict"] = head + ". " + PLAN_CHECK_CAVEAT
++    return report

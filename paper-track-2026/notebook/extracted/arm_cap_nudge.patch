@@ -1,0 +1,136 @@
+diff --git a/ARC3-Inference/inference/agent/tool_agent.py b/ARC3-Inference/inference/agent/tool_agent.py
+index d128597..54d5824 100644
+--- a/ARC3-Inference/inference/agent/tool_agent.py
++++ b/ARC3-Inference/inference/agent/tool_agent.py
+@@ -2021,6 +2021,58 @@ def _reasoning_effort_ladder() -> list[str]:
+     return [level.strip() for level in raw.split(",") if level.strip()]
+ 
+ 
++# ARC3_CAP_NUDGE (default off; thor-claude 10-10, from the 194th read of 140
++# pilot game-runs): a reply that hits max_output_tokens comes back
++# finish_reason=length with no tool call. The harness yields the turn and the
++# resumed turn re-sends the same opener, so the model is never told that its
++# last reply was cut, and ~167 s of clock went to silence (4.4% of the pilot
++# clock; ka59 13.6%, bp35 10.1%). In the cd82 read the cut text was an in-head
++# derivation that a 2-action probe then answered. With the flag on, the next
++# message after a capped reply (the resumption opener, or the in-turn follow-up
++# when no yield fires) carries one extra line: the reply was cut, nothing ran,
++# name the hypotheses and run the cheapest discriminating action. The scaffold
++# supplies the cheap test; which action, and whether to take it, stays with
++# the model. Beside it, independent: ARC3_REASONING_EFFORT_LADDER.
++_CAP_NUDGE_MARK = "[harness] Your previous reply was cut off at the output limit"
++
++
++def _cap_nudge_enabled() -> bool:
++    return _get_env_bool("ARC3_CAP_NUDGE", False)
++
++
++def _cap_nudge_text(tokens: int) -> str:
++    spent = f" ({int(tokens)} tokens of reasoning)" if tokens and tokens > 0 else ""
++    return (
++        f"{_CAP_NUDGE_MARK}{spent} before any tool call, so nothing was "
++        "executed and the board is unchanged. Do not finish that derivation in "
++        "your head. State your leading hypotheses in one line each, then run the "
++        "cheapest action that tells them apart with `action(...)` and read the "
++        "diff; a 1-2 action probe answers faster than a proof. Keep the reasoning "
++        "short enough to finish within the output limit."
++    )
++
++
++def _cap_nudge_append(message: dict[str, Any], text: str) -> None:
++    """The nudge as the opener's own last line; an opener with images gets it
++    as a final text part so the board image keeps its place in the prefix."""
++    content = message.get("content")
++    if isinstance(content, list):
++        message["content"] = [*content, {"type": "text", "text": text}]
++    else:
++        message["content"] = f"{content or ''}\n{text}"
++
++
++def _usage_completion_tokens(usage: Any) -> int:
++    if not isinstance(usage, dict):
++        return 0
++    for key in ("completion_tokens", "output_tokens", "generated_tokens"):
++        try:
++            return max(0, int(usage.get(key)))
++        except (TypeError, ValueError):
++            continue
++    return 0
++
++
+ def _preserve_thinking_kwarg() -> bool | None:
+     """Value for the `preserve_thinking` chat-template kwarg, or None to omit.
+ 
+@@ -4258,6 +4310,9 @@ class ToolAgent:
+         self._text_chars_per_token: float | None = None
+         # index into the reasoning-effort ladder; -1 means "server default"
+         self._reasoning_effort_rung: int = -1
++        # ARC3_CAP_NUDGE: completion tokens of the last capped reply, until the
++        # nudge is delivered or an action executes
++        self._cap_nudge_pending: int | None = None
+         self._guard_death_override_batch: bool = False
+         self._noop_guard_deaths_enabled: bool = _get_env_bool(
+             "ARC3_DEATH_REPEAT_GUARD", False
+@@ -6812,6 +6867,20 @@ class ToolAgent:
+         fired.add(level)
+         state["prior_card_pending"] = level
+ 
++    def _cap_nudge_take(self, current_frame: Frame | None, where: str) -> str | None:
++        """ARC3_CAP_NUDGE: the nudge line for the next message after a capped
++        reply, once; writes `cap_nudge fired level=<n> where=<resume|followup>
++        tokens=<k>` to the gauge channel. None when nothing is pending."""
++        if not _cap_nudge_enabled() or self._cap_nudge_pending is None:
++            return None
++        tokens = int(self._cap_nudge_pending)
++        self._cap_nudge_pending = None
++        level = int(current_frame.level) if current_frame is not None else -1
++        self._verify_state()["status"].append(
++            f"cap_nudge fired level={level} where={where} tokens={tokens}"
++        )
++        return _cap_nudge_text(tokens)
++
+     def _prior_card_opener(self, user_prompt: str) -> str:
+         """The card as its own line on the first opener after its stall gate."""
+         state = getattr(self, "_verify", None)
+@@ -8231,6 +8300,10 @@ class ToolAgent:
+                 self._verify_hazard_opener(self._prior_card_opener(self._verify_opener(user_prompt))),
+                 resume_frame if resuming_after_yield else current_frame,
+             )
++        if resuming_after_yield:
++            cap_nudge = self._cap_nudge_take(current_frame, "resume")
++            if cap_nudge is not None:
++                _cap_nudge_append(opening_message, cap_nudge)
+         # log what was actually SENT, not the argument that was passed in: on a
+         # resumed invocation the short/state_only substitution happens here, so
+         # transcribing `user_prompt` would report a full opener the model never
+@@ -8394,6 +8467,8 @@ class ToolAgent:
+                     continue
+                 truncated_tool_call = False
+                 if str(result.finish_reason or "").strip() == "length":
++                    if _cap_nudge_enabled():
++                        self._cap_nudge_pending = _usage_completion_tokens(result.usage)
+                     ladder = _reasoning_effort_ladder()
+                     if ladder and self._reasoning_effort_rung < len(ladder) - 1:
+                         self._reasoning_effort_rung += 1
+@@ -8554,6 +8629,13 @@ class ToolAgent:
+                         break
+                     followup_prefix = "You have not acted yet. Investigate first. "
+                     if truncated_tool_call:
++                        # the cut-off-call text below already says the reply
++                        # was cut; one message, one explanation
++                        self._cap_nudge_pending = None
++                    cap_nudge = self._cap_nudge_take(current_frame, "followup")
++                    if cap_nudge is not None:
++                        followup_prefix = cap_nudge + " "
++                    elif truncated_tool_call:
+                         # the only signal the model gets that LENGTH, not
+                         # formatting, is why its call vanished
+                         followup_prefix = (
+@@ -8645,6 +8727,7 @@ class ToolAgent:
+                     dispatch = self._dispatch_tool(state_path, tool_name, arguments)
+                     if dispatch.step_executed:
+                         step_executed = True
++                        self._cap_nudge_pending = None
+                         if self._reasoning_effort_rung >= 0 and dispatch.made_progress:
+                             # the turn achieved something, so restore the server
+                             # default; an inert action leaves the reduction in

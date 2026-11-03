@@ -1,0 +1,1 @@
+Papers that score above 4.5/5 on the paper rubric qualify for a bonus prize of $375,000. If multiple papers score above 4.5/5, the total prize pool will be divided equally among all.

@@ -1,0 +1,842 @@
+[
+ {
+  "ref": "52335338",
+  "date": "2026-05-05 00:23:36",
+  "score": null,
+  "status": "ERROR",
+  "desc": "Notebook notebookc432fa31dc | Version 14"
+ },
+ {
+  "ref": "52335844",
+  "date": "2026-05-05 00:46:25",
+  "score": null,
+  "status": "ERROR",
+  "desc": "Notebook notebookc432fa31dc | Version 15"
+ },
+ {
+  "ref": "52337127",
+  "date": "2026-05-05 01:39:18",
+  "score": null,
+  "status": "ERROR",
+  "desc": "Notebook notebookc432fa31dc | Version 16"
+ },
+ {
+  "ref": "52411313",
+  "date": "2026-05-07 05:28:31",
+  "score": null,
+  "status": "ERROR",
+  "desc": "Notebook notebookc432fa31dc | Version 24"
+ },
+ {
+  "ref": "52430817",
+  "date": "2026-05-07 18:30:44",
+  "score": 0.0,
+  "status": "COMPLETE",
+  "desc": "Notebook arc-agi-3 codification v9 | Version 3"
+ },
+ {
+  "ref": "52463900",
+  "date": "2026-05-08 20:14:17",
+  "score": 0.0,
+  "status": "COMPLETE",
+  "desc": ""
+ },
+ {
+  "ref": "52472004",
+  "date": "2026-05-09 04:13:56",
+  "score": 0.0,
+  "status": "COMPLETE",
+  "desc": "Notebook arc-agi-3 codification v11 | Version 2"
+ },
+ {
+  "ref": "52500487",
+  "date": "2026-05-10 02:35:10",
+  "score": 0.0,
+  "status": "COMPLETE",
+  "desc": "Notebook arc-agi-3 codification v12 | Version 2"
+ },
+ {
+  "ref": "52532765",
+  "date": "2026-05-11 03:55:43",
+  "score": 0.05,
+  "status": "COMPLETE",
+  "desc": "Notebook arc-agi-3 codification v14 | Version 2"
+ },
+ {
+  "ref": "52593622",
+  "date": "2026-05-12 22:27:51",
+  "score": 0.0,
+  "status": "COMPLETE",
+  "desc": "Notebook arc-agi-3 codification v17x | Version 2"
+ },
+ {
+  "ref": "52594878",
+  "date": "2026-05-13 00:01:34",
+  "score": 0.0,
+  "status": "COMPLETE",
+  "desc": "Notebook arc-agi-3 codification v17x | Version 3"
+ },
+ {
+  "ref": "52634815",
+  "date": "2026-05-14 03:27:05",
+  "score": 0.0,
+  "status": "COMPLETE",
+  "desc": "Notebook arc-agi-3 codification v18s | Version 3"
+ },
+ {
+  "ref": "52729186",
+  "date": "2026-05-17 04:55:53",
+  "score": 0.0,
+  "status": "COMPLETE",
+  "desc": "Notebook arc-agi-3 codification v14plus18 | Version 3"
+ },
+ {
+  "ref": "52828542",
+  "date": "2026-05-19 21:07:03",
+  "score": 0.0,
+  "status": "COMPLETE",
+  "desc": "Notebook arc-agi-3 codification v19 | Version 3"
+ },
+ {
+  "ref": "52834616",
+  "date": "2026-05-20 02:09:34",
+  "score": 0.0,
+  "status": "COMPLETE",
+  "desc": "Notebook arc-agi-3 codification v19 | Version 7"
+ },
+ {
+  "ref": "52903489",
+  "date": "2026-05-21 22:03:19",
+  "score": null,
+  "status": "ERROR",
+  "desc": "Notebook arc-agi-3 codification v21 | Version 4"
+ },
+ {
+  "ref": "52905798",
+  "date": "2026-05-22 00:32:54",
+  "score": 0.01,
+  "status": "COMPLETE",
+  "desc": "Notebook arc-agi-3 codification v21 | Version 7"
+ },
+ {
+  "ref": "52996468",
+  "date": "2026-05-24 18:26:16",
+  "score": 0.01,
+  "status": "COMPLETE",
+  "desc": "Notebook arc-agi-3 codification v21 | Version 8"
+ },
+ {
+  "ref": "53002926",
+  "date": "2026-05-25 00:40:03",
+  "score": null,
+  "status": "ERROR",
+  "desc": "Notebook arc-agi-3 codification v21 | Version 9"
+ },
+ {
+  "ref": "53030463",
+  "date": "2026-05-25 20:30:50",
+  "score": 0.01,
+  "status": "COMPLETE",
+  "desc": "Notebook arc-agi-3 codification v28 faith | Version 3"
+ },
+ {
+  "ref": "53656552",
+  "date": "2026-06-14 02:23:25",
+  "score": null,
+  "status": "ERROR",
+  "desc": "Notebook arc-agi-3 codification v30 objspace | Version 2"
+ },
+ {
+  "ref": "53659065",
+  "date": "2026-06-14 04:25:30",
+  "score": null,
+  "status": "ERROR",
+  "desc": "Notebook arc-agi-3 codification v30 objspace | Version 3"
+ },
+ {
+  "ref": "53697786",
+  "date": "2026-06-15 05:32:55",
+  "score": 0.0,
+  "status": "COMPLETE",
+  "desc": "Notebook arc-agi-3 codification v40 | Version 2"
+ },
+ {
+  "ref": "53790047",
+  "date": "2026-06-17 23:58:59",
+  "score": 0.08,
+  "status": "COMPLETE",
+  "desc": "imagine_reason: no-fork learned-forward-model imagination + in-process gemma-4 pick (Thor handoff 2026-06-17 scored gauge; ALLGAMES forward model)"
+ },
+ {
+  "ref": "54052085",
+  "date": "2026-06-25 20:45:40",
+  "score": 0.0,
+  "status": "COMPLETE",
+  "desc": "v41 goal_interp LLM-active scored (Thor 610fea6): online affordance + gemma goal-interp + fine-tuned ALLGAMES forward model; min-reaim-gap=40 throttle; full sub"
+ },
+ {
+  "ref": "54089967",
+  "date": "2026-06-26 22:33:29",
+  "score": null,
+  "status": "ERROR",
+  "desc": "LLM-stack canary v6: runtime-encoded scored-rerun diagnostic. Decode: 1080=T4-worker-mute 1380=non-T4-CUDA(wrong GPU) 1680=LLM-works-T4 | 480=no-transformers 78"
+ },
+ {
+  "ref": "54222269",
+  "date": "2026-07-01 05:45:06",
+  "score": 0.02,
+  "status": "COMPLETE",
+  "desc": "v43 fused-perception + real vision via full harness on RTX Pro 6000; functionality gauge, ~0 expected"
+ },
+ {
+  "ref": "54248887",
+  "date": "2026-07-02 01:35:21",
+  "score": null,
+  "status": "ERROR",
+  "desc": "fused_vllm scored: vLLM 0.19.1 offline on sm_120 + batched K-lens cognition (Gap A/B solved; functionality test)"
+ },
+ {
+  "ref": "54276081",
+  "date": "2026-07-02 20:35:15",
+  "score": 0.0,
+  "status": "COMPLETE",
+  "desc": "v44 organ stack scored (gateway-env fix v7 proof): GAME_OVER+vitality+surprise+rehearse-veto+K-lens; beliefs OFF"
+ },
+ {
+  "ref": "54287098",
+  "date": "2026-07-03 05:07:19",
+  "score": 0.0,
+  "status": "COMPLETE",
+  "desc": "v45 DiffusionGemma scored debut: substrate swap on proven v44 organs; beliefs+dream OFF"
+ },
+ {
+  "ref": "54318184",
+  "date": "2026-07-04 04:27:50",
+  "score": 0.12,
+  "status": "COMPLETE",
+  "desc": "v46 DiffusionGemma: isolated veto rebalance (progress-floor + panic-damp); beliefs+dreams OFF"
+ },
+ {
+  "ref": "54349447",
+  "date": "2026-07-05 03:45:24",
+  "score": 0.04,
+  "status": "COMPLETE",
+  "desc": "v47 DiffusionGemma: apprenticeship lessons on rebalanced base; beliefs+dreams OFF"
+ },
+ {
+  "ref": "54379194",
+  "date": "2026-07-06 01:48:05",
+  "score": 0.03,
+  "status": "COMPLETE",
+  "desc": "v47 lessons (confirmed loaded) + adherence gauge; rebalanced base; beliefs+dreams OFF"
+ },
+ {
+  "ref": "54413167",
+  "date": "2026-07-07 02:41:36",
+  "score": 0.0,
+  "status": "COMPLETE",
+  "desc": "insearch v1: in-head search (no LLM) legion-WM placeholder; first search-on-private + execute_frac"
+ },
+ {
+  "ref": "54443687",
+  "date": "2026-07-08 00:02:46",
+  "score": 0.0,
+  "status": "COMPLETE",
+  "desc": "insearch v48: fresh thor WM 3afc9e1a (epoch>1000, loads 28/28) + commit=3 nodes=1000 + fmem \u2014 daily tracker pt2, freshest WM+evidence params"
+ },
+ {
+  "ref": "54476276",
+  "date": "2026-07-09 00:03:39",
+  "score": 0.14,
+  "status": "COMPLETE",
+  "desc": "v48-reflect: LIVE self-authored per-game reflection memory on the v46 base (winners' memory shape). Ladder: v46 no-notes 0.12 / v47 static-notes 0.03 / v48 live"
+ },
+ {
+  "ref": "54538912",
+  "date": "2026-07-10 20:42:53",
+  "score": 0.07,
+  "status": "COMPLETE",
+  "desc": "v49 lessons-now-live: SAGE_LESSONS=1 (25 role_sig tutor lessons) on v48-reflect 0.14 base. One variable vs 0.14 (lessons ON; reflection both arms). Canonical fa"
+ },
+ {
+  "ref": "54870351",
+  "date": "2026-07-21 06:06:54",
+  "score": 0.0,
+  "status": "COMPLETE",
+  "desc": "v51.1 FIRST VISION scored run: DiffGemma SEES the board (separated video+text, K=1) informed by organs. Plumbing proven (Gemma4Processor, multimodal decode). Vs"
+ },
+ {
+  "ref": "54889409",
+  "date": "2026-07-22 00:03:11",
+  "score": 0.13,
+  "status": "COMPLETE",
+  "desc": "v52 CLEAN vision test: vision-history at K=4 (lone variable vs v48-reflect 0.14; corrects v51.1 K-confound)."
+ },
+ {
+  "ref": "54948614",
+  "date": "2026-07-24 10:07:23",
+  "score": 0.2,
+  "status": "COMPLETE",
+  "desc": "v53 goal-inference falsification (text base): win-hypotheses de-frozen, goal-recognition ~0->5 correct vs oracle (m0r0 exact). Cognition gauge is the real read;"
+ },
+ {
+  "ref": "54963795",
+  "date": "2026-07-25 00:58:24",
+  "score": 0.09,
+  "status": "COMPLETE",
+  "desc": "v55 FULL STACK: falsification + object-dynamics + goal hill-climb (attribution+aim). Cognition gauge: reasoning now spans goal+mechanic+action. Does the private"
+ },
+ {
+  "ref": "55443876",
+  "date": "2026-08-11 23:45:25",
+  "score": 0.0,
+  "status": "COMPLETE",
+  "desc": "configuration_goals: FULL-ORGAN vision run. PRD v5 \u00a70.0 enforced in code \u2014 every lobe call carries an interleaved [caption,frame] stream that grows across the w"
+ },
+ {
+  "ref": "55501630",
+  "date": "2026-08-14 08:41:44",
+  "score": 0.0,
+  "status": "COMPLETE",
+  "desc": "configuration_goals v6: organs WIRED AND USED, not merely built. Perceiver (annotated glyphs: 1px marks, hollowness, addressing preserved) in the scored menu; b"
+ },
+ {
+  "ref": "55826490",
+  "date": "2026-08-27 20:34:58",
+  "score": 0.0,
+  "status": "COMPLETE",
+  "desc": "v44: proven fused-perception scored agent (SAGE_FUSED vision+actionable), refreshed sage-dataset"
+ },
+ {
+  "ref": "55828966",
+  "date": "2026-08-28 00:02:00",
+  "score": 0.0,
+  "status": "COMPLETE",
+  "desc": "imagine_reason: proven no-fork play (0.08 baseline), refreshed dataset \u2014 replaces v44 fused VOID (boot-death). Duration-watched."
+ },
+ {
+  "ref": "55855580",
+  "date": "2026-08-29 00:02:51",
+  "score": 0.0,
+  "status": "COMPLETE",
+  "desc": "configuration_goals v9: DiffusionGemma cortex (harness_runner, NvidiaRtxPro6000), staged stamp cf0e9d1fbd507, editor-only SAGE_PUBLIC_FAST; validated locally fr"
+ },
+ {
+  "ref": "55878323",
+  "date": "2026-08-30 00:41:09",
+  "score": 0.0,
+  "status": "COMPLETE",
+  "desc": "configuration_goals v17: DiffusionGemma cortex, grounding chain + fork-free pursuit + plan-execution fidelity; nonscored full-set validated"
+ },
+ {
+  "ref": "55902382",
+  "date": "2026-08-31 00:02:15",
+  "score": 0.0,
+  "status": "COMPLETE",
+  "desc": "configuration_goals v19: DiffusionGemma cortex, grounding chain + fork-free pursuit + plan-execution fidelity; nonscored full-set validated"
+ },
+ {
+  "ref": "55944454",
+  "date": "2026-09-01 16:55:28",
+  "score": 0.12,
+  "status": "COMPLETE",
+  "desc": "v23: scored path UNBLOCKED (action-enum + click-None); v22 validated 21/21 play, 0 crashes"
+ },
+ {
+  "ref": "55949961",
+  "date": "2026-09-02 00:02:05",
+  "score": 0.14,
+  "status": "COMPLETE",
+  "desc": "v23: scored path unblocked: action-enum + click-None fixes; v22 validated 21/21 games play, 0 crashes"
+ },
+ {
+  "ref": "55970484",
+  "date": "2026-09-03 00:02:05",
+  "score": 0.14,
+  "status": "COMPLETE",
+  "desc": "v23: scored path unblocked: action-enum + click-None fixes; v22 validated 21/21 games play, 0 crashes"
+ },
+ {
+  "ref": "55996136",
+  "date": "2026-09-04 00:02:09",
+  "score": 0.04,
+  "status": "COMPLETE",
+  "desc": "v23: scored path unblocked: action-enum + click-None fixes; v22 validated 21/21 games play, 0 crashes"
+ },
+ {
+  "ref": "56021290",
+  "date": "2026-09-05 00:02:09",
+  "score": 0.11,
+  "status": "COMPLETE",
+  "desc": "v23: scored path unblocked: action-enum + click-None fixes; v22 validated 21/21 games play, 0 crashes"
+ },
+ {
+  "ref": "56042812",
+  "date": "2026-09-06 00:02:08",
+  "score": 0.14,
+  "status": "COMPLETE",
+  "desc": "v24: flag registry (62, payload in diag) + world_note FIXED (usable on keyboard games, live on both twin games) + guard3/vllm/LEVEL_INVALIDATE removed; tu93 A/B"
+ },
+ {
+  "ref": "56083071",
+  "date": "2026-09-07 19:08:30",
+  "score": 0.05,
+  "status": "COMPLETE",
+  "desc": "v25: region-match shape (real sat+gradient) + paint-executor aim + click_effect with first-class unknown + credit-grain repair (a goal shape measured at 92% pre"
+ },
+ {
+  "ref": "56105013",
+  "date": "2026-09-08 18:47:37",
+  "score": 0.12,
+  "status": "COMPLETE",
+  "desc": "v25: region-match shape (real sat+gradient) + paint-executor aim + click_effect with first-class unknown + credit-grain repair (a goal shape measured at 92% pre"
+ },
+ {
+  "ref": "56127857",
+  "date": "2026-09-09 17:04:16",
+  "score": 0.0,
+  "status": "COMPLETE",
+  "desc": "v28: v27 tree / kernel 28: the complete-experiment path (control zero, probe, scoring+refund, field 6, key guard, false-refutation fix, stores SHIPPED, head dar"
+ },
+ {
+  "ref": "56133120",
+  "date": "2026-09-10 00:05:25",
+  "score": 0.0,
+  "status": "COMPLETE",
+  "desc": "v30: v29 tree: budget kind + meter tick + win-first ballot + WIN TRAIL replay; staged validation tu93 L0 replay 38 + L1 70, lp85 L0 replay 18; twin ok; prefligh"
+ },
+ {
+  "ref": "56154128",
+  "date": "2026-09-11 00:05:53",
+  "score": 0.02,
+  "status": "COMPLETE",
+  "desc": "v33: v33: v31 tree + the RELATION LEARNER (r11l L0 solved live at 16) + r11l trail; staged validation tu93 2 levels, lp85 L0, r11l L0 all by replay; Kaggle twin"
+ },
+ {
+  "ref": "56174592",
+  "date": "2026-09-12 00:06:01",
+  "score": 0.0,
+  "status": "COMPLETE",
+  "desc": "v36: v36: v33 tree + paint shape withheld on movers + identity-by-consistency + meter-masked learner + one-press scheme confirmation + recipe_step rows; staged "
+ },
+ {
+  "ref": "56195081",
+  "date": "2026-09-13 00:05:46",
+  "score": 0.06,
+  "status": "COMPLETE",
+  "desc": "v37: v37: a BlindRunError voids the GAME not the run (every roll since v28 ended after a few games); degraded server restarted; state-conditioned inert memory; "
+ },
+ {
+  "ref": "56217129",
+  "date": "2026-09-14 00:07:34",
+  "score": 0.07,
+  "status": "COMPLETE",
+  "desc": "v38: v38: AUTONOMOUS MOVERS + SETTLE (bodies on their own clock, countdown told + flee guard, gravity in the router) + v37 tree; twin mount+liveness ok; preflig"
+ },
+ {
+  "ref": "56240919",
+  "date": "2026-09-15 00:02:27",
+  "score": 0.04,
+  "status": "COMPLETE",
+  "desc": "v39: v39: v38 tree at identical flag defaults + route-failure telemetry (route_why exhausted/depth_capped/root_none, route_seen_n, tgt_own, subj_is_tgt, route_i"
+ },
+ {
+  "ref": "56264571",
+  "date": "2026-09-16 00:02:27",
+  "score": 0.07,
+  "status": "COMPLETE",
+  "desc": "v41: v41 (v40 re-push): v39 tree + SAGE_ROUTE_AUTONOMOUS=1 (ac1a52ed). Kernel v40 mounted v39's dataset version (5-second race after upload) and ran the flag at"
+ },
+ {
+  "ref": "56322921",
+  "date": "2026-09-18 06:28:21",
+  "score": 0.08,
+  "status": "COMPLETE",
+  "desc": "v42: v42: v41 tree + the object-space WORLD-MODEL CENSUS (SAGE_WM_DIAG=1, DIAG class). Diagnostics only: fits identity by continuity and four named priors from "
+ },
+ {
+  "ref": "56407071",
+  "date": "2026-09-20 22:24:52",
+  "score": 0.08,
+  "status": "COMPLETE",
+  "desc": "v43: v43: v42 tree + six measured changes on the DEPTH lever, each FIRE-gated and measured on the offline engine before wiring. (1) SAGE_SKIP_CROSS_LEVEL_LEARN="
+ },
+ {
+  "ref": "56460240",
+  "date": "2026-09-22 09:21:28",
+  "score": 0.04,
+  "status": "COMPLETE",
+  "desc": "v45: kernel version 45 (the parked v44 attempt never ran): v43 tree + two changes, one behavioural and one diagnostic. (1) SAGE_TRACKER_EXCLUSIVE=1: ObjectTrack"
+ },
+ {
+  "ref": "56476972",
+  "date": "2026-09-23 00:08:13",
+  "score": 0.07,
+  "status": "COMPLETE",
+  "desc": "v49: kernel version 49: the v48 tree (tracker default 0, probe_ask five-field repair) + the LEGEND goal shape (goal_shapes.enum_legend / legend_plan, _legend_po"
+ },
+ {
+  "ref": "56506287",
+  "date": "2026-09-24 00:02:41",
+  "score": 0.07,
+  "status": "COMPLETE",
+  "desc": "v51: kernel version 51: the v49 tree (v48 + the LEGEND goal shape) + win-trail trimming (d9ee3962: recorded win trails drop the clicks that changed nothing; ft0"
+ },
+ {
+  "ref": "56534468",
+  "date": "2026-09-25 00:02:44",
+  "score": 0.07,
+  "status": "COMPLETE",
+  "desc": "v55: v54's tree plus the SECOND-PASS guard 5 repair, because v54's first pass did not survive live play. The 8-world confirmation run that was meant to prove th"
+ },
+ {
+  "ref": "56563590",
+  "date": "2026-09-26 00:02:42",
+  "score": 0.13,
+  "status": "COMPLETE",
+  "desc": "v56: v55's tree plus what the player is TOLD and what the run RECORDS. v55 scored 0.07, the same as v51 and v49, while the local public-set level count went 10 "
+ },
+ {
+  "ref": "56592141",
+  "date": "2026-09-27 00:03:09",
+  "score": 0.07,
+  "status": "COMPLETE",
+  "desc": "v57: v56 (0.13) plus the 09-26 repairs, all fired by execution: click observation and probe verdicts on the meter-MASKED board, the null twin registered, the de"
+ },
+ {
+  "ref": "56622726",
+  "date": "2026-09-28 00:02:32",
+  "score": 0.11,
+  "status": "COMPLETE",
+  "desc": "v58: v57 (0.07) plus: exact-coordinate clicks in the probe ask ON (tn36 L0 cleared by the player's one (x,y) answer), win trails trimmed by offline replay and p"
+ },
+ {
+  "ref": "56655811",
+  "date": "2026-09-29 00:02:33",
+  "score": 0.07,
+  "status": "COMPLETE",
+  "desc": "v60: v59 (meter boundary fix) plus: the FILM of an action \u2014 every frame read, a per-action sentence and the last animated action in the player's facts, the peak"
+ },
+ {
+  "ref": "56690923",
+  "date": "2026-09-30 00:02:36",
+  "score": 0.14,
+  "status": "COMPLETE",
+  "desc": "v62: [Kaggle kernel version 62 = our v61] v60 plus the PROGRAM executor (program_shape.py, FINDINGS \u00a759.8-\u00a759.12): on a board that reads as a programmable machi"
+ },
+ {
+  "ref": "56722704",
+  "date": "2026-10-01 00:02:36",
+  "score": 0.13,
+  "status": "COMPLETE",
+  "desc": "v63: [Kaggle kernel version 63 = our v63] v61 plus: the PROGRAM executor treats every mechanic it took from the engine source as a PRIOR the film adjudicates: t"
+ },
+ {
+  "ref": "56761209",
+  "date": "2026-10-02 00:02:29",
+  "score": 0.13,
+  "status": "COMPLETE",
+  "desc": "v64: [Kaggle kernel version 64 = our v64] v63 plus: a win trail is recalled across VERSIONS of the same world when the board is byte-identical (the public set b"
+ },
+ {
+  "ref": "56784538",
+  "date": "2026-10-03 00:02:37",
+  "score": null,
+  "status": "ERROR",
+  "desc": "v66: [Kaggle kernel version 66 = our v66] CLEAN re-ship of v65's validated code plus three later changes, all validated here (s31/s32 >= 11.9 on 76c41dcc). v65 "
+ },
+ {
+  "ref": "56786208",
+  "date": "2026-10-03 01:04:03",
+  "score": 0.11,
+  "status": "COMPLETE",
+  "desc": "v67: [Kaggle kernel version 67 = our v67] v66 plus FIVE LEARNED ORGANS, default ON: agency (marked bodies, switch click, push as a learned slide incl. chains, n"
+ },
+ {
+  "ref": "56809141",
+  "date": "2026-10-04 00:02:38",
+  "score": 0.08,
+  "status": "COMPLETE",
+  "desc": "v68: [Kaggle kernel version 68 = our v68] v67 plus cd82 click-stamps (a tool you click is a stamp; cd82 L2 clears live), walker rebinds a changed body, explore "
+ },
+ {
+  "ref": "56836531",
+  "date": "2026-10-05 00:03:16",
+  "score": 1.17,
+  "status": "COMPLETE",
+  "desc": "v8: [Kaggle kernel version 8] the Tufa duck harness (public, unmodified, @7652836) on Qwen3.8-27B-FP8 (rev 017b9c7, hash-verified), vllm 0.30 + torch 2.13 cu130"
+ },
+ {
+  "ref": "56864492",
+  "date": "2026-10-06 00:02:56",
+  "score": 2.18,
+  "status": "COMPLETE",
+  "desc": "v1: [Kaggle kernel dennispalatov/arc-agi-3-duck-qwen38-fastmtp v1] duck on Qwen3.8-27B-FP8, thor-v3 tree (UNDO + death ledger; Situate memory OFF), 32k window, "
+ },
+ {
+  "ref": "56894159",
+  "date": "2026-10-07 00:04:12",
+  "score": 24.82,
+  "status": "COMPLETE",
+  "desc": "v1: [Kaggle kernel dennispalatov/arc-agi-3-franzen-anchor v1] Franzen M2 copy (Qwen3.8-Flash-Next) + thor-claude turn anchor (duck 267b7b1). Smoke: gate '20 non"
+ },
+ {
+  "ref": "56925139",
+  "date": "2026-10-08 00:04:06",
+  "score": 27.06,
+  "status": "COMPLETE",
+  "desc": "v1: [Kaggle kernel dennispalatov/arc-agi-3-franzen-levelmem v1] Franzen M2 copy (Flash-Next) + thor-claude level memory (5b25ca3): cleared levels' rules + winni"
+ },
+ {
+  "ref": "56979852",
+  "date": "2026-10-09 00:05:33",
+  "score": 24.89,
+  "status": "COMPLETE",
+  "desc": "v1: [Kaggle kernel dennispalatov/arc-agi-3-pilot-b1-goalaudit v1] scored path = Franzen copy (Flash-Next) + thor-claude goal audit (duck 3daf46b6; stall-trigger"
+ },
+ {
+  "ref": "57026619",
+  "date": "2026-10-10 01:08:38",
+  "score": 19.22,
+  "status": "COMPLETE",
+  "desc": "v1: [Kaggle kernel dennispalatov/arc-agi-3-franzen-verify v1] Franzen copy (Flash-Next) + per-action log + escalation-gated verification (duck 05767f7; gate act"
+ },
+ {
+  "ref": "57055743",
+  "date": "2026-10-11 00:04:24",
+  "score": 25.23,
+  "status": "COMPLETE",
+  "desc": "v1: [Kaggle kernel dennispalatov/arc-agi-3-franzen-lean v1] LEAN hail mary (10-11): Franzen copy (Flash-Next) + level memory + S2 prior card on its own stall tr"
+ },
+ {
+  "ref": "57088784",
+  "date": "2026-10-12 00:04:23",
+  "score": 16.06,
+  "status": "COMPLETE",
+  "desc": "v1: [Kaggle kernel dennispalatov/arc-agi-3-franzen-tuned-fast v1] TUNED hail mary (10-12): LEAN exactly + P1 LoRA (rank 16, 300 bf16 modules; held-out NLL 1.005"
+ },
+ {
+  "ref": "57123244",
+  "date": "2026-10-13 00:04:18",
+  "score": 23.02,
+  "status": "COMPLETE",
+  "desc": "v1: [Kaggle kernel dennispalatov/arc-agi-3-franzen-lean-capnudge v1] CAP NUDGE (10-13): LEAN + cut-off nudge: after a reply cut at max_output_tokens the next me"
+ },
+ {
+  "ref": "57160060",
+  "date": "2026-10-14 00:04:02",
+  "score": 27.61,
+  "status": "COMPLETE",
+  "desc": "v1: [Kaggle kernel dennispalatov/arc-agi-3-franzen-lean-capnudge-fs-clk-dprime v1] D' SCHEDULER on LEAN-CAPNUDGE-FS-CLK (10-14): fs-clk v1 exactly (same 10 arms"
+ },
+ {
+  "ref": "57198850",
+  "date": "2026-10-15 00:04:01",
+  "score": 27.75,
+  "status": "COMPLETE",
+  "desc": "v2: [Kaggle kernel dennispalatov/arc-agi-3-lean-capnudge-dprime-stack v2] 10-15 STACK on LEAN-CAPNUDGE-FS-CLK-D' (dp 10-13 'every swing for the bleachers'): D' "
+ },
+ {
+  "ref": "57247761",
+  "date": "2026-10-16 00:03:58",
+  "score": 25.85,
+  "status": "COMPLETE",
+  "desc": "v1: [Kaggle kernel dennispalatov/arc-agi-3-lean-capnudge-dprime-frame v1] 10-16 FRAME STACK (dp 10-13 'every swing for the bleachers'): stack v2 exactly (D' sch"
+ },
+ {
+  "ref": "57289279",
+  "date": "2026-10-17 00:45:48",
+  "score": 28.48,
+  "status": "COMPLETE",
+  "desc": "v1: [Kaggle kernel dennispalatov/arc-agi-3-lean-capnudge-dprime-frame2 v1] 10-17 FRAME2 STACK: the 10-16 frame stack exactly (D' + measured-elapsed deadline + 1"
+ },
+ {
+  "ref": "57331071",
+  "date": "2026-10-18 00:13:27",
+  "score": 28.46,
+  "status": "COMPLETE",
+  "desc": "v1: [Kaggle kernel dennispalatov/arc-agi-3-lean-capnudge-dprime-frame3 v1] 10-18 FRAME3 STACK: Frame2 exactly (10-17, 28.48: D' + measured-elapsed deadline + 10"
+ },
+ {
+  "ref": "57374159",
+  "date": "2026-10-19 00:12:54",
+  "score": 31.82,
+  "status": "COMPLETE",
+  "desc": "v3: [Kaggle kernel dennispalatov/arc-agi-3-lean-capnudge-dprime-identity v3] 10-19 IDENTITY STACK: Frame3 exactly (10-18, 28.46) + a run identity heading every "
+ },
+ {
+  "ref": "57414375",
+  "date": "2026-10-20 00:12:18",
+  "score": 0.0,
+  "status": "COMPLETE",
+  "desc": "v2: [Kaggle kernel dennispalatov/arc-agi-3-lean-capnudge-dprime-idj2 v2] 10-20 IDJ2: IDENTITY exactly (10-19, 31.82 public, new best) + the run-journal digest s"
+ },
+ {
+  "ref": "57457945",
+  "date": "2026-10-21 00:12:50",
+  "score": 0.0,
+  "status": "COMPLETE",
+  "desc": "v3: [Kaggle kernel dennispalatov/arc-agi-3-lean-capnudge-dprime-idj2 v3] 10-21 IDJ2 REFIRE (v2 scored 0.00 COMPLETE in ~32 min on 10-20: early rerun failure, no"
+ },
+ {
+  "ref": "57502299",
+  "date": "2026-10-22 00:13:19",
+  "score": 0.0,
+  "status": "COMPLETE",
+  "desc": "v1: [Kaggle kernel dennispalatov/arc-agi-3-lean-capnudge-dprime-identity-anim v1] 10-22 identity-anim = the 10-19 IDENTITY code (31.82) on OUR OWN byte-verified"
+ },
+ {
+  "ref": "57542473",
+  "date": "2026-10-23 00:12:41",
+  "score": null,
+  "status": "ERROR",
+  "desc": "v1: [Kaggle kernel dennispalatov/arc-agi-3-identity-anim-keepalive v1] 10-23 identity-anim-keepalive = the 10-22 candidate (IDENTITY 31.82 code on our own input"
+ },
+ {
+  "ref": "57566034",
+  "date": "2026-10-23 15:56:29",
+  "score": null,
+  "status": "ERROR",
+  "desc": "v1: [Kaggle kernel dennispalatov/arc-agi-3-identity-anim-keepalive v1] RESUBMIT of 57542473 (Kaggle system error at ~8 h); platform control, dp 10-23"
+ },
+ {
+  "ref": "57566990",
+  "date": "2026-10-23 16:37:38",
+  "score": 28.26,
+  "status": "COMPLETE",
+  "desc": "v1: [Kaggle kernel dennispalatov/arc-agi-3-identity-anim-keepalive v1] RESUBMIT 2 of 57542473 (system error at ~8 h; 57566034 system error at 7 min); platform c"
+ },
+ {
+  "ref": "57580802",
+  "date": "2026-10-24 03:23:58",
+  "score": null,
+  "status": "ERROR",
+  "desc": "v11: [Kaggle kernel dennispalatov/arc-agi-3-identity-simkeep v11] 10-24 identity-simkeep = the 10-23 candidate (IDENTITY 31.82 code on our own input copies + an"
+ },
+ {
+  "ref": "57585562",
+  "date": "2026-10-24 06:40:53",
+  "score": null,
+  "status": "ERROR",
+  "desc": "v11: [Kaggle kernel dennispalatov/arc-agi-3-identity-simkeep v11] RESUBMIT of 57580802 (system error at 7 min, died in boot); identical bytes"
+ },
+ {
+  "ref": "57598782",
+  "date": "2026-10-24 15:25:01",
+  "score": null,
+  "status": "ERROR",
+  "desc": "v3: [Kaggle kernel dennispalatov/arc-agi-3-identity-loop2 v3] LOOP v2c + SIMKEEP v4 on v11: harness replays recorded moves through the model's own simulator, he"
+ },
+ {
+  "ref": "57603775",
+  "date": "2026-10-24 18:41:36",
+  "score": null,
+  "status": "ERROR",
+  "desc": "v4: [Kaggle kernel dennispalatov/arc-agi-3-identity-loop3 v4] LOOP v3 (goal ask) + SIMKEEP v4 on v11: model's own simulator replayed, held-back test, BFS to its"
+ },
+ {
+  "ref": "57608625",
+  "date": "2026-10-24 22:49:24",
+  "score": null,
+  "status": "ERROR",
+  "desc": "v4 retry: [Kaggle kernel dennispalatov/arc-agi-3-identity-loop3 v4] LOOP v3 (goal ask) + SIMKEEP v4 on v11; 57603775 died of a Kaggle system error (dp 10-24)"
+ },
+ {
+  "ref": "57608911",
+  "date": "2026-10-24 23:06:51",
+  "score": null,
+  "status": "ERROR",
+  "desc": "v4 20261024T230650Z: [Kaggle kernel dennispalatov/arc-agi-3-identity-loop3 v4] retry 2 (dp 10-24 posture: use the slot; 57603775 and 57608625 died of Kaggle sys"
+ },
+ {
+  "ref": "57609199",
+  "date": "2026-10-24 23:23:46",
+  "score": null,
+  "status": "ERROR",
+  "desc": "v4 20261024T232345Z: [Kaggle kernel dennispalatov/arc-agi-3-identity-loop3 v4] retry until close #1 (dp 10-24: 'might as well keep trying'; today's runs died of"
+ },
+ {
+  "ref": "57609264",
+  "date": "2026-10-24 23:28:26",
+  "score": null,
+  "status": "ERROR",
+  "desc": "v4 20261024T232824Z: [Kaggle kernel dennispalatov/arc-agi-3-identity-loop3 v4] retry until close #2 (dp 10-24: 'might as well keep trying'; today's runs died of"
+ },
+ {
+  "ref": "57609413",
+  "date": "2026-10-24 23:37:07",
+  "score": null,
+  "status": "ERROR",
+  "desc": "v4 20261024T233707Z: [Kaggle kernel dennispalatov/arc-agi-3-identity-loop3 v4] retry until close #3 (dp 10-24: 'might as well keep trying'; today's runs died of"
+ },
+ {
+  "ref": "57609524",
+  "date": "2026-10-24 23:43:48",
+  "score": null,
+  "status": "ERROR",
+  "desc": "v4 20261024T234347Z: [Kaggle kernel dennispalatov/arc-agi-3-identity-loop3 v4] retry until close #4 (dp 10-24: 'might as well keep trying'; today's runs died of"
+ },
+ {
+  "ref": "57644264",
+  "date": "2026-10-25 22:35:18",
+  "score": 26.19,
+  "status": "COMPLETE",
+  "desc": "v4 20261025T223517Z: [Kaggle kernel dennispalatov/arc-agi-3-identity-loop3 v4] 10-25 22:35Z early backstop: loop3 v4 (Kaggle bench OFF 47.86 local); GOALPRIOR v"
+ },
+ {
+  "ref": "57668634",
+  "date": "2026-10-26 13:57:36",
+  "score": 9.62,
+  "status": "COMPLETE",
+  "desc": "v2 20261026T135735Z: [Kaggle kernel dennispalatov/arc-agi-3-identity-gp-low v2] 10-26 gp-low v2: GOALPRIOR v1 + effort low (thor-claude)"
+ },
+ {
+  "ref": "57682893",
+  "date": "2026-10-27 00:15:05",
+  "score": 26.86,
+  "status": "COMPLETE",
+  "desc": "v1 20261027T001504Z: [Kaggle kernel dennispalatov/arc-agi-3-identity-anim-keepalive v1] retry until close 2026-10-27 #1: 10-27 identity-anim-keepalive v1 replic"
+ },
+ {
+  "ref": "57747094",
+  "date": "2026-10-28 19:25:58",
+  "score": 29.69,
+  "status": "COMPLETE",
+  "desc": "v1 20261028T192556Z: [Kaggle kernel dennispalatov/arc-agi-3-identity-v3-ka-nh-c1 v1] 10-28 nh-c1 v1 (no hints, D' fade 1.0): four-way (f); estimates kimi 38 / c"
+ },
+ {
+  "ref": "57784941",
+  "date": "2026-10-29 23:30:05",
+  "score": 11.48,
+  "status": "COMPLETE",
+  "desc": "v1 backstop 20261029T233003Z: [Kaggle kernel dennispalatov/arc-agi-3-identity-v3-ka-ae3nt-nh-c1 v1] slot unused by 23:30Z; LIVE (dp 10-29 ~20:4xZ: 'replace it w"
+ },
+ {
+  "ref": "57819070",
+  "date": "2026-10-30 23:15:42",
+  "score": 18.14,
+  "status": "COMPLETE",
+  "desc": "v3 20261030T231541Z: [Kaggle kernel dennispalatov/arc-agi-3-identity-v3-ka-nh-c1-wmf2 v3] 10-30 manual (dp: fire WMF2 v3 after kimi check): nh-c1 + WMF v2.2 for"
+ },
+ {
+  "ref": "57853279",
+  "date": "2026-10-31 23:42:32",
+  "score": 29.86,
+  "status": "COMPLETE",
+  "desc": "v1 20261031T234231Z: [Kaggle kernel dennispalatov/arc-agi-3-identity-v3-ka-nh-c1-skills01 v1] 10-31 manual (dp: hold is a waste, fire the best): nh-c1 + skills "
+ },
+ {
+  "ref": "57885376",
+  "date": "2026-11-01 22:19:56",
+  "score": 30.26,
+  "status": "COMPLETE",
+  "desc": "v1 20261101T221955Z: [Kaggle kernel dennispalatov/arc-agi-3-c1-nova-tools-nh v1] 11-01 manual (dp GO + codex AGREE 7794): NOVA = c1 + nova causal tools + family"
+ },
+ {
+  "ref": "57911309",
+  "date": "2026-11-02 14:15:04",
+  "score": 26.04,
+  "status": "COMPLETE",
+  "desc": "v1 20261102T141503Z: [Kaggle kernel dennispalatov/arc-agi-3-c1-api-history12k-research-nh v1] 11-02 FINAL: composite c1+advisor+exec investigator+history (dp GO"
+ }
+]

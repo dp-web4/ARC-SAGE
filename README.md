@@ -1,5 +1,7 @@
 # ARC-SAGE - historical Phase-1 research snapshot
 
+> **November 2026 addendum:** [`paper-track-2026/`](paper-track-2026/) adds the public evidence annex for our ARC Prize 2026 Paper Track writeup, a later competition-legal local-model study. Everything outside that directory is unchanged and remains the Phase-1 snapshot described below.
+>
 > **Status, September 2026:** frozen spring-2026 artifact. ARC-SAGE preserves the SAGE/ARC harness that produced the April 2026 public scorecard. It is **not current competition positioning**, not the active SAGE capability tree, and not evidence that dp-web4 is near the top of the ARC-AGI-3 leaderboard today. Current competition-legal local-model work is well behind the leaders.
 
 ## What this repository preserves
@@ -77,6 +79,7 @@ For the current public stack:
 | `environment_files/` | ARC-AGI-3 public game engines from the ARC Prize SDK |
 | `knowledge/` | Mechanics notes, cross-game patterns, visual memory, fleet learning logs |
 | `membot/` | Vendored memory work from Waving Cat Learning Systems |
+| `paper-track-2026/` | Nov 2026 addendum: evidence annex for the ARC Prize 2026 Paper Track writeup (not part of the Phase-1 snapshot) |
 
 See `PRUNE_NOTES.md` for the inclusion/pruning rationale.
 
