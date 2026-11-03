@@ -38,7 +38,6 @@ Cell 0 lists each step with its date.
 ## Licences
 See `THIRD_PARTY_NOTICES.md`. Franzen's code is Apache-2.0 (`LICENSE-APACHE-2.0.txt`). Duck states MIT in a classifier but has no LICENSE file. The Qwen weights are referenced only, not redistributed.
 
-## Not changed, but flagged
-- **Line kept verbatim:** `ours_identity_seed.json` (cell 19) carries a `source.corpus` field holding the absolute path, on our workstation, of the private analysis file that the seed was built from.
-- **Why it was kept:** the file is the scored artifact, so it stays byte-exact. Kaggle will publish the same bytes.
-- **What it means:** the path reveals a directory name only. The corpus itself is not published, and its sha256 is in the same field.
+## One redaction
+- `ours_identity_seed.json` (cell 19, and `extracted/ours_identity_seed.json`) carries a `source.corpus` field. In the scored notebook it held the absolute path, on our workstation, of the private analysis file the seed was built from. Here the workstation prefix is replaced by `[local path redacted]`; the file name and the corpus sha256 in the same field are unchanged.
+- That is the only byte that differs from the scored notebook. The field is provenance metadata: the agent's prompts never contain it (the seed's rules and roles are read; `source` is not), so the redaction does not change what was played.

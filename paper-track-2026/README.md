@@ -37,8 +37,8 @@ This directory is the public evidence annex for our ARC Prize 2026 **Paper Track
 
 **Where the underlying data is private.** Some claims rest on transcripts or run directories that are not published here. `writeup/RECEIPTS.md` marks each of these **evidence private** rather than leaving it out.
 
-## Licences (WORDING PENDING dp REVIEW)
-- **Our own material in this directory:** MIT-0, like the rest of this repository (`../LICENSE`). For the ARC Prize 2026 Paper Track, it is also offered under **CC-BY-4.0**, the licence the track's winners grant (`evidence/rules/rules.md` §1.6, §2.5).
+## Licences
+- **Our own material in this directory is CC-BY-4.0** (`LICENSE`, full text). That is the licence the Paper Track requires of a winning submission and the source code used to generate it (`evidence/rules/rules.md` §1.6, §2.5.a.1). The rest of this repository stays MIT-0 (`../LICENSE`).
 - **Third-party components of the notebook:** they keep their own licences; see `notebook/THIRD_PARTY_NOTICES.md`.
 - **The Kaggle rule pages:** they are Kaggle's text, archived as evidence.
 

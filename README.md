@@ -91,7 +91,7 @@ See `PRUNE_NOTES.md` for the inclusion/pruning rationale.
 
 ## License
 
-MIT-0 (MIT No Attribution) for code authored in this repository. Vendored dependencies retain their upstream licenses.
+MIT-0 (MIT No Attribution) for code authored in this repository, except `paper-track-2026/`, which is CC-BY-4.0 as the ARC Prize 2026 Paper Track requires (see `paper-track-2026/LICENSE`). Vendored dependencies retain their upstream licenses.
 
 ---
 

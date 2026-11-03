@@ -53,8 +53,7 @@ These are the files and cells marked `thor-claude`, `thor-codex` or `kimi-code`:
 - the install cells in the notebook (sections 6 and 7);
 - the change notes in cell 0.
 
-**Licence for our additions (WORDING PENDING dp REVIEW):**
-- They are offered under **MIT-0**, this repository's licence (see `../../LICENSE`).
-- For the ARC Prize 2026 Paper Track, they are also offered under **CC-BY-4.0**, the licence a winner grants under `../evidence/rules/rules.md` §1.6 and §2.5.
-- MIT-0 is more permissive than CC-BY-4.0 for our own code, so offering both restricts nothing.
-- Neither licence changes the licences of the third-party components above.
+**Licence for our additions:**
+- They are licensed under **CC-BY-4.0** (`../LICENSE`), as the Paper Track requires of a winner's submission and source code (`../evidence/rules/rules.md` §1.6, §2.5.a.1).
+- That licence covers only what we wrote. It does not change the licences of the third-party components above, which keep their own terms.
+- Known gap, stated rather than hidden: Duck has no LICENSE file (only an MIT classifier), so the right to sublicense the Duck-derived lines rests on that classifier and on Franzen's public Apache-2.0 notebook, not on an explicit upstream licence.
