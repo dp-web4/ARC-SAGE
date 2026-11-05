@@ -1,6 +1,6 @@
 # Receipts: public paths for every number in the writeup
 
-This file maps claims in `WRITEUP_rev4.1_2026-11-05.md` to public evidence where available, and identifies claims whose underlying records are private. A published excerpt is the team's report, not an independent verification of its underlying run data. The writeup is copied verbatim, so the qualifications here are not all stated in the text.
+This file maps claims in `WRITEUP_rev4.3_2026-11-05.md` (rows written for rev 4.1 still apply unless amended below) to public evidence where available, and identifies claims whose underlying records are private. A published excerpt is the team's report, not an independent verification of its underlying run data. The writeup is copied verbatim, so the qualifications here are not all stated in the text.
 
 - **Built from:** cloud-claude's private receipts (`WRITEUP_1500_RECEIPTS_2026-11-03.md`, dp-web4/dev-SAGE at `162d86cd1`).
 - **What changed:** that file cites private repositories. Here each citation points to one of these public files:
@@ -28,6 +28,9 @@ Paths are relative to `paper-track-2026/`.
 | lf52 L7 exhaustive search and bp35 L5 geometry | Team reports in the private Phase-1 day-17 record; **underlying search logs and geometry argument private**. No independent verification is claimed here. |
 | Disclosure and leaderboard review | [Community leaderboard PR #20](https://github.com/arcprize/ARC-AGI-Community-Leaderboard/pull/20). The PR is a first-hand account of source discovery and solver writing, not an independent recreation of the process. |
 | 0.12 → 1.17 and 2.18 → 24.82; intermediate 1.17 → 2.18 | `cover/scored.json` refs 56105013, 56836531, 56864492, 56894159, respectively. Ratios: 9.75×, 11.39× and 1.86×. The JSON is our copied score history. Different model, harness, context and serving changes prevent a single-factor attribution. |
+| Rev 4.3: final 92.82 → 94.85 (+2.03) | Team report in the private Phase-1 day-17 record: completion of dc22 (71.4 → 100) and re86 (77.8 → 100; L1–L7 new plus an earlier L8 trace). **Underlying record private.** The wa30 L7 / re86 L8 frame-questioning examples are separate (Phase-1 paper §3.2). |
+| Rev 4.3: steps 0.20 → 1.17 (5.9×) and 2.18 → 24.82 (11.4×) | `cover/scored.json`: 0.20 = ref 54948614 (v53, the organism era's best); 1.17 = 56836531; 2.18 = 56864492; 24.82 = 56894159. Observed steps; model, harness, context and serving changed together. |
+| Rev 4.3: ≈$250 | Phase-1 paper estimate through the April 15 92.82% result; the April 15 table row was dropped in rev 4.3. |
 | Selected 31.82 | `cover/scored.json` ref 57374159 and `evidence/excerpts/COMPETITION_RUN_LOG.md` line 51. One unreplicated selected result. |
 | Copy mean 25.77 and SD 3.93 | `evidence/excerpts/DECISIONS.md` lines 984–987 describes unchanged public resubmissions of Franzen's notebook, not a measured distribution for our identity-modified notebook. Underlying study **private**. |
 | Timing panel: 13 of 18 | `evidence/excerpts/DRAFT_v1.md` lines 276–282 describes 13 converted pre-classed STARVED rows in a small panel; the panel was not randomized per level. |
@@ -40,7 +43,7 @@ The tables below retain the prior draft's evidence index; rows that are not in t
 
 | Writeup claim | Public file | Label |
 |---|---|---|
-| Our harness 0.08–0.20 | `cover/scored.json`: ref 54948614 (v53, 0.20); ref 56809141 (v68, 0.08) | public |
+| Our harness 0.08–0.20 | `cover/scored.json`: ref 54948614 (v53, 0.20); ref 56809141 (v68, 0.08) | public examples, not a full minimum-to-maximum range: ref 56655811 (v60) scored 0.07, and other runs scored 0.00 |
 | Duck on Qwen3.8-27B 1.17 | `cover/scored.json` ref 56836531 | public |
 | 3× throughput 2.18 | `cover/scored.json` ref 56864492 | public |
 | Flash-Next copy 24.82 | `cover/scored.json` ref 56894159 | public |

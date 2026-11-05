@@ -4,7 +4,7 @@ This directory is the evidence annex for our ARC Prize 2026 **Paper Track** draf
 
 - **Submission ID for the Accuracy criterion:** **57374159**, Kaggle kernel `dennispalatov/arc-agi-3-lean-capnudge-dprime-identity` v3, public score **31.82**. That score is an unreplicated maximum of about 20 runs. Our last scored run, 57911309, scored 26.04.
 - **Scored notebook:** `notebook/`.
-- **Writeup text:** `writeup/WRITEUP_rev4.1_2026-11-05.md` is the approved submission text; submission is not asserted here. The earlier writeup is retained as historical context. See provenance in `MANIFEST.md` and qualifications in `writeup/RECEIPTS.md`.
+- **Writeup text:** `writeup/WRITEUP_rev4.3_2026-11-05.md` is the approved submission text (it supersedes `WRITEUP_rev4.1_2026-11-05.md`, kept for history); submission is not asserted here. The earlier writeup is retained as historical context. See provenance in `MANIFEST.md` and qualifications in `writeup/RECEIPTS.md`.
 
 ## How this relates to the rest of ARC-SAGE
 - **Everything outside this directory** is the frozen **Phase-1** snapshot (April 2026, 94.85% on the public set with engine-source affordances; see the top-level `README.md`). This annex does not change it.
