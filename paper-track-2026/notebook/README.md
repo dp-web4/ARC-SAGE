@@ -3,7 +3,7 @@
 `arc-agi-3-lean-capnudge-dprime-identity.ipynb` is the source of Kaggle kernel `dennispalatov/arc-agi-3-lean-capnudge-dprime-identity`, **version 3**. It was submitted to ARC Prize 2026 (ARC-AGI-3) on 2026-10-19 00:12 UTC as submission **57374159**, which scored **31.82** on the public field. That is the submission ID named in the Paper Track writeup.
 
 ## Provenance
-- **Source:** byte-exact copy of dp-web4/dev-SAGE (private) commit `86e55c04e` (2026-10-18 13:26:34 PDT = 20:26:34 UTC), file `kaggle/qwen/franzen_lean_capnudge_dprime_identity/arc-agi-3-lean-capnudge-dprime-identity.ipynb`.
+- **Source:** dp-web4/dev-SAGE (private) commit `86e55c04e` (2026-10-18 13:26:34 PDT = 20:26:34 UTC), file `kaggle/qwen/franzen_lean_capnudge_dprime_identity/arc-agi-3-lean-capnudge-dprime-identity.ipynb`, with the provenance-path redaction described below.
 - **Binding to kernel v3:**
   - Our promoter log records "Kernel version 3 successfully pushed" at 2026-10-18 20:26:56 UTC, 22 s after that commit.
   - The submission at 00:11 UTC on 10-19 names "v3".
@@ -40,4 +40,4 @@ See `THIRD_PARTY_NOTICES.md`. Franzen's code is Apache-2.0 (`LICENSE-APACHE-2.0.
 
 ## One redaction
 - `ours_identity_seed.json` (cell 19, and `extracted/ours_identity_seed.json`) carries a `source.corpus` field. In the scored notebook it held the absolute path, on our workstation, of the private analysis file the seed was built from. Here the workstation prefix is replaced by `[local path redacted]`; the file name and the corpus sha256 in the same field are unchanged.
-- That is the only byte that differs from the scored notebook. The field is provenance metadata: the agent's prompts never contain it (the seed's rules and roles are read; `source` is not), so the redaction does not change what was played.
+- This is the only intended redaction from the private source copy. The field is provenance metadata: the agent's prompts never contain it (the seed's rules and roles are read; `source` is not), so the redaction does not change what was played. As noted above, the published file has not been byte-compared with Kaggle's stored v3.

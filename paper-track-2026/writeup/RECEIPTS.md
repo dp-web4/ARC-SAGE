@@ -1,6 +1,6 @@
 # Receipts: public paths for every number in the writeup
 
-This file traces each number in `WRITEUP_1500_cloud-claude_2026-11-03.md` to a file in this repository.
+This file maps claims in `WRITEUP_rev4.1_2026-11-05.md` to public evidence where available, and identifies claims whose underlying records are private. A published excerpt is the team's report, not an independent verification of its underlying run data. The writeup is copied verbatim, so the qualifications here are not all stated in the text.
 
 - **Built from:** cloud-claude's private receipts (`WRITEUP_1500_RECEIPTS_2026-11-03.md`, dp-web4/dev-SAGE at `162d86cd1`).
 - **What changed:** that file cites private repositories. Here each citation points to one of these public files:
@@ -15,6 +15,26 @@ This file traces each number in `WRITEUP_1500_cloud-claude_2026-11-03.md` to a f
 - **evidence private**: the underlying data (transcripts, run directories) is not published. The claim rests on our own report of it.
 
 Paths are relative to `paper-track-2026/`.
+
+## Current draft: Phase 1, score steps, and SAGE
+
+| Draft claim | Evidence and limitations |
+|---|---|
+| Phase 1 public 94.85%, 23/25 games, 175/183 levels | [`../README.md`](../../README.md) and its [scorecard](https://arcprize.org/scorecards/c7dfb4f1-8642-4c9e-ab4d-152f5f8e33b4). The run used game engine source and replayed agent-generated action traces. |
+| Phase 1 84.9% legacy and 92.82%; approximate $250 | [`../paper/ARC-SAGE-AGI-84-9.md`](../../paper/ARC-SAGE-AGI-84-9.md), header and abstract; $250 is the estimate in the April 15 report, not a verified final total through the later 94.85% scorecard. |
+| Official Opus 4.6 0.5%, $8.9K | [ARC Prize leaderboard](https://arcprize.org/leaderboard). This is a semi-private evaluation, different from the Phase-1 public set and conditions. |
+| 25/25 solvers by April 8 | The Phase-1 repository contains solvers; the April 8 chronology is a team report based on a private shared-context Git record. **Underlying chronology private.** |
+| Frame-questioning wa30 L7 and re86 L8 | `../paper/ARC-SAGE-AGI-84-9.md` §3.2 records the team's account; the contemporaneous underlying records are private. |
+| lf52 L7 exhaustive search and bp35 L5 geometry | Team reports in the private Phase-1 day-17 record; **underlying search logs and geometry argument private**. No independent verification is claimed here. |
+| Disclosure and leaderboard review | [Community leaderboard PR #20](https://github.com/arcprize/ARC-AGI-Community-Leaderboard/pull/20). The PR is a first-hand account of source discovery and solver writing, not an independent recreation of the process. |
+| 0.12 → 1.17 and 2.18 → 24.82; intermediate 1.17 → 2.18 | `cover/scored.json` refs 56105013, 56836531, 56864492, 56894159, respectively. Ratios: 9.75×, 11.39× and 1.86×. The JSON is our copied score history. Different model, harness, context and serving changes prevent a single-factor attribution. |
+| Selected 31.82 | `cover/scored.json` ref 57374159 and `evidence/excerpts/COMPETITION_RUN_LOG.md` line 51. One unreplicated selected result. |
+| Copy mean 25.77 and SD 3.93 | `evidence/excerpts/DECISIONS.md` lines 984–987 describes unchanged public resubmissions of Franzen's notebook, not a measured distribution for our identity-modified notebook. Underlying study **private**. |
+| Timing panel: 13 of 18 | `evidence/excerpts/DRAFT_v1.md` lines 276–282 describes 13 converted pre-classed STARVED rows in a small panel; the panel was not randomized per level. |
+
+**Interpretation limits.** The official Opus score and Phase-1 score use different evaluation sets and conditions, and the latter replayed traces; their contrast does not isolate the effect of tools. The $250 estimate comes from the April 15 Phase-1 report; a total through the April 17 94.85% scorecard has not been independently reconciled. The copy mean and SD are from Franzen's public notebook, not a measured distribution of our identity-modified notebook. Three intervention scores contain stacked changes (note A below), so the named change's effect is not isolated. The goal gate was unused and therefore inert, not a test demonstrating that goal checking failed. These qualifications narrow causal readings of the paper's comparisons.
+
+The tables below retain the prior draft's evidence index; rows that are not in the current draft are historical context rather than current claims. They include the scored intervention and small-panel receipts used by this draft.
 
 ## Scored numbers (Kaggle public field, 0-100+ scale, one draw on the hidden set per row)
 
