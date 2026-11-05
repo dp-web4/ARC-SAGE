@@ -1,6 +1,6 @@
 # Receipts: public paths for every number in the writeup
 
-This file maps claims in `WRITEUP_rev4.3_2026-11-05.md` (rows written for rev 4.1 still apply unless amended below) to public evidence where available, and identifies claims whose underlying records are private. A published excerpt is the team's report, not an independent verification of its underlying run data. The writeup is copied verbatim, so the qualifications here are not all stated in the text.
+This file maps claims in `WRITEUP_rev4.5_2026-11-05.md` (rows written for rev 4.1 and 4.3 still apply unless amended below) to public evidence where available, and identifies claims whose underlying records are private. A published excerpt is the team's report, not an independent verification of its underlying run data. The writeup is copied verbatim, so the qualifications here are not all stated in the text.
 
 - **Built from:** cloud-claude's private receipts (`WRITEUP_1500_RECEIPTS_2026-11-03.md`, dp-web4/dev-SAGE at `162d86cd1`).
 - **What changed:** that file cites private repositories. Here each citation points to one of these public files:
@@ -31,6 +31,8 @@ Paths are relative to `paper-track-2026/`.
 | Rev 4.3: final 92.82 → 94.85 (+2.03) | Team report in the private Phase-1 day-17 record: completion of dc22 (71.4 → 100) and re86 (77.8 → 100; L1–L7 new plus an earlier L8 trace). **Underlying record private.** The wa30 L7 / re86 L8 frame-questioning examples are separate (Phase-1 paper §3.2). |
 | Rev 4.3: steps 0.20 → 1.17 (5.9×) and 2.18 → 24.82 (11.4×) | `cover/scored.json`: 0.20 = ref 54948614 (v53, the organism era's best); 1.17 = 56836531; 2.18 = 56864492; 24.82 = 56894159. Observed steps; model, harness, context and serving changed together. |
 | Rev 4.3: ≈$250 | Phase-1 paper estimate through the April 15 92.82% result; the April 15 table row was dropped in rev 4.3. |
+| Rev 4.5: one GPU, an RTX PRO 6000 (96 GB) | `notebook/kernel-metadata.json` line 23 (`"machine_shape": "NvidiaRtxPro6000"`) and the notebook's own run note; 96 GB is the card's specification (RTX PRO 6000 Blackwell). Rev 4.3's "32 GB of VRAM" had no supporting record and is corrected here. |
+| Rev 4.5: Zatravkin ~3,200 tokens/s, 110 sessions, 54.55 | External: [Zatravkin, LinkedIn, 2026-11-03](https://www.linkedin.com/pulse/serving-llm-agent-110-concurrent-sessions-one-gpu-behind-zatravkin-9hqgf/) (throughput) and [gzatravkin/pathbreaker-arc-agi-3](https://github.com/gzatravkin/pathbreaker-arc-agi-3) README (public score 54.55, rank 6, Franzen Milestone-2 lineage, Qwen3.8 Flash Next, 110 sessions, NvidiaRtxPro6000). His composite system; not a single-lever causal estimate, and not evidence for any change of ours. |
 | Selected 31.82 | `cover/scored.json` ref 57374159 and `evidence/excerpts/COMPETITION_RUN_LOG.md` line 51. One unreplicated selected result. |
 | Copy mean 25.77 and SD 3.93 | `evidence/excerpts/DECISIONS.md` lines 984–987 describes unchanged public resubmissions of Franzen's notebook, not a measured distribution for our identity-modified notebook. Underlying study **private**. |
 | Timing panel: 13 of 18 | `evidence/excerpts/DRAFT_v1.md` lines 276–282 describes 13 converted pre-classed STARVED rows in a small panel; the panel was not randomized per level. |
